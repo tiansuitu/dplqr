@@ -1,7 +1,9 @@
 library(latex2exp)
 par(mfrow=c(2,2))
 ## DPLQR
-res <- read.csv(file="../data/resDeep.csv",header=TRUE)
+# Original path from the authors' repository:
+# res <- read.csv(file="../data/resDeep.csv",header=TRUE)
+res <- read.csv(file="data/resDeep.csv",header=TRUE)
 tau <- res$tau
 est <- res$estCoef
 ci_lower <- res$lowerCI
@@ -19,7 +21,9 @@ abline(h=0,col="gray50")
 lines(tau,est,col="gray10")
 
 ## LQR
-res <- read.csv(file="../data/resLin.csv",header=TRUE)
+# Original path from the authors' repository:
+# res <- read.csv(file="../data/resLin.csv",header=TRUE)
+res <- read.csv(file="data/resLin.csv",header=TRUE)
 tau <- res$tau
 est <- res$estCoef
 ci_lower <- res$lowerCI
@@ -37,7 +41,9 @@ abline(h=0,col="gray50")
 lines(tau,est,col="gray10")
 
 ## PLAQR
-res <- read.csv(file="../data/resAdd.csv",header=TRUE)
+# Original path from the authors' repository:
+# res <- read.csv(file="../data/resAdd.csv",header=TRUE)
+res <- read.csv(file="data/resAdd.csv",header=TRUE)
 tau <- res$tau
 est <- res$estCoef
 ci_lower <- res$lowerCI

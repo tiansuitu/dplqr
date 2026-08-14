@@ -6,8 +6,12 @@ checkLoss_mean <- function(errors,tau=0.5){
   return(m)
 }
 
-df_train <- read.csv(file="../data/df_train.csv")
-df_test <- read.csv(file="../data/df_test.csv")
+# Original path from the authors' repository:
+# df_train <- read.csv(file="../data/df_train.csv")
+df_train <- read.csv(file="data/df_train.csv")
+# Original path from the authors' repository:
+# df_test <- read.csv(file="../data/df_test.csv")
+df_test <- read.csv(file="data/df_test.csv")
 # delete index column
 df_train <- df_train[,-1]
 df_test <- df_test[,-1]
@@ -46,7 +50,9 @@ ACL <- sum(resAdd$CL)*delta
 print(paste('ACL under PLAQR:',ACL,sep=" ") )
 
 # save results for plot
-pathmain = "../data/resAdd"
+# Original path from the authors' repository:
+# pathmain = "../data/resAdd"
+pathmain = "data/resAdd"
 write.csv(resAdd,file=paste(pathmain,".csv",sep=""))
 
 
