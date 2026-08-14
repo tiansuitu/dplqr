@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+
+# Local R session files
+.Rhistory
+.RData
+.Ruserdata
