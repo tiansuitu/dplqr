@@ -1,0 +1,84 @@
+# training model with different quantile levels
+for tau in tau_seq:
+    # linear quantile regression (LQR)
+    model_lin = smf.quantreg("outY~inX+blst+flh+sup+cag+fag+age",df_train_lin).fit(q=tau)
+        # ===replicate===:)
+        # Original code: 
+        # paramsLin = model_lin.params[1] 
+        # Using "inX" is better than .iloc[1] because it explicitly requests the coefficient intended by the analysis.
+        # Pandas 3-compatible code:
+    paramsLin = model_lin.params.loc["inX"]
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+We cannot know the authors’ exact intention without asking them, but the code strongly suggests `logic=True` was meant for a binary linear variable.
+
+Inside `getSESingle`:
+
+```python
+if logic:
+    loss = nn.BCELoss()
+else:
+    loss = nn.MSELoss()
+```
+
+And inside the network:
+
+```python
+if self.logic:
+    out = self.sigmoid(out)
+```
+
+Therefore:
+
+- `logic=True` means logistic/binary prediction: sigmoid output plus binary cross-entropy.
+- `logic=False` means continuous prediction: unrestricted output plus mean squared error.
+
+The paper’s simulations include a binary covariate such as:
+
+```text
+X₁ = indicator(...)
+```
+
+So `logic=True` makes sense for that binary covariate. The concrete application, however, uses `inX` as the water-cement ratio, which is continuous and reaches approximately `1.88`.
+
+Most likely explanations are:
+
+1. The setting was copied from code for a binary simulation variable and not changed for the concrete example.
+2. It is simply an oversight in the demonstration notebook.
+3. Their older PyTorch version did not enforce the `[0,1]` target requirement as strictly, so the code ran even though the loss was inappropriate.
+4. They may once have used a rescaled version of `inX`, but the uploaded notebook and data do not contain that rescaling.
+
+There is direct evidence that the current combination is inconsistent:
+
+```text
+logic=True
+→ BCELoss
+→ target must be between 0 and 1
+
+inX
+→ continuous water-cement ratio
+→ maximum 1.882353
+```
+
+So changing it to:
+
+```python
+logic=False
+```
+
+is not merely a workaround for the error. It selects the branch designed for a continuous variable.
+
+For transparency in your replication, preserve the original line:
+
+```python
+# Original authors' setting:
+# se = getSESingle(..., logic=True)
+
+# Continuous water-cement ratio:
+se = getSESingle(..., logic=False)
+```
+
+You should document this as a compatibility/methodological correction because it may cause your numerical results to differ from the authors’ saved results.
+
