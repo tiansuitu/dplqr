@@ -284,3 +284,33 @@ by fitting spline boundaries on one random training split and then predicting
 outside that range. It did not stop prediction or invalidate file creation, but
 it should be retained in the replication record and examined in any robustness
 analysis.
+
+## Epoch-ceiling sensitivity: 03 September 2026 (03092026)
+
+Added `results/2026-09-03-epochs-vary/epochs_vary.py`, based on `demo.ipynb`,
+to compare ceilings of 50, 100, 250, 500 (the demo default), and 1,000 epochs
+for both DPLQR and its auxiliary SE projection. The experiment uses all 49
+quantiles, one fixed 742/82/206 train/validation/test split, and three paired
+training seeds (11, 22, 33). Architecture, learning rate, batch size, sparsity,
+validation early stopping (patience 10), and the continuous-MSE correction
+remain as in the current demo. Actual and selected-best epochs are recorded.
+
+Run from the repository root:
+
+```powershell
+.\.venv\Scripts\python.exe results/2026-09-03-epochs-vary/epochs_vary.py --verify
+```
+
+The folder contains the comparison table (`summary.md`/`.csv`), figure
+(`epochs_comparison.png`/`.pdf`), per-seed and per-quantile results, training
+histories, split files, and configuration. The shared-training-path shortcut
+was checked against independent default fits at every ceiling for the median
+quantile: weights matched exactly and standard errors matched `getSESingle`.
+All outputs are separate from the original demo and August results.
+
+Mean test ACL was 0.076169, 0.068076, and 0.066808 at ceilings 50, 100, and
+250 respectively. Results at 250, 500, and 1,000 were identical: across every
+seed and quantile, the main fit stopped by epoch 220 and the auxiliary fit by
+epoch 113. Thus 50 was clearly restrictive, 100 retained a small penalty, and
+the demo's 500 ceiling was comfortably above the observed stopping point in
+this controlled split-and-seed experiment.

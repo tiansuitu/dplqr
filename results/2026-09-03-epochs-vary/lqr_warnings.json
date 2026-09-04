@@ -1,0 +1,7 @@
+[
+  {
+    "tau": 0.02,
+    "category": "IterationLimitWarning",
+    "message": "Maximum number of iterations (1000) reached."
+  }
+]
