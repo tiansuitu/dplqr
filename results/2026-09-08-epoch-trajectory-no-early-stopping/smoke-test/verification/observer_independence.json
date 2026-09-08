@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "final_weights_identical": true,
+  "final_checkpoint_metrics_identical": true,
+  "dense_checkpoints": 12,
+  "sparse_checkpoints": 1,
+  "epochs_per_fit": 12,
+  "optimizer_steps": 84,
+  "meaning": "Diagnostic frequency and test/evaluation forwards do not alter the training path"
+}

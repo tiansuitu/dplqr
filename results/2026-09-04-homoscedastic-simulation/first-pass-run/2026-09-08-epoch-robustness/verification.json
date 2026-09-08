@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "parent_files_unchanged": [
+    "results\\2026-09-04-homoscedastic-simulation\\simulate_homoscedastic.ipynb",
+    "results\\2026-09-04-homoscedastic-simulation\\simulate_homoscedastic.R",
+    "dqAux.py",
+    "REPLICATION_SETUP.md",
+    "results\\2026-09-04-homoscedastic-simulation\\first-pass-run\\raw_results.csv",
+    "results\\2026-09-04-homoscedastic-simulation\\first-pass-run\\run_config.json",
+    "results\\2026-09-04-homoscedastic-simulation\\first-pass-run\\raw_results_combined.csv",
+    "results\\2026-09-04-homoscedastic-simulation\\first-pass-run\\raw_results_r.csv",
+    "results\\2026-09-04-homoscedastic-simulation\\first-pass-run\\tables_comparison.md"
+  ],
+  "trajectory_rows": 6006,
+  "budget_rows": 126,
+  "summary_groups": 63,
+  "baseline_matches": "All six coefficients, relative MSEs, and stopping epochs match saved first pass exactly",
+  "notebook": "All source cells executed without errors; clean and executed source text agree",
+  "figures": "Four PNGs visually inspected; four vector PDFs also saved; report links resolve"
+}

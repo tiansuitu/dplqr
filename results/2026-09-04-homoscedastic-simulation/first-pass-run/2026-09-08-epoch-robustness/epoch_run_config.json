@@ -1,0 +1,53 @@
+{
+  "created_utc": "2026-09-08T04:43:31.967195+00:00",
+  "identity": {
+    "profile": {
+      "repetitions": 2,
+      "cases": [
+        1,
+        2,
+        3
+      ],
+      "n": 1000,
+      "test_size": 1000,
+      "tau": 0.5,
+      "seed": 20260904,
+      "depth": 2,
+      "width": 32,
+      "batch_size": 128,
+      "learning_rate": 0.005,
+      "patience": 15,
+      "threads": 1
+    },
+    "budgets": [
+      10,
+      25,
+      50,
+      100,
+      200,
+      500,
+      1000
+    ],
+    "code_sha256": "6a106ffcce0e08460e23d13287367561c86a8a4519aaecc34600cfaaef8093b6",
+    "scientific_functions_sha256": "44bc3b074e786da5ed3ccaa9ff8d5df0ab4af5ae662a40f41c1a433ff12cbfed",
+    "dqAux_sha256": "99dc7ce752818cd59e4a8d8cc048d0a3752659f601503bea0b08c56bd52dc2db",
+    "baseline_config_sha256": "373ceeb2095ae7a73ff73891cb24d45d81c8ade03507463c021c020bf48866b5",
+    "baseline_results_sha256": "6ebff1dc0dd2fcbe2bc858ec2f8c6feade3cfc5398a55a3791928bc541699ca9",
+    "versions": {
+      "python": "3.11.9",
+      "numpy": "2.4.6",
+      "pandas": "3.0.5",
+      "torch": "2.13.0+cpu",
+      "torchtuples": "0.2.2"
+    }
+  },
+  "status": "complete",
+  "completed_trajectories": 6,
+  "expected_trajectories": 6,
+  "early_stopping": "Virtual only; live training continues to the maximum epoch",
+  "inference": "No SEs, auxiliary projection fits, R calls, or coverage",
+  "elapsed_seconds": 155.2715107999975,
+  "trajectory_rows": 6006,
+  "budget_rows": 126,
+  "baseline_verified": true
+}

@@ -1,0 +1,663 @@
+{
+  "status": "passed",
+  "authoritative_callback": "main notebook EarlyStopInMemory",
+  "synthetic": {
+    "fixtures": [
+      {
+        "name": "monotone_improvement",
+        "validation_losses": [
+          5.0,
+          4.0,
+          3.0,
+          2.0,
+          1.0
+        ],
+        "replay": {
+          "patience": 2,
+          "max_epochs": 5,
+          "stop_epoch": 5,
+          "selected_epoch": 5,
+          "best_validation_epoch": 5,
+          "best_validation_loss": 1.0,
+          "stopping_reason": "max_epochs",
+          "restore_best": true,
+          "min_delta": 0.0
+        },
+        "actual_notebook_callback": {
+          "stop_epoch": 5,
+          "selected_epoch": 5,
+          "stopping_reason": "max_epochs"
+        },
+        "actual_torchtuples_callback": {
+          "stop_epoch": 5,
+          "selected_epoch": 5,
+          "stopping_reason": "max_epochs"
+        }
+      },
+      {
+        "name": "two_bad_epochs",
+        "validation_losses": [
+          5.0,
+          4.0,
+          4.5,
+          4.6,
+          3.0
+        ],
+        "replay": {
+          "patience": 2,
+          "max_epochs": 5,
+          "stop_epoch": 4,
+          "selected_epoch": 2,
+          "best_validation_epoch": 2,
+          "best_validation_loss": 4.0,
+          "stopping_reason": "early_stopping",
+          "restore_best": true,
+          "min_delta": 0.0
+        },
+        "actual_notebook_callback": {
+          "stop_epoch": 4,
+          "selected_epoch": 2,
+          "stopping_reason": "early_stopping"
+        },
+        "actual_torchtuples_callback": {
+          "stop_epoch": 4,
+          "selected_epoch": 2,
+          "stopping_reason": "early_stopping"
+        }
+      },
+      {
+        "name": "tie_keeps_earliest",
+        "validation_losses": [
+          1.0,
+          1.0,
+          1.0,
+          0.5
+        ],
+        "replay": {
+          "patience": 2,
+          "max_epochs": 4,
+          "stop_epoch": 3,
+          "selected_epoch": 1,
+          "best_validation_epoch": 1,
+          "best_validation_loss": 1.0,
+          "stopping_reason": "early_stopping",
+          "restore_best": true,
+          "min_delta": 0.0
+        },
+        "actual_notebook_callback": {
+          "stop_epoch": 3,
+          "selected_epoch": 1,
+          "stopping_reason": "early_stopping"
+        },
+        "actual_torchtuples_callback": {
+          "stop_epoch": 3,
+          "selected_epoch": 3,
+          "stopping_reason": "early_stopping"
+        }
+      },
+      {
+        "name": "improvement_resets_counter",
+        "validation_losses": [
+          3.0,
+          4.0,
+          2.0,
+          4.0,
+          5.0,
+          1.0
+        ],
+        "replay": {
+          "patience": 2,
+          "max_epochs": 6,
+          "stop_epoch": 5,
+          "selected_epoch": 3,
+          "best_validation_epoch": 3,
+          "best_validation_loss": 2.0,
+          "stopping_reason": "early_stopping",
+          "restore_best": true,
+          "min_delta": 0.0
+        },
+        "actual_notebook_callback": {
+          "stop_epoch": 5,
+          "selected_epoch": 3,
+          "stopping_reason": "early_stopping"
+        },
+        "actual_torchtuples_callback": {
+          "stop_epoch": 5,
+          "selected_epoch": 3,
+          "stopping_reason": "early_stopping"
+        }
+      },
+      {
+        "name": "improvement_smaller_than_1e-8",
+        "validation_losses": [
+          1.0,
+          0.999999999999,
+          1.0,
+          1.0
+        ],
+        "replay": {
+          "patience": 2,
+          "max_epochs": 4,
+          "stop_epoch": 4,
+          "selected_epoch": 2,
+          "best_validation_epoch": 2,
+          "best_validation_loss": 0.999999999999,
+          "stopping_reason": "early_stopping",
+          "restore_best": true,
+          "min_delta": 0.0
+        },
+        "actual_notebook_callback": {
+          "stop_epoch": 4,
+          "selected_epoch": 2,
+          "stopping_reason": "early_stopping"
+        },
+        "actual_torchtuples_callback": {
+          "stop_epoch": 4,
+          "selected_epoch": 2,
+          "stopping_reason": "early_stopping"
+        }
+      },
+      {
+        "name": "cap_before_patience",
+        "validation_losses": [
+          3.0,
+          2.0,
+          4.0,
+          5.0,
+          1.0
+        ],
+        "replay": {
+          "patience": 3,
+          "max_epochs": 3,
+          "stop_epoch": 3,
+          "selected_epoch": 2,
+          "best_validation_epoch": 2,
+          "best_validation_loss": 2.0,
+          "stopping_reason": "max_epochs",
+          "restore_best": true,
+          "min_delta": 0.0
+        },
+        "actual_notebook_callback": {
+          "stop_epoch": 3,
+          "selected_epoch": 2,
+          "stopping_reason": "max_epochs"
+        },
+        "actual_torchtuples_callback": {
+          "stop_epoch": 3,
+          "selected_epoch": 2,
+          "stopping_reason": "max_epochs"
+        }
+      },
+      {
+        "name": "callback_and_cap_same_epoch",
+        "validation_losses": [
+          1.0,
+          2.0,
+          3.0
+        ],
+        "replay": {
+          "patience": 2,
+          "max_epochs": 3,
+          "stop_epoch": 3,
+          "selected_epoch": 1,
+          "best_validation_epoch": 1,
+          "best_validation_loss": 1.0,
+          "stopping_reason": "early_stopping",
+          "restore_best": true,
+          "min_delta": 0.0
+        },
+        "actual_notebook_callback": {
+          "stop_epoch": 3,
+          "selected_epoch": 1,
+          "stopping_reason": "early_stopping"
+        },
+        "actual_torchtuples_callback": {
+          "stop_epoch": 3,
+          "selected_epoch": 1,
+          "stopping_reason": "early_stopping"
+        }
+      },
+      {
+        "name": "single_epoch_cap",
+        "validation_losses": [
+          9.0,
+          1.0
+        ],
+        "replay": {
+          "patience": 5,
+          "max_epochs": 1,
+          "stop_epoch": 1,
+          "selected_epoch": 1,
+          "best_validation_epoch": 1,
+          "best_validation_loss": 9.0,
+          "stopping_reason": "max_epochs",
+          "restore_best": true,
+          "min_delta": 0.0
+        },
+        "actual_notebook_callback": {
+          "stop_epoch": 1,
+          "selected_epoch": 1,
+          "stopping_reason": "max_epochs"
+        },
+        "actual_torchtuples_callback": {
+          "stop_epoch": 1,
+          "selected_epoch": 1,
+          "stopping_reason": "max_epochs"
+        }
+      },
+      {
+        "name": "patience_one",
+        "validation_losses": [
+          2.0,
+          1.0,
+          1.0,
+          0.5
+        ],
+        "replay": {
+          "patience": 1,
+          "max_epochs": 4,
+          "stop_epoch": 3,
+          "selected_epoch": 2,
+          "best_validation_epoch": 2,
+          "best_validation_loss": 1.0,
+          "stopping_reason": "early_stopping",
+          "restore_best": true,
+          "min_delta": 0.0
+        },
+        "actual_notebook_callback": {
+          "stop_epoch": 3,
+          "selected_epoch": 2,
+          "stopping_reason": "early_stopping"
+        },
+        "actual_torchtuples_callback": {
+          "stop_epoch": 3,
+          "selected_epoch": 3,
+          "stopping_reason": "early_stopping"
+        }
+      }
+    ],
+    "cap_truncation": [
+      {
+        "patience": 2,
+        "max_epochs": 2,
+        "stop_epoch": 2,
+        "selected_epoch": 2,
+        "best_validation_epoch": 2,
+        "best_validation_loss": 4.0,
+        "stopping_reason": "max_epochs",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "patience": 2,
+        "max_epochs": 3,
+        "stop_epoch": 3,
+        "selected_epoch": 3,
+        "best_validation_epoch": 3,
+        "best_validation_loss": 3.0,
+        "stopping_reason": "max_epochs",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "patience": 2,
+        "max_epochs": 4,
+        "stop_epoch": 4,
+        "selected_epoch": 3,
+        "best_validation_epoch": 3,
+        "best_validation_loss": 3.0,
+        "stopping_reason": "max_epochs",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "patience": 2,
+        "max_epochs": 5,
+        "stop_epoch": 5,
+        "selected_epoch": 3,
+        "best_validation_epoch": 3,
+        "best_validation_loss": 3.0,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "patience": 2,
+        "max_epochs": 6,
+        "stop_epoch": 5,
+        "selected_epoch": 3,
+        "best_validation_epoch": 3,
+        "best_validation_loss": 3.0,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "patience": 2,
+        "max_epochs": 8,
+        "stop_epoch": 5,
+        "selected_epoch": 3,
+        "best_validation_epoch": 3,
+        "best_validation_loss": 3.0,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      }
+    ],
+    "rejected_inputs": [
+      "insufficient_dense_epochs",
+      "nonfinite_loss",
+      "zero_patience",
+      "noninteger_cap"
+    ],
+    "function_inputs": [
+      "validation_losses",
+      "patience",
+      "max_epochs"
+    ],
+    "no_truth_test_or_oracle_inputs": true
+  },
+  "batch_scoring": {
+    "validation_observations": 200,
+    "batch_sizes": [
+      128,
+      72
+    ],
+    "direct_float32_mean_batch_loss": 1.25,
+    "actual_torchtuples_loss": 1.25,
+    "full_sample_empirical_loss": 1.0399999618530273,
+    "convention": "Unweighted mean of float32 batch means; no validation shuffle"
+  },
+  "exact_tie_discrepancy": "Notebook keeps earliest best checkpoint; installed torchtuples EarlyStopping rewrites its checkpoint on an equal best loss, so it restores the latest tied best. Their patience counters agree.",
+  "actual_trajectories": {
+    "source": "C:\\Users\\Tiansui Tu\\Documents\\GitHub\\dplqr\\results\\2026-09-08-early-stopping-vs-theta\\smoke-test\\dense_epoch_trajectory.csv",
+    "checked_configurations": [
+      {
+        "case": 1,
+        "replicate": 1,
+        "patience": 5,
+        "max_epochs": 1000,
+        "stop_epoch": 49,
+        "selected_epoch": 44,
+        "best_validation_epoch": 44,
+        "best_validation_loss": 0.5090333223342896,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "patience": 15,
+        "max_epochs": 25,
+        "stop_epoch": 25,
+        "selected_epoch": 24,
+        "best_validation_epoch": 24,
+        "best_validation_loss": 0.5464975833892822,
+        "stopping_reason": "max_epochs",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "patience": 15,
+        "max_epochs": 50,
+        "stop_epoch": 50,
+        "selected_epoch": 50,
+        "best_validation_epoch": 50,
+        "best_validation_loss": 0.5049349665641785,
+        "stopping_reason": "max_epochs",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "patience": 15,
+        "max_epochs": 100,
+        "stop_epoch": 84,
+        "selected_epoch": 69,
+        "best_validation_epoch": 69,
+        "best_validation_loss": 0.493632823228836,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "patience": 15,
+        "max_epochs": 200,
+        "stop_epoch": 84,
+        "selected_epoch": 69,
+        "best_validation_epoch": 69,
+        "best_validation_loss": 0.493632823228836,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "patience": 15,
+        "max_epochs": 500,
+        "stop_epoch": 84,
+        "selected_epoch": 69,
+        "best_validation_epoch": 69,
+        "best_validation_loss": 0.493632823228836,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "patience": 15,
+        "max_epochs": 1000,
+        "stop_epoch": 84,
+        "selected_epoch": 69,
+        "best_validation_epoch": 69,
+        "best_validation_loss": 0.493632823228836,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "patience": 30,
+        "max_epochs": 1000,
+        "stop_epoch": 99,
+        "selected_epoch": 69,
+        "best_validation_epoch": 69,
+        "best_validation_loss": 0.493632823228836,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "patience": 50,
+        "max_epochs": 1000,
+        "stop_epoch": 119,
+        "selected_epoch": 69,
+        "best_validation_epoch": 69,
+        "best_validation_loss": 0.493632823228836,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "patience": 100,
+        "max_epochs": 1000,
+        "stop_epoch": 169,
+        "selected_epoch": 69,
+        "best_validation_epoch": 69,
+        "best_validation_loss": 0.493632823228836,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "patience": 200,
+        "max_epochs": 1000,
+        "stop_epoch": 269,
+        "selected_epoch": 69,
+        "best_validation_epoch": 69,
+        "best_validation_loss": 0.493632823228836,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 2,
+        "patience": 5,
+        "max_epochs": 1000,
+        "stop_epoch": 16,
+        "selected_epoch": 11,
+        "best_validation_epoch": 11,
+        "best_validation_loss": 0.6317074298858643,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 2,
+        "patience": 15,
+        "max_epochs": 25,
+        "stop_epoch": 25,
+        "selected_epoch": 20,
+        "best_validation_epoch": 20,
+        "best_validation_loss": 0.6297115683555603,
+        "stopping_reason": "max_epochs",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 2,
+        "patience": 15,
+        "max_epochs": 50,
+        "stop_epoch": 50,
+        "selected_epoch": 46,
+        "best_validation_epoch": 46,
+        "best_validation_loss": 0.6189497709274292,
+        "stopping_reason": "max_epochs",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 2,
+        "patience": 15,
+        "max_epochs": 100,
+        "stop_epoch": 89,
+        "selected_epoch": 74,
+        "best_validation_epoch": 74,
+        "best_validation_loss": 0.6130552887916565,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 2,
+        "patience": 15,
+        "max_epochs": 200,
+        "stop_epoch": 89,
+        "selected_epoch": 74,
+        "best_validation_epoch": 74,
+        "best_validation_loss": 0.6130552887916565,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 2,
+        "patience": 15,
+        "max_epochs": 500,
+        "stop_epoch": 89,
+        "selected_epoch": 74,
+        "best_validation_epoch": 74,
+        "best_validation_loss": 0.6130552887916565,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 2,
+        "patience": 15,
+        "max_epochs": 1000,
+        "stop_epoch": 89,
+        "selected_epoch": 74,
+        "best_validation_epoch": 74,
+        "best_validation_loss": 0.6130552887916565,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 2,
+        "patience": 30,
+        "max_epochs": 1000,
+        "stop_epoch": 104,
+        "selected_epoch": 74,
+        "best_validation_epoch": 74,
+        "best_validation_loss": 0.6130552887916565,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 2,
+        "patience": 50,
+        "max_epochs": 1000,
+        "stop_epoch": 124,
+        "selected_epoch": 74,
+        "best_validation_epoch": 74,
+        "best_validation_loss": 0.6130552887916565,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 2,
+        "patience": 100,
+        "max_epochs": 1000,
+        "stop_epoch": 174,
+        "selected_epoch": 74,
+        "best_validation_epoch": 74,
+        "best_validation_loss": 0.6130552887916565,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      },
+      {
+        "case": 1,
+        "replicate": 2,
+        "patience": 200,
+        "max_epochs": 1000,
+        "stop_epoch": 274,
+        "selected_epoch": 74,
+        "best_validation_epoch": 74,
+        "best_validation_loss": 0.6130552887916565,
+        "stopping_reason": "early_stopping",
+        "restore_best": true,
+        "min_delta": 0.0
+      }
+    ]
+  }
+}

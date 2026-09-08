@@ -1,0 +1,70 @@
+{
+  "created_utc": "2026-09-08T05:10:04.996328+00:00",
+  "identity": {
+    "profile": {
+      "repetitions": 10,
+      "cases": [
+        1,
+        2,
+        3
+      ],
+      "n": 1000,
+      "test_size": 1000,
+      "tau": 0.5,
+      "seed": 20260904,
+      "depth": 2,
+      "width": 32,
+      "batch_size": 128,
+      "learning_rate": 0.005,
+      "patience": 15,
+      "threads": 1
+    },
+    "budgets": [
+      10,
+      25,
+      50,
+      100,
+      200,
+      500,
+      1000
+    ],
+    "code_sha256": "fa5e22fc269e88c6a127a5a10dbff94fc8136e1fafb3bc60a80c3d409e482778",
+    "scientific_functions_sha256": "44bc3b074e786da5ed3ccaa9ff8d5df0ab4af5ae662a40f41c1a433ff12cbfed",
+    "dqAux_sha256": "99dc7ce752818cd59e4a8d8cc048d0a3752659f601503bea0b08c56bd52dc2db",
+    "baseline_config_sha256": "373ceeb2095ae7a73ff73891cb24d45d81c8ade03507463c021c020bf48866b5",
+    "baseline_results_sha256": "6ebff1dc0dd2fcbe2bc858ec2f8c6feade3cfc5398a55a3791928bc541699ca9",
+    "versions": {
+      "python": "3.11.9",
+      "numpy": "2.4.6",
+      "pandas": "3.0.5",
+      "torch": "2.13.0+cpu",
+      "torchtuples": "0.2.2"
+    },
+    "cache_provenance": {
+      "source_config_sha256": "0472314a217d602f1655ef33c6ea58bfaeed9c3e1027d6f4e6347a1ec5ab1cdd",
+      "source_code_sha256": "6a106ffcce0e08460e23d13287367561c86a8a4519aaecc34600cfaaef8093b6",
+      "trajectory_hashes": {
+        "case_1_rep_0001.csv": "cdca3b03603283ecf1df9b97a29847f983386b273ce316ce3b00cde7a62a7691",
+        "case_1_rep_0002.csv": "5a28308a7537c9af668cdf3b7bc96bbf1c84b0c6c0003b303075f7953cd3b429",
+        "case_2_rep_0001.csv": "fb90d7f2ed87defc205d332e2197f89a0497b534625c929f8e745dc921b8cc93",
+        "case_2_rep_0002.csv": "ef4a873ace346b5b3fa2e82246fcb00b6b6c8a3a7bff544fbdadc758a84ea535",
+        "case_3_rep_0001.csv": "2491d32960a5de049df74902b69940bfc8f9f7d5e0f84493aac801cfbddf6b67",
+        "case_3_rep_0002.csv": "1204d153a1f73ed58cb9fe47674801e99f8a9d2470735ec14f1b505e2b9b4ae7"
+      }
+    }
+  },
+  "status": "complete",
+  "completed_trajectories": 30,
+  "expected_trajectories": 30,
+  "reused_original_trajectories": 6,
+  "newly_fitted_trajectories": 24,
+  "resumed_trajectories": 0,
+  "early_stopping": "Virtual only; live training continues to the maximum epoch",
+  "inference": "Coefficient/prediction diagnostics; no SEs, coverage, auxiliary networks or R",
+  "elapsed_seconds": 592.6493996000063,
+  "last_completed_case": 3,
+  "last_completed_rep": 10,
+  "trajectory_rows": 30030,
+  "budget_rows": 630,
+  "existing_baselines_verified": 6
+}

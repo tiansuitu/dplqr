@@ -1,0 +1,86 @@
+{
+  "created_utc": "2026-09-08T11:07:50.031113+00:00",
+  "output_dir": "C:\\Users\\Tiansui Tu\\Documents\\GitHub\\dplqr\\results\\2026-09-08-epoch-trajectory-no-early-stopping\\smoke-test",
+  "auditor_sha256": "b7e530997b9f497a954d08b707a22aef0bccc752f5eb216f535ad0e8b08d1eb4",
+  "training_performed": false,
+  "raw": {
+    "raw_rows": 42,
+    "complete_unique_grid": true,
+    "all_numeric_raw_values_finite": true,
+    "correct_labels_and_errors": true,
+    "optimizer_steps_per_epoch": 7,
+    "max_abs_decomposition_residual": 3.9968028886505635e-15
+  },
+  "summaries": {
+    "coefficient_summary_rows": 42,
+    "diagnostic_summary_rows": 252,
+    "independently_recomputed_bias_sd_rmse_and_mcse": true
+  },
+  "archives": {
+    "continuous_paths_checked": 6,
+    "checkpoint_archive_hashes_checked": 42,
+    "checkpoint_hash_chains_valid": true,
+    "all_paths_reached_requested_ceiling": true,
+    "no_early_stopping_restoration_or_clipping": true
+  },
+  "reconstructed_checkpoints": {
+    "checkpoints_reconstructed_from_weights": 6,
+    "fixed_replicate": 1,
+    "fixed_checkpoint_epochs": [
+      1,
+      50
+    ],
+    "checks": [
+      {
+        "case": 1,
+        "replicate": 1,
+        "epoch": 1,
+        "optimizer_steps": 7,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 6.384219819466352e-10
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "epoch": 50,
+        "optimizer_steps": 350,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 2.3810908800214747e-09
+      },
+      {
+        "case": 2,
+        "replicate": 1,
+        "epoch": 1,
+        "optimizer_steps": 7,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 2.0128565481059013e-10
+      },
+      {
+        "case": 2,
+        "replicate": 1,
+        "epoch": 50,
+        "optimizer_steps": 350,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 2.4971915646432308e-09
+      },
+      {
+        "case": 3,
+        "replicate": 1,
+        "epoch": 1,
+        "optimizer_steps": 7,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 9.583116522549062e-10
+      },
+      {
+        "case": 3,
+        "replicate": 1,
+        "epoch": 50,
+        "optimizer_steps": 350,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 1.131541083054799e-09
+      }
+    ]
+  },
+  "status": "passed",
+  "elapsed_seconds": 1.437317100004293
+}

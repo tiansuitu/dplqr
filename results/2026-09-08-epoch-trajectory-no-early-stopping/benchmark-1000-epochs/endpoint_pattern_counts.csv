@@ -1,0 +1,4 @@
+case,case_name,start_epoch,end_epoch,repetitions,training_loss_down,theta_l2_up,q_l2_down,test_loss_up,training_down_theta_up_q_down,training_down_theta_up_test_up,negative_cross_moment_start,negative_cross_moment_end
+1,linear,100,1000,2,2,0,0,2,0,0,2,1
+2,additive,100,1000,2,2,0,0,2,0,0,2,0
+3,deep,100,1000,2,2,1,0,2,0,1,2,2

@@ -1,0 +1,98 @@
+{
+  "created_utc": "2026-09-08T11:26:18.916593+00:00",
+  "training_performed": false,
+  "auditor_sha256": "ccab04b6e98626ad224ca8ad51ff3eb12f165df9bc667443de4a9984ef1519b5",
+  "stage": "full_analysis",
+  "dense": {
+    "paths": 30,
+    "dense_rows": 30000,
+    "original_rows_matched_exactly": 450,
+    "original_state_fingerprints_matched": 450,
+    "data_manifests_identical": true,
+    "every_epoch_observed": true,
+    "uninterrupted_fit_and_optimizer": true
+  },
+  "selection": {
+    "selected_rows": 390,
+    "independent_prefix_minimum_decisions_match": true,
+    "shared_selected_metrics_and_weights_match": true,
+    "global_oracle_minima_verified": true,
+    "regrets_verified": true,
+    "unchanged_cap_plateau_pairs": 194
+  },
+  "summaries": {
+    "stopping_rule_summary_rows": 39,
+    "oracle_summary_rows": 3,
+    "bias_sd_rmse_epoch_statistics_and_probabilities_recomputed": true
+  },
+  "reloaded_metrics": {
+    "checkpoints_reconstructed": 9,
+    "checks": [
+      {
+        "case": 1,
+        "replicate": 1,
+        "epoch": 1,
+        "torchtuples_validation_criterion_exact": true,
+        "saved_metrics_reconstructed": true
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "epoch": 100,
+        "torchtuples_validation_criterion_exact": true,
+        "saved_metrics_reconstructed": true
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "epoch": 1000,
+        "torchtuples_validation_criterion_exact": true,
+        "saved_metrics_reconstructed": true
+      },
+      {
+        "case": 2,
+        "replicate": 1,
+        "epoch": 1,
+        "torchtuples_validation_criterion_exact": true,
+        "saved_metrics_reconstructed": true
+      },
+      {
+        "case": 2,
+        "replicate": 1,
+        "epoch": 100,
+        "torchtuples_validation_criterion_exact": true,
+        "saved_metrics_reconstructed": true
+      },
+      {
+        "case": 2,
+        "replicate": 1,
+        "epoch": 1000,
+        "torchtuples_validation_criterion_exact": true,
+        "saved_metrics_reconstructed": true
+      },
+      {
+        "case": 3,
+        "replicate": 1,
+        "epoch": 1,
+        "torchtuples_validation_criterion_exact": true,
+        "saved_metrics_reconstructed": true
+      },
+      {
+        "case": 3,
+        "replicate": 1,
+        "epoch": 100,
+        "torchtuples_validation_criterion_exact": true,
+        "saved_metrics_reconstructed": true
+      },
+      {
+        "case": 3,
+        "replicate": 1,
+        "epoch": 1000,
+        "torchtuples_validation_criterion_exact": true,
+        "saved_metrics_reconstructed": true
+      }
+    ]
+  },
+  "status": "passed",
+  "elapsed_seconds": 4.791468700001133
+}

@@ -1,0 +1,7 @@
+{
+  "status": "passed",
+  "selected_rows_checked": 390,
+  "plateau_pairs_checked": 194,
+  "every_rule_uses_same_path": true,
+  "oracle_inputs_excluded_from_selector": true
+}

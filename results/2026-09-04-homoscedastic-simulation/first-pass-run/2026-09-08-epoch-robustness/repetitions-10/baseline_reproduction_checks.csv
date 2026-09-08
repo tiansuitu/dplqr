@@ -1,0 +1,7 @@
+case,rep,selected_epoch,actual_stop_epoch,theta1_difference,theta2_difference,relative_mse_difference,passed
+1,1,55,70,0.0,0.0,0.0,True
+1,2,9,24,0.0,0.0,0.0,True
+2,1,62,77,0.0,0.0,0.0,True
+2,2,76,91,0.0,0.0,0.0,True
+3,1,62,77,0.0,0.0,0.0,True
+3,2,93,100,0.0,0.0,0.0,True

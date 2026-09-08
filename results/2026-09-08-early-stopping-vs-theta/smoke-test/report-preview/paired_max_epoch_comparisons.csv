@@ -1,0 +1,7 @@
+case,case_name,max_epochs,reference_max_epochs,repetitions,same_selected_epoch_count,proportion_same_selected_epoch,exactly_same_coefficients_count,mean_coefficient_difference_l2,max_coefficient_difference_l2,mean_paired_selected_epoch_difference,mcse_paired_selected_epoch_difference,mean_paired_theta_error_l2_difference,mcse_paired_theta_error_l2_difference,mean_paired_test_check_loss_difference,mcse_paired_test_check_loss_difference,mean_paired_q_l2_error_difference,mcse_paired_q_l2_error_difference
+1,linear,25,1000,2,0,0.0,0,0.5859826527493517,0.9101169406867953,-49.5,4.5,0.5606320780198075,0.32452366354774015,0.024489521076555942,0.01908419670477829,0.13029015335833335,0.11188322552134035
+1,linear,50,1000,2,0,0.0,0,0.19622661495852384,0.3133637544784295,-23.5,4.5,0.18797003422541914,0.11795164748264343,0.0029642728228378434,0.0078050636533114615,0.016832120526838634,0.0474679323382367
+1,linear,100,1000,2,2,1.0,2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+1,linear,200,1000,2,2,1.0,2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+1,linear,500,1000,2,2,1.0,2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+1,linear,1000,1000,2,2,1.0,2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0

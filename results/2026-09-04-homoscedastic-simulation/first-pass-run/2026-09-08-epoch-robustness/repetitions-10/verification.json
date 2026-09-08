@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "preserved_files": 48,
+  "trajectory_rows": 30030,
+  "budget_rows": 630,
+  "summary_groups": 63,
+  "paired_datasets": 30,
+  "cached_trajectories_identical": 6,
+  "new_trajectories": 24,
+  "original_baselines_exact": 6,
+  "notebook": "Clean and executed source match; every code cell completed without errors",
+  "figures": "Four PNGs visually inspected; four PDFs saved; all report links resolve"
+}

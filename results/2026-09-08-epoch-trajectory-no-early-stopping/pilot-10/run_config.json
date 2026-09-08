@@ -1,0 +1,140 @@
+{
+  "created_utc": "2026-09-08T11:01:00.904136+00:00",
+  "status": "complete",
+  "identity": {
+    "config": {
+      "repetitions": 10,
+      "cases": [
+        1,
+        2,
+        3
+      ],
+      "n": 1000,
+      "tau": 0.5,
+      "max_epochs": 1000,
+      "checkpoints": [
+        1,
+        2,
+        5,
+        10,
+        20,
+        30,
+        50,
+        75,
+        100,
+        150,
+        200,
+        300,
+        500,
+        750,
+        1000
+      ],
+      "test_size": 10000,
+      "eval_size": 10000,
+      "seed": 20260904,
+      "depth": 2,
+      "width": 32,
+      "batch_size": 128,
+      "learning_rate": 0.005,
+      "threads": 1
+    },
+    "science_sha256": "14bf5ddf86ff062ce8fc1a208c77ddb5c8eaf6eb3b4ac1e4b904eeb208235e98",
+    "sources": {
+      "results\\2026-09-08-epoch-trajectory-no-early-stopping\\scripts\\run_trajectory.py": "39706997122bc64b04816d41d8c3215371e263ae02c149b288f5c989ac216714",
+      "results\\2026-09-08-epoch-trajectory-no-early-stopping\\scripts\\reporting.py": "411bb68bb9484e8c8ad2b2f71773c4d29d292c54421cbb1ccdd3138b0898c584",
+      "dqAux.py": "99dc7ce752818cd59e4a8d8cc048d0a3752659f601503bea0b08c56bd52dc2db"
+    },
+    "theta_true": [
+      1.0,
+      -1.0
+    ],
+    "versions": {
+      "python": "3.11.9",
+      "numpy": "2.4.6",
+      "pandas": "3.0.5",
+      "torch": "2.13.0+cpu",
+      "torchtuples": "0.2.2"
+    }
+  },
+  "configuration": {
+    "repetitions": 10,
+    "cases": [
+      1,
+      2,
+      3
+    ],
+    "n": 1000,
+    "tau": 0.5,
+    "max_epochs": 1000,
+    "checkpoints": [
+      1,
+      2,
+      5,
+      10,
+      20,
+      30,
+      50,
+      75,
+      100,
+      150,
+      200,
+      300,
+      500,
+      750,
+      1000
+    ],
+    "test_size": 10000,
+    "eval_size": 10000,
+    "seed": 20260904,
+    "depth": 2,
+    "width": 32,
+    "batch_size": 128,
+    "learning_rate": 0.005,
+    "threads": 1,
+    "workers": 6
+  },
+  "intended_design": {
+    "repetitions": 100,
+    "cases": [
+      1,
+      2,
+      3
+    ],
+    "max_epochs": 1000,
+    "checkpoints": [
+      1,
+      2,
+      5,
+      10,
+      20,
+      30,
+      50,
+      75,
+      100,
+      150,
+      200,
+      300,
+      500,
+      750,
+      1000
+    ],
+    "n": 1000,
+    "tau": 0.5
+  },
+  "output_dir": "C:\\Users\\Tiansui Tu\\Documents\\GitHub\\dplqr\\results\\2026-09-08-epoch-trajectory-no-early-stopping\\pilot-10",
+  "expected_replicates": 30,
+  "expected_raw_rows": 450,
+  "completed_replicates": 30,
+  "training": "One uninterrupted fit and optimizer per replicate; no early stopping or validation data in fit",
+  "diagnostics": "Unclipped current parameters; dropout disabled only during observation",
+  "training_sample": "80% estimation sample; remaining20% diagnostic validation only",
+  "full_design_requested": false,
+  "cpu_workers": 6,
+  "threads_per_worker": 1,
+  "elapsed_seconds": 210.94231579999905,
+  "last_completed": {
+    "case": 3,
+    "replicate": 10
+  },
+  "raw_rows": 450
+}

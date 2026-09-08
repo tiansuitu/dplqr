@@ -1,0 +1,111 @@
+{
+  "created_utc": "2026-09-08T11:04:48.601575+00:00",
+  "output_dir": "C:\\Users\\Tiansui Tu\\Documents\\GitHub\\dplqr\\results\\2026-09-08-epoch-trajectory-no-early-stopping\\pilot-10",
+  "auditor_sha256": "b7e530997b9f497a954d08b707a22aef0bccc752f5eb216f535ad0e8b08d1eb4",
+  "training_performed": false,
+  "raw": {
+    "raw_rows": 450,
+    "complete_unique_grid": true,
+    "all_numeric_raw_values_finite": true,
+    "correct_labels_and_errors": true,
+    "optimizer_steps_per_epoch": 7,
+    "max_abs_decomposition_residual": 7.105427357601002e-15
+  },
+  "summaries": {
+    "coefficient_summary_rows": 90,
+    "diagnostic_summary_rows": 540,
+    "independently_recomputed_bias_sd_rmse_and_mcse": true
+  },
+  "archives": {
+    "continuous_paths_checked": 30,
+    "checkpoint_archive_hashes_checked": 450,
+    "checkpoint_hash_chains_valid": true,
+    "all_paths_reached_requested_ceiling": true,
+    "no_early_stopping_restoration_or_clipping": true
+  },
+  "reconstructed_checkpoints": {
+    "checkpoints_reconstructed_from_weights": 9,
+    "fixed_replicate": 1,
+    "fixed_checkpoint_epochs": [
+      1,
+      100,
+      1000
+    ],
+    "checks": [
+      {
+        "case": 1,
+        "replicate": 1,
+        "epoch": 1,
+        "optimizer_steps": 7,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 6.384219819466352e-10
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "epoch": 100,
+        "optimizer_steps": 700,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 9.802967326777434e-10
+      },
+      {
+        "case": 1,
+        "replicate": 1,
+        "epoch": 1000,
+        "optimizer_steps": 7000,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 5.9521891859759535e-09
+      },
+      {
+        "case": 2,
+        "replicate": 1,
+        "epoch": 1,
+        "optimizer_steps": 7,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 2.0128565481059013e-10
+      },
+      {
+        "case": 2,
+        "replicate": 1,
+        "epoch": 100,
+        "optimizer_steps": 700,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 2.888746686302568e-09
+      },
+      {
+        "case": 2,
+        "replicate": 1,
+        "epoch": 1000,
+        "optimizer_steps": 7000,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 3.676909221539404e-09
+      },
+      {
+        "case": 3,
+        "replicate": 1,
+        "epoch": 1,
+        "optimizer_steps": 7,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 9.583116522549062e-10
+      },
+      {
+        "case": 3,
+        "replicate": 1,
+        "epoch": 100,
+        "optimizer_steps": 700,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 9.662406430521742e-10
+      },
+      {
+        "case": 3,
+        "replicate": 1,
+        "epoch": 1000,
+        "optimizer_steps": 7000,
+        "reloaded_metrics_match": true,
+        "max_direct_float32_check_loss_gap": 3.3017154565939677e-09
+      }
+    ]
+  },
+  "status": "passed",
+  "elapsed_seconds": 2.718966000000364
+}
