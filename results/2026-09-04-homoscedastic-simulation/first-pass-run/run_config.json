@@ -1,0 +1,125 @@
+{
+  "repetitions": 2,
+  "sample_sizes": [
+    1000
+  ],
+  "test_size": 1000,
+  "cases": [
+    1,
+    2,
+    3
+  ],
+  "taus": [
+    0.5
+  ],
+  "seed": 20260904,
+  "hyperparameter_mode": "fixed",
+  "depth": 2,
+  "width": 32,
+  "epochs": 100,
+  "batch_size": 128,
+  "patience": 15,
+  "learning_rate": 0.005,
+  "threads": 1,
+  "fail_fast": true,
+  "restart": false,
+  "export_r_data": true,
+  "output_dir": "C:\\Users\\Tiansui Tu\\Documents\\GitHub\\dplqr\\results\\2026-09-04-homoscedastic-simulation\\first-pass-run",
+  "date": "2026-09-08-notebook",
+  "status": "complete",
+  "identity": {
+    "sample_sizes": [
+      1000
+    ],
+    "test_size": 1000,
+    "cases": [
+      1,
+      2,
+      3
+    ],
+    "taus": [
+      0.5
+    ],
+    "seed": 20260904,
+    "hyperparameter_mode": "fixed",
+    "depth": 2,
+    "width": 32,
+    "epochs": 100,
+    "batch_size": 128,
+    "patience": 15,
+    "learning_rate": 0.005,
+    "export_r_data": true,
+    "pipeline_version": "2026-09-08-notebook",
+    "notebook_code": "354412f309633822c3719e5ff46ea7771e8d3647a15fd6c58f0e66bced8ff117",
+    "sources": {
+      "simulate_homoscedastic.R": "db836db439d344c913b69a582c0acd753d152eb7ca76f8bc09b85b77e0928260",
+      "dqAux.py": "99dc7ce752818cd59e4a8d8cc048d0a3752659f601503bea0b08c56bd52dc2db"
+    },
+    "constants": {
+      "theta": [
+        1.0,
+        -1.0
+      ],
+      "methods": [
+        "LQR",
+        "DPLQR"
+      ],
+      "cases": [
+        1,
+        2,
+        3
+      ],
+      "taus": [
+        0.25,
+        0.5,
+        0.75
+      ],
+      "sample_sizes": [
+        1000,
+        2000
+      ],
+      "z975": 1.959963984540054
+    },
+    "versions": {
+      "python": [
+        3,
+        11,
+        9
+      ],
+      "numpy": "2.4.6",
+      "pandas": "3.0.5",
+      "torch": "2.13.0+cpu"
+    }
+  },
+  "requested_profile": {
+    "mode": "fixed",
+    "depth": 2,
+    "width": 32,
+    "epochs": 100,
+    "batch_size": 128,
+    "patience": 15,
+    "lr": 0.005
+  },
+  "expected_result_rows": 12,
+  "depth_convention": "dqAux nodes[0]; hidden layers = depth + 1",
+  "inference_sample": "80% estimation sample",
+  "density": "R stats::density defaults, old.coords=TRUE; linear interpolation at zero",
+  "paper_design": {
+    "repetitions": 200,
+    "sample_sizes": [
+      1000,
+      2000
+    ],
+    "test_size": 5000,
+    "taus": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "train_validation_ratio": "80:20"
+  },
+  "elapsed_wall_seconds": 18.60894730000291,
+  "result_rows": 12,
+  "failures": 0,
+  "missing_result_rows": 0
+}

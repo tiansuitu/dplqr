@@ -314,3 +314,14 @@ seed and quantile, the main fit stopped by epoch 220 and the auxiliary fit by
 epoch 113. Thus 50 was clearly restrictive, 100 retained a small penalty, and
 the demo's 500 ceiling was comfortably above the observed stopping point in
 this controlled split-and-seed experiment.
+
+## Homoscedastic simulation reconstruction: 04 September 2026 (04092026)
+
+Added `results/2026-09-04-homoscedastic-simulation/` to reconstruct Simulation
+I on paper page 608 and target Tables 1-3. The Python script adapts the original
+`demo.ipynb` and imports the DPLQR network, quantile loss, prediction-loss
+function, and auxiliary network directly from `dqAux.py`. It produces LQR and
+DPLQR results and exports each data split. The R script adapts the original
+`plaqr.R`, reads those splits, and adds PLAQR results with archived `plaqr` 2.0.
+Both scripts add the paper's simulation DGP, 200-repetition loop, and Table 1-3
+summaries. The published tables are included as CSV comparison targets.

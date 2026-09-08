@@ -1,0 +1,2 @@
+case,n,rep,tau,method,theta1,theta2,se_theta1,se_theta2,lower_theta1,upper_theta1,lower_theta2,upper_theta2,covered_theta1,covered_theta2,rmse_m,test_check_loss,selected_hyperparameters,epochs_run,density_zero,projection_epochs
+1,1000,1,0.25,LQR,0.9302191390688392,-0.9770456565951804,0.14655188675222097,0.14459379985305296,0.6429827191680935,1.217455558969585,-1.2604442966949572,-0.6936470164954036,True,True,0.001580545832558173,0.472744964150159,,,,
