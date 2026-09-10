@@ -1,0 +1,62 @@
+{
+  "identity": {
+    "schema": 1,
+    "tau": 0.5,
+    "theta": [
+      1.0,
+      -1.0
+    ],
+    "seed": 20260904,
+    "train_fraction": 0.8,
+    "hp": {
+      "mode": "fixed",
+      "depth": 2,
+      "width": 32,
+      "epochs": 100,
+      "batch_size": 128,
+      "patience": 15,
+      "lr": 0.005
+    },
+    "threads": 1,
+    "deterministic_algorithms": true,
+    "selected_notebook_definitions": "9be62d3cf26196cf939fedee83de4636a898ca22bd03e30ffaf0268b62fad6b4",
+    "sources": {
+      "source_bridge.py": "3c23be37758e724ef138d372a07b91f1b57576d1e789fa15343e5961cde833ba",
+      "run_normality.py": "7ebc9557228227b764d8a906a9ed2c5d5d8146189fda2216521399ae19eea6c7",
+      "density_only.R": "685028c05d1e35dd3d4dc49ba6255d9f7886d407b44d6ed173eb4bed757d071d"
+    },
+    "dqAux_sha256": "99dc7ce752818cd59e4a8d8cc048d0a3752659f601503bea0b08c56bd52dc2db",
+    "versions": {
+      "numpy": "2.4.6",
+      "pandas": "3.0.5",
+      "scipy": "1.17.1",
+      "scikit-learn": "1.6.1",
+      "torch": "2.13.0",
+      "torchtuples": "0.2.2"
+    },
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "r_version": "Rscript (R) version 4.6.1 (2026-06-24)"
+  },
+  "identity_sha256": "77b003e4c4510e2e6411fbdb2e2ad5f2a0cc8e9c74f897f7744427462636e596",
+  "requested_cases": [
+    3
+  ],
+  "requested_sample_sizes": [
+    500,
+    1000,
+    2000,
+    4000
+  ],
+  "requested_repetitions": 1,
+  "original_notebook": "results\\2026-09-04-homoscedastic-simulation\\simulate_homoscedastic.ipynb",
+  "requested_result_rows": 4,
+  "started_utc": "2026-09-10T13:38:27.312165+00:00",
+  "status": "complete",
+  "completed_result_rows": 4,
+  "reused_result_rows": 0,
+  "missing_result_rows": 0,
+  "last_error": null,
+  "invocation_seconds": 7.379809500002011,
+  "updated_utc": "2026-09-10T13:38:34.692604+00:00"
+}

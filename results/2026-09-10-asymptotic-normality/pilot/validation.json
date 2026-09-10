@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "replications": 240,
+  "groups": 12,
+  "q": 20,
+  "raw_and_summary_formulas": "passed",
+  "checkpoint_hashes_checked": 720,
+  "completed_smoke_rows_reused_unchanged": 4,
+  "diagnostic_figures": 15,
+  "normal_quantile_rows": 36,
+  "model_fits_performed": 0
+}

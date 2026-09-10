@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "numerical_parity": "bit-for-bit theta1, theta2, both SEs, density and epochs",
+  "checkpoint_reuse": "main and both projection fits prohibited; identical scientific outputs recovered",
+  "r_density": "function text exactly matches September 4; base R only",
+  "benchmark_definitions_loaded": false,
+  "extra_validation_dplqr_fits": 1,
+  "extra_validation_auxiliary_fits": 2,
+  "elapsed_seconds": 3.771154200003366
+}
