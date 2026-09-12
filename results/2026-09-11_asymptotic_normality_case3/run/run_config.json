@@ -1,0 +1,60 @@
+{
+  "identity": {
+    "schema": 1,
+    "case": 3,
+    "tau": 0.5,
+    "theta": [
+      1.0,
+      -1.0
+    ],
+    "seed": 20260904,
+    "train_fraction": 0.8,
+    "hp": {
+      "depth": 2,
+      "width": 32,
+      "batch_size": 128,
+      "lr": 0.005
+    },
+    "threads": 1,
+    "deterministic_algorithms": true,
+    "early_stopping": false,
+    "projection_epochs": "same as main",
+    "validation": "monitor only",
+    "clipping": "post-fit nuisance",
+    "implementation_sha256": "833d890a5a8674c13d8cca705d7efd405c292c89ca9fe58ceb2a47e05b039203",
+    "sources": {
+      "dqAux.py": "99dc7ce752818cd59e4a8d8cc048d0a3752659f601503bea0b08c56bd52dc2db",
+      "results\\2026-09-10-asymptotic-normality\\source_bridge.py": "3c23be37758e724ef138d372a07b91f1b57576d1e789fa15343e5961cde833ba",
+      "results\\2026-09-04-homoscedastic-simulation\\simulate_homoscedastic.ipynb": "2e5bafc6cd1148f547f42c96bf8a4b027c6f3247f0e7dad09ff18797e0327405",
+      "results\\2026-09-10-asymptotic-normality\\density_only.R": "685028c05d1e35dd3d4dc49ba6255d9f7886d407b44d6ed173eb4bed757d071d"
+    },
+    "versions": {
+      "numpy": "2.4.6",
+      "pandas": "3.0.5",
+      "scipy": "1.17.1",
+      "scikit-learn": "1.6.1",
+      "torch": "2.13.0",
+      "torchtuples": "0.2.2"
+    },
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "r_version": "Rscript (R) version 4.6.1 (2026-06-24)"
+  },
+  "fingerprint": "ae01061c4ed6dfccbaf6d09ff63f72b0de57dc5d27e13fbe0db8adef85145d16",
+  "requested_Q": 20,
+  "sample_sizes": [
+    500,
+    1000,
+    2000,
+    4000
+  ],
+  "epoch_counts": [
+    200,
+    500,
+    1000
+  ],
+  "expected_rows": 240,
+  "status": "complete",
+  "completed_rows": 240,
+  "error": null
+}
