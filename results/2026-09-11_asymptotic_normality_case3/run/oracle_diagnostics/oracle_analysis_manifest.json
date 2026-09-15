@@ -1,0 +1,65 @@
+{
+  "created_utc": "2026-09-15T09:37:26.152526+00:00",
+  "case": 3,
+  "tau": 0.5,
+  "theta": [
+    1.0,
+    -1.0
+  ],
+  "true_f0": 0.36755259694786135,
+  "input_raw_sha256": "d1b7ea3a47e90b8f28dce6a1675fd9435b76dd807a541a51d6f7351bd9a08f8b",
+  "source_sha256": {
+    "dqAux.py": "99dc7ce752818cd59e4a8d8cc048d0a3752659f601503bea0b08c56bd52dc2db",
+    "results\\2026-09-10-asymptotic-normality\\source_bridge.py": "3c23be37758e724ef138d372a07b91f1b57576d1e789fa15343e5961cde833ba",
+    "results\\2026-09-04-homoscedastic-simulation\\simulate_homoscedastic.ipynb": "2e5bafc6cd1148f547f42c96bf8a4b027c6f3247f0e7dad09ff18797e0327405",
+    "results\\2026-09-10-asymptotic-normality\\density_only.R": "685028c05d1e35dd3d4dc49ba6255d9f7886d407b44d6ed173eb4bed757d071d"
+  },
+  "original_experiment_code_sha256": "833d890a5a8674c13d8cca705d7efd405c292c89ca9fe58ceb2a47e05b039203",
+  "versions": {
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.6.1",
+    "matplotlib": "3.11.1"
+  },
+  "sample_sizes": [
+    500,
+    1000,
+    2000,
+    4000
+  ],
+  "epochs": [
+    200,
+    500,
+    1000
+  ],
+  "Q_requested": 200,
+  "all_cells_have_Q200": true,
+  "saved_fit_rows": 2400,
+  "distinct_datasets": 800,
+  "all_seed_and_dataset_hash_checks_passed": true,
+  "oracle_A_normalization": "centered residual covariance / (n_train - 1), matching paper eq.14 and current code",
+  "sensitivity_normalization": "uncentered v.T @ v / n_train",
+  "oracle_B_normalization": "uncentered population second moment / M",
+  "oracle_interval_critical_value": 1.96,
+  "current_interval_critical_value": 1.959963984540054,
+  "all_oracle_A_SEs_identical_across_epochs": true,
+  "finite_inferential_statistics": true,
+  "Z_MC_available_rows": {
+    "1": 2400,
+    "2": 2400
+  },
+  "point_estimates_unchanged": true,
+  "original_notebook_cells_preserved": true,
+  "existing_files_checked": 4810,
+  "all_existing_files_unchanged_during_execution": true,
+  "population_size": 10000000,
+  "population_seed": 2026091502,
+  "population_relative_SE_MCSE": [
+    0.00015232360802574488,
+    0.00017470694975570274
+  ],
+  "projection_diagnostics_in_original_raw": [],
+  "neural_network_fits_launched": 0,
+  "R_invocations": 0
+}
