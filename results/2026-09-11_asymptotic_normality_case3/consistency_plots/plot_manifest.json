@@ -1,0 +1,39 @@
+{
+  "created_utc": "2026-09-15T14:07:25.139902+00:00",
+  "inputs": {
+    "run/raw_replications.csv": "d1b7ea3a47e90b8f28dce6a1675fd9435b76dd807a541a51d6f7351bd9a08f8b",
+    "run/run_config.json": "8ccf4da0c59f18a0772577bc83db0e08b03f49451a10e46ab44acfd7d26081c1"
+  },
+  "true_theta": [
+    1.0,
+    -1.0
+  ],
+  "tau": 0.5,
+  "replication_rows": 2400,
+  "summary_rows": 24,
+  "simulations_launched": 0,
+  "MC_SD_ddof": 1,
+  "RMSE_definition": "sqrt(mean((theta_hat - theta0)**2))",
+  "actual_Q": [
+    200
+  ],
+  "outputs": [
+    "consistency_plots/theta1_summary.csv",
+    "consistency_plots/theta2_summary.csv",
+    "consistency_plots/theta1_mean_vs_epochs.png",
+    "consistency_plots/theta1_absolute_bias_vs_epochs.png",
+    "consistency_plots/theta1_rmse_vs_epochs.png",
+    "consistency_plots/theta1_n500_boxplot.png",
+    "consistency_plots/theta1_n1000_boxplot.png",
+    "consistency_plots/theta1_n2000_boxplot.png",
+    "consistency_plots/theta1_n4000_boxplot.png",
+    "consistency_plots/theta2_mean_vs_epochs.png",
+    "consistency_plots/theta2_absolute_bias_vs_epochs.png",
+    "consistency_plots/theta2_rmse_vs_epochs.png",
+    "consistency_plots/theta2_n500_boxplot.png",
+    "consistency_plots/theta2_n1000_boxplot.png",
+    "consistency_plots/theta2_n2000_boxplot.png",
+    "consistency_plots/theta2_n4000_boxplot.png",
+    "consistency_plots/README.md"
+  ]
+}
