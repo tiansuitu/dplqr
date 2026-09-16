@@ -1,0 +1,34 @@
+{
+  "method": "Oracle-nuisance heteroskedastic Wald",
+  "confidence_level": 0.95,
+  "critical_value": 1.959963984540054,
+  "input_run": "results\\2026-09-15_heteroskedastic_epoch_drift_case6\\run_x1_x2",
+  "parent_fingerprint": "bb1a1ebe1b83ec43b6d338c52f59a1f2c2e4d8565e6e0612c8db6147e1cd5ae5",
+  "saved_requested_Q": 70,
+  "scale": "(x1+x2)/10 + Phi(mean(z-1)); user-requested x1+x2 specification",
+  "theta0": [
+    1.0,
+    -1.0
+  ],
+  "tau": 0.5,
+  "raw_sha256": "5ef2ec0034c0df7bd1d90630612ab31a51f28f6d87f68017d033e6997a02b89b",
+  "source_notebook_sha256": "a22c402599c7b06e7ab1837328c5c55ba8054210f0c565d4807d19ede0f665a2",
+  "coverage_notebook_sha256": "f507f71e2f26c794f975216d0941ee4c9736391dec19928e585cee4a0c711966",
+  "selected_helpers_sha256": "4f19a36bae12ce65635ab80a7335aa6ab5d404856d9be1e0a791b9f7d4388d40",
+  "quadrature": {
+    "ORACLE_QUAD_EPSABS": 1e-10,
+    "ORACLE_QUAD_EPSREL": 1e-09,
+    "ORACLE_QUAD_BATCH": 128
+  },
+  "normalization": "uncentered empirical moments divided by actual n_fit",
+  "model_training": false,
+  "bootstrap": false,
+  "original_estimates_modified": false,
+  "versions": {
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.6.1",
+    "matplotlib": "3.11.1"
+  }
+}

@@ -1,0 +1,9 @@
+n_total,epoch,Q_available,Q_requested,complete
+1000,200,70,70,True
+1000,500,70,70,True
+1000,1000,70,70,True
+1000,2000,70,70,True
+2000,200,70,70,True
+2000,500,70,70,True
+2000,1000,70,70,True
+2000,2000,70,70,True
