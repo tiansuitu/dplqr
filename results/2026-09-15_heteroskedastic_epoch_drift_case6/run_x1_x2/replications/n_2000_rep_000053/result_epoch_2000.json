@@ -1,0 +1,31 @@
+{
+  "fingerprint": "bb1a1ebe1b83ec43b6d338c52f59a1f2c2e4d8565e6e0612c8db6147e1cd5ae5",
+  "row": {
+    "case": 6,
+    "tau": 0.5,
+    "n_total": 2000,
+    "n_fit": 1600,
+    "n_val": 400,
+    "replication": 53,
+    "seed": 82260957,
+    "data_seed": 82260957,
+    "fit_seed": 82760957,
+    "data_sha256": "2340571865d93ea222e4a033c4a5fb38bb49a7b72ed3771e502efe428ad96f4b",
+    "initialization_sha256": "e691e42db6529384a9d103bd76ebc635bbef06e21fca6f47d15774817f486aef",
+    "epoch": 2000,
+    "optimizer_updates": 26000,
+    "train_check_loss": 0.17054176896810533,
+    "validation_check_loss": 0.4969266080856323,
+    "train_check_loss_clipped": 0.4190458536148071,
+    "validation_check_loss_clipped": 0.5420501470565796,
+    "elapsed_time": 91.5187503999914,
+    "theta_hat_1": 1.0077139139175415,
+    "theta0_1": 1.0,
+    "error_theta1": 0.007713913917541504,
+    "squared_error_theta1": 5.950446792724051e-05,
+    "theta_hat_2": -1.0079439878463745,
+    "theta0_2": -1.0,
+    "error_theta2": -0.007943987846374512,
+    "squared_error_theta2": 6.310694290334595e-05
+  }
+}

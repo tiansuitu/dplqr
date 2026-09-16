@@ -1,0 +1,70 @@
+{
+  "identity": {
+    "schema": 1,
+    "case": 6,
+    "tau": 0.5,
+    "theta": [
+      1.0,
+      -1.0
+    ],
+    "seed": 20260904,
+    "train_fraction": 0.8,
+    "hp": {
+      "depth": 2,
+      "width": 32,
+      "batch_size": 128,
+      "lr": 0.005
+    },
+    "n_list": [
+      1000,
+      2000
+    ],
+    "checkpoint_epochs": [
+      200,
+      500,
+      1000,
+      2000
+    ],
+    "max_epochs": 2000,
+    "save_every": 50,
+    "device": "cpu",
+    "threads": 1,
+    "deterministic_algorithms": true,
+    "optimizer": "tt.optim.AdamW wrapping torch.optim.Adam",
+    "adam_betas": [
+      0.9,
+      0.99
+    ],
+    "adam_eps": 1e-08,
+    "decoupled_weight_decay": 0.0,
+    "continuous_trajectory": true,
+    "early_stopping": false,
+    "validation": "diagnostic only",
+    "clipping": "original helper on checkpoint copies only; raw live state always resumes",
+    "sigma_formula": "(x1+x2)/10 + Phi(mean(z-1)); user-requested x1+x2 specification",
+    "theta_source": "raw joint DPLQR check-loss optimization",
+    "source_sha256": {
+      "dqAux.py": "99dc7ce752818cd59e4a8d8cc048d0a3752659f601503bea0b08c56bd52dc2db",
+      "reused_DGP_definitions": "3d3cd1a3092dd608d3f74325be2f5cae9916b647929f0c330a377c1c1b2a91d4",
+      "reused_Case3_IO_definitions": "e8ddbbb633f7e970ec29a84c3fa133216c83b71133a962783952f02ded19206d"
+    },
+    "implementation_sha256": "5c486617cc5d8da7b46042ce0096fa3bdbd98cae8957b767216e9840745a7ac5",
+    "versions": {
+      "numpy": "2.4.6",
+      "pandas": "3.0.5",
+      "scipy": "1.17.1",
+      "scikit-learn": "1.6.1",
+      "torch": "2.13.0",
+      "torchtuples": "0.2.2",
+      "matplotlib": "3.11.1"
+    },
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0"
+  },
+  "fingerprint": "bb1a1ebe1b83ec43b6d338c52f59a1f2c2e4d8565e6e0612c8db6147e1cd5ae5",
+  "requested_Q": 70,
+  "status": "complete",
+  "completed_rows": 560,
+  "expected_rows": 560,
+  "error": null
+}
