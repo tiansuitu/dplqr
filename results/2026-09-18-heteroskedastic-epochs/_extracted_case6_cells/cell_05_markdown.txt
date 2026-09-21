@@ -1,0 +1,8 @@
+## 3. Random seeds and exact restart state
+
+Data seed = \`BASE_SEED + CASE*10_000_000 + n_total*1000 + replication\`.
+Fit seed = data seed + \`round(tau*1_000_000)\`. Epoch is absent from both formulas.
+
+The original helper seeds Python, NumPy and PyTorch. The DGP uses its own \`default_rng(data_seed)\`.
+Recovery stores all training RNG states, not just the starting seed. The restored RNG is installed in
+\`on_fit_start\`, after torchtuples' loader setup, so startup inspection of a minibatch does not perturb a resumed trajectory.

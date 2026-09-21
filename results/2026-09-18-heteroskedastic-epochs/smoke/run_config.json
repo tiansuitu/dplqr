@@ -1,0 +1,139 @@
+{
+  "created_utc": "2026-09-18T03:27:49.940002+00:00",
+  "verify": true,
+  "tau": 0.5,
+  "theta0": [
+    1.0,
+    -1.0
+  ],
+  "hp": {
+    "depth": 2,
+    "width": 32,
+    "batch_size": 128,
+    "lr": 0.005
+  },
+  "adam_betas": [
+    0.9,
+    0.99
+  ],
+  "adam_eps": 1e-08,
+  "train_fraction": 0.8,
+  "n_list": [
+    400
+  ],
+  "epochs": [
+    20,
+    60
+  ],
+  "max_epochs": 60,
+  "reps": 2,
+  "base_seed": 20260918,
+  "designs": [
+    {
+      "name": "mild_s1_t3",
+      "sigma": "mild_prior",
+      "scale": 1.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "paper6_s1_t3",
+      "sigma": "paper_case6",
+      "scale": 1.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "paper4_s1_t3",
+      "sigma": "paper_case4",
+      "scale": 1.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "mild_x10_s1_t3",
+      "sigma": "mild_x10",
+      "scale": 1.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "mild_s10_t3",
+      "sigma": "mild_prior",
+      "scale": 10.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "paper6_s10_t3",
+      "sigma": "paper_case6",
+      "scale": 10.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "paper4_s10_t3",
+      "sigma": "paper_case4",
+      "scale": 10.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "case4_unscaled_t3",
+      "sigma": "case4_unscaled",
+      "scale": 1.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "case6_amp_phi_t3",
+      "sigma": "case6_amp_phi",
+      "scale": 1.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "steep_s1_t3",
+      "sigma": "steep_x",
+      "scale": 1.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "steep_hard_t3",
+      "sigma": "steep_x_hard",
+      "scale": 1.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "interact_s1_t3",
+      "sigma": "interaction",
+      "scale": 1.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "interact_s5_t3",
+      "sigma": "interaction",
+      "scale": 5.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "x_mult_t3",
+      "sigma": "x_multiplicative",
+      "scale": 1.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "z_spike_t3",
+      "sigma": "z_spike",
+      "scale": 1.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "paper6_s10_normal",
+      "sigma": "paper_case6",
+      "scale": 10.0,
+      "error_law": "normal"
+    },
+    {
+      "name": "mild_x10_normal",
+      "sigma": "mild_x10",
+      "scale": 1.0,
+      "error_law": "normal"
+    }
+  ],
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python": "3.11.9",
+  "torch": "2.13.0+cpu",
+  "note": "Primary metric: bias/RMSE of theta_hat vs structural theta_0 across epochs. bias_vs_theta_tau only for affine-in-X sigma families."
+}

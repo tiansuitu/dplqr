@@ -1,0 +1,13 @@
+## Reading the eventual results
+
+Check the mean-versus-epoch plots against the true horizontal lines first, then compare absolute bias,
+RMSE and paired changes with the check-loss plots. A mean moving away from truth is different from
+increased dispersion around an unchanged mean. A lower check loss does not, by itself, imply a more
+accurate linear coefficient.
+
+The optional oracle statistic addresses centering and variance scale under the proposed asymptotic
+approximation. It is separate from the primary question of raw coefficient movement along the same
+optimization path. Finite-sample drift, Monte Carlo uncertainty, architecture/optimization effects and
+formal asymptotic consistency must not be conflated.
+
+No simulation results are included in this notebook; every code cell is initially unexecuted.

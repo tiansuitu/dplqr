@@ -1,0 +1,8 @@
+def generate_case6_covariates(n_total, rng):
+    covariance = np.full((10, 10), 0.5)
+    np.fill_diagonal(covariance, 1.0)
+    latent = rng.multivariate_normal(np.zeros(10), covariance, size=n_total)
+    z_tilde = 2 * norm.cdf(latent)
+    z = z_tilde[:, :8]
+    x = np.column_stack((z_tilde[:, 8] > 1, z_tilde[:, 9])).astype(float)
+    return x, z, latent[:, :8]

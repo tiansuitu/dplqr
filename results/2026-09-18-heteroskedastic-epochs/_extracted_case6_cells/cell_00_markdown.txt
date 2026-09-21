@@ -1,0 +1,16 @@
+# Case 6: heteroskedastic DPLQR epoch stability
+
+Research question:
+"Under Zhong and Wang (2024) Simulation II, deep Case 6,
+at tau=0.5, does continuing the same DPLQR optimization
+trajectory for more epochs cause the estimated parametric
+coefficient theta_hat to drift away from the true
+theta_0=(1,-1), even when the empirical check loss continues
+to improve?"
+
+This is a **finite-sample optimization stability experiment**, not a mathematical test of asymptotic consistency.
+
+**Execution:** this revised notebook is unexecuted. Restart the kernel before running the revised cells. Run with the repository's Python environment from the repository root or this experiment folder. The clearly marked Monte Carlo cell launches Q=70 replications at each n=1000,2000, up to 2000 epochs. No smoke test or tuning grid is included. To inspect saved results later, skip that cell. The optional oracle section is disabled by default and is independent of training.
+
+For each (n, replication), all checkpoints lie on **one continuously trained model and one Adam optimizer**. Validation is diagnostic only. A restart restores model, masks, Adam moments/step counters and random-generator states at the latest saved epoch boundary; it does not restart a checkpoint as an independent fit. Exact resumption requires the same recorded software and CPU environment.
+**Revised scale:** this version uses the requested $(x_1+x_2)/10$ specification. Its outputs go to `run_x1_x2/`. The existing `run/` contains the earlier Q=50 experiment with $(x_1+x_1)/10$ and is preserved. Because changing the scale changes Y, those fits cannot be reused or extended for this revised DGP; the new run requires 70 replications per sample size.

@@ -1,0 +1,18 @@
+## 13. Oracle-nuisance asymptotic diagnostic
+
+This is **not** Zhong-Wang's practical heteroscedastic variance estimator. It is an optional
+population-nuisance diagnostic evaluated on each regenerated fitting sample. It does not
+alter theta, fit any network, or bootstrap.
+
+With $\widetilde X_i=X_i-\varphi^*(Z_i)$, use **uncentered empirical second moments**:
+$$\widehat\Sigma_1=\frac{\tau(1-\tau)}{n_{\rm fit}}\sum_i\widetilde X_i\widetilde X_i^\top,\qquad
+\widehat\Sigma_2=\frac1{n_{\rm fit}}\sum_i f_0(U_i)\widetilde X_i\widetilde X_i^\top,$$
+$$V_{\rm oracle}=\widehat\Sigma_2^{-1}\widehat\Sigma_1\widehat\Sigma_2^{-1},\qquad
+Z_j=\frac{\sqrt{n_{\rm fit}}(\hat\theta_j-\theta_{0j})}{\sqrt{V_{{\rm oracle},jj}}}.$$
+These are the requested heteroskedastic sandwich moments; do not substitute a centered sample
+covariance or the homoskedastic Case 3 scalar-density formula. The weighted projection need not
+make the **unweighted** mean residual zero.
+
+The denominator uses the **actual fitting sample size**. Its oracle matrix is the same at every
+checkpoint within a replication, so only the raw estimate changes. Oracle outputs are saved under a
+separate `run_x1_x2/oracle_diagnostics/` directory; repeated optional runs use a fresh subdirectory.

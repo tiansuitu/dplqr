@@ -1,0 +1,19 @@
+## 5. Exact deep function, heteroskedastic scale, and split
+
+Reuse the **vectorized original Case 3** \`nonlinear_truth(z, 3)\`, which implements
+$$m(z)=0.61\left[
+e^{z_1(1+z_2-\pi z_3z_4)/2}(z_5+0.2)
++\frac{z_5(z_4-0.3)}{|2z_4-1|+1}
++2\sin(z_5)|z_5z_6-0.6|+\log(z_6+z_7z_8)\right].$$
+
+**User-requested specification:**
+$$\sigma(x,z)=(x_1+x_2)/10+\Phi\left(\frac18\sum_{k=1}^8(z_k-1)\right).$$
+This uses $x_1+x_2$ as the intended expression, following your correction of the printed $x_1+x_1$. The earlier literal-formula results remain in `run/`; this specification uses a separate `run_x1_x2/` directory.
+
+Generate independent unscaled $\epsilon\sim t_3$ and
+$Y=X^\top(1,-1)+m(Z)+\sigma(X,Z)\epsilon$.
+The scale is positive, so the conditional median is exactly $X^\top(1,-1)+m(Z)$.
+
+As in Case 3, the same data RNG draws the permutation **after the error draws**. Fit on the first
+80% and validate on the rest. StandardScaler is fitted only to training Z; X and Y stay on their raw
+scales. The data hash includes X, raw Z, Y, split order and retained latent values.

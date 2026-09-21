@@ -1,0 +1,51 @@
+def paired_diagnostic(frame):
+    if frame.empty:
+        return pd.DataFrame(), pd.DataFrame()
+    columns = ["n_total", "replication", "theta_hat_1", "theta_hat_2",
+               "train_check_loss", "validation_check_loss"]
+    baseline = frame.loc[frame.epoch == 200, columns].rename(
+        columns={name: name + "_at_200" for name in columns if name not in ("n_total", "replication")})
+    paired = frame.loc[frame.epoch > 200].merge(baseline, on=["n_total", "replication"],
+                                              how="inner", validate="many_to_one")
+    for j in (1, 2):
+        paired[f"delta_theta{j}"] = paired[f"theta_hat_{j}"] - paired[f"theta_hat_{j}_at_200"]
+        paired[f"delta_abs_error_theta{j}"] = (
+            (paired[f"theta_hat_{j}"] - THETA_0[j - 1]).abs()
+            - (paired[f"theta_hat_{j}_at_200"] - THETA_0[j - 1]).abs())
+    for name in ("train_check_loss", "validation_check_loss"):
+        paired[f"delta_{name}"] = paired[name] - paired[f"{name}_at_200"]
+    rows = []
+    for (n_total, epoch), group in paired.groupby(["n_total", "epoch"], sort=True):
+        row = dict(n_total=int(n_total), epoch=int(epoch), Q_paired=len(group))
+        for j in (1, 2):
+            row[f"mean_delta_theta{j}"] = float(group[f"delta_theta{j}"].mean())
+            row[f"mcse_delta_theta{j}"] = float(group[f"delta_theta{j}"].std(ddof=1) / np.sqrt(len(group))) if len(group)>1 else np.nan
+            row[f"mean_delta_abs_error_theta{j}"] = float(group[f"delta_abs_error_theta{j}"].mean())
+        row["mean_delta_train_check_loss"] = float(group.delta_train_check_loss.mean())
+        row["mean_delta_validation_check_loss"] = float(group.delta_validation_check_loss.mean())
+        rows.append(row)
+    return paired, pd.DataFrame(rows)
+
+paired_rows, paired_summary = paired_diagnostic(plot_raw)
+if paired_summary.empty:
+    print("No complete paired trajectories yet.")
+else:
+    atomic_write(OUTPUT / "paired_changes.csv", paired_rows, "csv")
+    atomic_write(OUTPUT / "paired_summary.csv", paired_summary, "csv")
+    display(paired_summary.round(5))
+    for j in (1, 2):
+        fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
+        for n_total in N_LIST:
+            group = paired_summary.loc[paired_summary.n_total == n_total].sort_values("epoch")
+            if group.empty:
+                continue
+            errors = group[f"mcse_delta_theta{j}"].to_numpy()
+            ax.errorbar(group.epoch, group[f"mean_delta_theta{j}"],
+                        yerr=errors if np.isfinite(errors).all() else None,
+                        marker="o", capsize=3, label=f"n={n_total}, Q={int(group.Q_paired.iloc[0])}")
+        ax.axhline(0, color="black", ls="--")
+        ax.set(xlabel="Training epoch", xticks=CHECKPOINT_EPOCHS[1:],
+               ylabel=rf"Mean $\hat{{\theta}}_{j}(e)-\hat{{\theta}}_{j}(200)$",
+               title=f"Case 6: paired theta_{j} movement along the same trajectory\nBars show one paired MC SE")
+        ax.legend(frameon=False)
+        save_plot(fig, f"theta{j}_paired_change_from_200.png")

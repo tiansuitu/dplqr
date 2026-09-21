@@ -1,0 +1,16 @@
+## 8. Incremental saving and the manual Monte Carlo run
+
+Runtime outputs follow the earlier structure under `run_x1_x2/`:
+- \`run_config.json\`, \`raw_replications.csv\`, \`summary.csv\`, and \`figures/\`.
+- \`replications/n_<n>_rep_<rep>/trajectory.pt\` contains the recoverable raw trajectory.
+- \`result_epoch_<epoch>.json\` stores each immutable checkpoint row.
+- \`clipped_epoch_<epoch>.pt\` retains the post-fit copy for reference; it is never loaded to resume training.
+
+The original atomic-write helper and exclusive run lock are reused. A scientific/source/environment
+fingerprint prevents mixing runs. Q may be increased, but not reduced within an existing run.
+Previously saved rows must agree exactly; only new keys are added. The CSV is reconstructed
+atomically from checkpoint JSON records. If a kernel is forcibly killed, remove a stale
+`run_x1_x2/.run.lock` manually **only after confirming its process has stopped**.
+
+**The final cell in this section is the expensive experiment. Execute it manually when ready.**
+No simulation is needed to read the notebook or its definitions.

@@ -1,0 +1,22 @@
+{
+  "experiment": "experiment0_exact_m0",
+  "N_VALUES": [
+    1000,
+    2000
+  ],
+  "Q": 50,
+  "BASE_SEED": 20260921,
+  "TAU": 0.5,
+  "THETA0": [
+    1.0,
+    -1.0
+  ],
+  "M0_COEF": 0.56,
+  "DF_T": 3,
+  "F0": 0.3675525969478614,
+  "WALD_Z": 1.959963984540054,
+  "solver": "scipy.optimize.linprog(method='highs') L1 / median regression LP",
+  "note": "Oracle m0, f0, varphi*; estimate theta only.",
+  "sandwich": "linear_QR_raw_X",
+  "sandwich_note": "With known m0, Exp0 uses ordinary linear median QR of Y-m0(Z) on X; oracle sandwich/IF use raw X. Residualized X-phi*(Z) is for estimated-m experiments only."
+}

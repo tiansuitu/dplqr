@@ -1,0 +1,69 @@
+def new_model(fit_seed):
+    reused.seed_all(fit_seed)
+    net = dqNetSparse(2, 8, torch.zeros((1, 2), dtype=torch.float32),
+                      [HP["depth"], HP["width"]], sparseRatio=0.5)
+    net.linLinear.reset_parameters()  # Preserve Case 3's explicit theta initialization.
+    optimizer = tt.optim.AdamW(lr=HP["lr"], betas=ADAM_BETAS, eps=ADAM_EPS,
+                                decoupled_weight_decay=0.0)
+    model = Model(net, checkLoss(tau=TAU), optimizer=optimizer, device=DEVICE)
+    model.optimizer.set_lr(HP["lr"])
+    assert isinstance(model.optimizer.optimizer, torch.optim.Adam)
+    assert tuple(model.optimizer.param_groups[0]["betas"]) == ADAM_BETAS
+    return model
+
+def state_digest(net):
+    digest = hashlib.sha256()
+    for name, value in net.state_dict().items():
+        digest.update(name.encode())
+        digest.update(value.detach().cpu().contiguous().numpy().tobytes())
+    return digest.hexdigest()
+
+def full_check_loss(net, inputs, target):
+    training = net.training
+    net.eval()
+    total = 0.0
+    loss_function = checkLoss(tau=TAU)
+    try:
+        with torch.no_grad():
+            for start in range(0, len(target), HP["batch_size"]):
+                stop = min(start + HP["batch_size"], len(target))
+                prediction = net(*(value[start:stop].to(DEVICE) for value in inputs))
+                loss = loss_function(prediction, target[start:stop].to(DEVICE))
+                total += float(loss) * (stop - start)
+    finally:
+        net.train(training)
+    value = total / len(target)
+    if not np.isfinite(value):
+        raise FloatingPointError("Non-finite full-sample check loss.")
+    return value
+
+def make_checkpoint_row(model, data, epoch, updates, elapsed, inputs, targets, initialization_sha256):
+    # Diagnostic evaluations must never perturb training randomness or parameters.
+    rng = capture_rng()
+    try:
+        theta = model.net.linLinear.weight.detach().cpu().numpy().reshape(-1).astype(float)
+        live_digest = state_digest(model.net)
+        if not np.isfinite(theta).all():
+            raise FloatingPointError("Non-finite theta.")
+        clipped = deepcopy(model.net)
+        reused.clip_neural_weights(clipped)
+        np.testing.assert_array_equal(clipped.linLinear.weight.detach().cpu().numpy().reshape(-1), theta)
+        row = dict(
+            case=CASE, tau=TAU, n_total=data.n_total, n_fit=data.n_fit, n_val=data.n_val,
+            replication=data.replication, seed=data.data_seed, data_seed=data.data_seed,
+            fit_seed=data.fit_seed, data_sha256=data.data_sha256,
+            initialization_sha256=initialization_sha256, epoch=int(epoch), optimizer_updates=int(updates),
+            train_check_loss=full_check_loss(model.net, inputs[0], targets[0]),
+            validation_check_loss=full_check_loss(model.net, inputs[1], targets[1]),
+            train_check_loss_clipped=full_check_loss(clipped, inputs[0], targets[0]),
+            validation_check_loss_clipped=full_check_loss(clipped, inputs[1], targets[1]),
+            elapsed_time=float(elapsed),
+        )
+        for j in (1, 2):
+            error = float(theta[j - 1] - THETA_0[j - 1])
+            row.update({f"theta_hat_{j}": float(theta[j - 1]), f"theta0_{j}": float(THETA_0[j - 1]),
+                        f"error_theta{j}": error, f"squared_error_theta{j}": error**2})
+        assert state_digest(model.net) == live_digest
+        return row, deepcopy(clipped.state_dict())
+    finally:
+        restore_rng(rng)

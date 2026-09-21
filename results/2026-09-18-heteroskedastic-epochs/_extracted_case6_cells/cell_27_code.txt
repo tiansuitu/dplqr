@@ -1,0 +1,82 @@
+def oracle_covariance(data):
+    phi, quadrature_error = oracle_varphi_case6(data.z_train, data.latent_train)
+    v = data.x_train - phi
+    f0 = f0_true(data.x_train, data.z_train)
+    sigma1 = TAU * (1 - TAU) * (v.T @ v) / data.n_fit
+    sigma2 = v.T @ (f0[:, None] * v) / data.n_fit
+    for matrix in (sigma1, sigma2):
+        np.testing.assert_allclose(matrix, matrix.T, rtol=1e-12, atol=1e-14)
+        if np.linalg.eigvalsh(matrix).min() <= 0:
+            raise FloatingPointError("Oracle sandwich matrix is not positive definite.")
+    inverse2 = np.linalg.inv(sigma2)
+    covariance = inverse2 @ sigma1 @ inverse2.T
+    covariance = (covariance + covariance.T) / 2
+    if not np.isfinite(covariance).all() or np.linalg.eigvalsh(covariance).min() <= 0:
+        raise FloatingPointError("Invalid oracle asymptotic covariance.")
+    diagnostics = dict(n_total=data.n_total, replication=data.replication, n_fit=data.n_fit,
+        data_sha256=data.data_sha256, quadrature_max_abs_error=quadrature_error,
+        sigma1_min_eigenvalue=float(np.linalg.eigvalsh(sigma1).min()),
+        sigma2_min_eigenvalue=float(np.linalg.eigvalsh(sigma2).min()),
+        sigma1_condition=float(np.linalg.cond(sigma1)), sigma2_condition=float(np.linalg.cond(sigma2)),
+        mean_f0=float(f0.mean()), mean_phi1=float(phi[:, 0].mean()), mean_phi2=float(phi[:, 1].mean()))
+    for name, matrix in (("Sigma1", sigma1), ("Sigma2", sigma2), ("V_oracle", covariance)):
+        for i, j in ((0, 0), (0, 1), (1, 1)):
+            diagnostics[f"{name}_{i+1}{j+1}"] = float(matrix[i, j])
+    return covariance, diagnostics
+
+def run_oracle_diagnostic():
+    frame = read_saved_results()
+    if frame.empty:
+        print("No saved point estimates available for the optional diagnostic.")
+        return None
+    original_theta = frame[["theta_hat_1", "theta_hat_2"]].copy()
+    sample_rows = []
+    for (n_total, replication), group in frame.groupby(["n_total", "replication"], sort=True):
+        data = make_case6(int(n_total), int(replication))
+        assert group.data_sha256.eq(data.data_sha256).all()
+        assert group.n_fit.eq(data.n_fit).all()
+        covariance, diagnostics = oracle_covariance(data)
+        for j in (1, 2):
+            diagnostics[f"oracle_se_{j}"] = float(np.sqrt(covariance[j-1, j-1] / data.n_fit))
+        sample_rows.append(diagnostics)
+    sample_table = pd.DataFrame(sample_rows)
+    oracle_raw = frame.merge(sample_table[["n_total", "replication", "oracle_se_1", "oracle_se_2"]],
+                             on=["n_total", "replication"], how="left", validate="many_to_one", sort=False)
+    pd.testing.assert_frame_equal(oracle_raw[["theta_hat_1", "theta_hat_2"]], original_theta, check_exact=True)
+    for j in (1, 2):
+        oracle_raw[f"Z_oracle_{j}"] = (oracle_raw[f"theta_hat_{j}"] - THETA_0[j-1]) / oracle_raw[f"oracle_se_{j}"]
+        assert np.isfinite(oracle_raw[f"Z_oracle_{j}"]).all()
+        assert oracle_raw.groupby(["n_total", "replication"])[f"oracle_se_{j}"].nunique().eq(1).all()
+    records = []
+    for (n_total, epoch), group in oracle_raw.groupby(["n_total", "epoch"], sort=True):
+        for j in (1, 2):
+            records.append(dict(n_total=int(n_total), n_fit=int(group.n_fit.iloc[0]), epoch=int(epoch),
+                component=f"theta_{j}", Q_available=len(group),
+                mean_oracle_SE=float(group[f"oracle_se_{j}"].mean()),
+                mean_Z_oracle=float(group[f"Z_oracle_{j}"].mean()),
+                SD_Z_oracle=float(group[f"Z_oracle_{j}"].std(ddof=1)) if len(group)>1 else np.nan))
+    oracle_summary = pd.DataFrame(records)
+    base = OUTPUT / "oracle_diagnostics"
+    if base.exists() and any(base.iterdir()):
+        from datetime import datetime, timezone
+        destination = base / ("rerun_" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S_%fZ"))
+    else:
+        destination = base
+    destination.mkdir(parents=True, exist_ok=False if destination != base else True)
+    for name, table in (("oracle_replications.csv", oracle_raw), ("oracle_sample_matrices.csv", sample_table),
+                         ("oracle_summary.csv", oracle_summary)):
+        with (destination / name).open("x", encoding="utf-8", newline="") as stream:
+            table.to_csv(stream, index=False)
+    with (destination / "oracle_config.json").open("x", encoding="utf-8") as stream:
+        json.dump(dict(parent_fingerprint=FINGERPRINT, tau=TAU, theta=THETA_0.tolist(),
+            density="2/(pi*sqrt(3)*sigma(U))", integration="analytic sum over X1 conditional on G10 plus deterministic quad_vec",
+            epsabs=ORACLE_QUAD_EPSABS, epsrel=ORACLE_QUAD_EPSREL, batch=ORACLE_QUAD_BATCH,
+            normalization="uncentered moments divided by actual n_fit", training_modified=False), stream, indent=2)
+    display(oracle_summary.round(5))
+    print("Optional oracle outputs:", destination.relative_to(ROOT))
+    return oracle_raw, sample_table, oracle_summary
+
+if RUN_ORACLE:
+    oracle_outputs = run_oracle_diagnostic()
+else:
+    print("Optional oracle-nuisance diagnostic skipped (RUN_ORACLE=False).")

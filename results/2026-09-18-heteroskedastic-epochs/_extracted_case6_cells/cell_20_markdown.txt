@@ -1,0 +1,10 @@
+## 10. Simple theta epoch-drift plots
+
+For each coefficient, show mean estimate, absolute bias and RMSE versus epoch, with n=1000 and
+n=2000 as separate lines. The mean plot optionally shows **one Monte Carlo SE** on either side of
+the estimated mean; these are Monte Carlo uncertainty bars, not confidence intervals for an
+individual fitted coefficient. Truth is always (1,-1).
+
+Boxplots separate sample sizes. The final loss plots compare the **raw** full-training and
+full-validation check losses, so they align with the raw theta trajectory. Additional clipped-copy
+losses remain in the replication CSV for transparency. No epoch is selected from validation loss.

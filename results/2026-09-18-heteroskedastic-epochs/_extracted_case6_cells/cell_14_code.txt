@@ -1,0 +1,117 @@
+class ContinuousCheckpoints(tt.callbacks.Callback):
+    def __init__(self, data, directory, inputs, targets, saved, initialization_sha256):
+        self.data, self.directory = data, directory
+        self.inputs, self.targets = inputs, targets
+        self.saved = saved
+        self.epoch = int(saved["epoch"]) if saved else 0
+        self.updates = int(saved["optimizer_updates"]) if saved else 0
+        self.rows = deepcopy(saved["rows"]) if saved else []
+        self.elapsed_before = float(saved["elapsed_time"]) if saved else 0.0
+        self.initialization_sha256 = initialization_sha256
+
+    def on_fit_start(self):
+        self.started = time.perf_counter()
+        self.model.net.train()
+        if self.saved is not None:
+            # torchtuples has already inspected its loader. Undo startup RNG consumption.
+            restore_rng(self.saved["rng"])
+        self.optimizer_object = self.model.optimizer.optimizer
+        return False
+
+    def on_batch_end(self):
+        if not torch.isfinite(self.model.batch_loss).item():
+            raise FloatingPointError("Non-finite minibatch loss; retain the last safe snapshot.")
+        self.updates += 1
+        return False
+
+    def on_epoch_end(self):
+        self.epoch += 1
+        assert self.model.optimizer.optimizer is self.optimizer_object
+        assert self.updates == self.epoch * math.ceil(self.data.n_fit / HP["batch_size"])
+        is_checkpoint = self.epoch in CHECKPOINT_EPOCHS
+        clipped_state = None
+        if is_checkpoint:
+            row, clipped_state = make_checkpoint_row(
+                self.model, self.data, self.epoch, self.updates,
+                self.elapsed_before + time.perf_counter() - self.started,
+                self.inputs, self.targets, self.initialization_sha256)
+            if any(old["epoch"] == self.epoch for old in self.rows):
+                raise ValueError("A scientific checkpoint was unexpectedly repeated.")
+            self.rows.append(row)
+        if is_checkpoint or self.epoch % SAVE_EVERY == 0 or self.epoch == MAX_EPOCHS:
+            bundle = dict(
+                fingerprint=FINGERPRINT, n_total=self.data.n_total, replication=self.data.replication,
+                n_fit=self.data.n_fit, data_sha256=self.data.data_sha256,
+                data_seed=self.data.data_seed, fit_seed=self.data.fit_seed,
+                initialization_sha256=self.initialization_sha256, epoch=self.epoch,
+                optimizer_updates=self.updates,
+                elapsed_time=self.elapsed_before + time.perf_counter() - self.started,
+                raw_model=self.model.net.state_dict(), optimizer=self.model.optimizer.state_dict(),
+                rng=capture_rng(), rows=deepcopy(self.rows), clipped_model=clipped_state,
+            )
+            # Durable trajectory state is committed BEFORE rows are exposed in JSON/CSV.
+            atomic_write(self.directory / "trajectory.pt", bundle, "torch")
+            if clipped_state is not None:
+                path = self.directory / f"clipped_epoch_{self.epoch:04d}.pt"
+                if not path.exists():
+                    atomic_write(path, dict(fingerprint=FINGERPRINT, epoch=self.epoch,
+                        data_sha256=self.data.data_sha256, clipped_model=clipped_state), "torch")
+            if is_checkpoint:
+                publish_rows(self.directory, self.rows)
+                export_raw_results()
+                print(f"Saved n={self.data.n_total}, replication={self.data.replication}, epoch={self.epoch}")
+        return False  # No early stopping or model selection.
+
+    def on_fit_end(self):
+        if self.epoch != MAX_EPOCHS:
+            raise RuntimeError("The continuous fit did not finish its requested epoch budget.")
+        assert self.updates == MAX_EPOCHS * math.ceil(self.data.n_fit / HP["batch_size"])
+        return False
+
+def fit_continuous(data, directory):
+    directory.mkdir(parents=True, exist_ok=True)
+    state_path = directory / "trajectory.pt"
+    saved = torch.load(state_path, map_location="cpu", weights_only=True) if state_path.exists() else None
+    if saved is not None:
+        expected = dict(fingerprint=FINGERPRINT, n_total=data.n_total, replication=data.replication,
+                        n_fit=data.n_fit, data_sha256=data.data_sha256,
+                        data_seed=data.data_seed, fit_seed=data.fit_seed)
+        if any(saved[key] != value for key, value in expected.items()):
+            raise ValueError(f"Incompatible trajectory state: {state_path}")
+        if not 0 <= saved["epoch"] <= MAX_EPOCHS:
+            raise ValueError("Invalid recovery epoch.")
+        assert saved["optimizer_updates"] == saved["epoch"] * math.ceil(data.n_fit / HP["batch_size"])
+        assert sorted(row["epoch"] for row in saved["rows"]) == [e for e in CHECKPOINT_EPOCHS if e <= saved["epoch"]]
+        # Repair outputs if a process stopped just after committing its trajectory state.
+        clipped_path = directory / f"clipped_epoch_{saved['epoch']:04d}.pt"
+        if saved.get("clipped_model") is not None and not clipped_path.exists():
+            atomic_write(clipped_path, dict(fingerprint=FINGERPRINT, epoch=saved["epoch"],
+                data_sha256=data.data_sha256, clipped_model=saved["clipped_model"]), "torch")
+        publish_rows(directory, saved["rows"])
+        export_raw_results()
+        if saved["epoch"] == MAX_EPOCHS:
+            return saved["rows"]
+    elif any(directory.glob("result_epoch_*.json")):
+        raise ValueError("Checkpoint rows exist without trajectory state; refusing an independent restart.")
+
+    # One live model and Adam optimizer per uninterrupted run; a restart reloads their full states.
+    model = new_model(data.fit_seed)
+    initialization_sha256 = state_digest(model.net)
+    if saved is not None:
+        if initialization_sha256 != saved["initialization_sha256"]:
+            raise ValueError("Initialization changed; use the recorded environment.")
+        model.net.load_state_dict(saved["raw_model"])
+        model.optimizer.load_state_dict(saved["optimizer"])
+    train_x = reused.tensor_pair(data.x_train, data.scaler.transform(data.z_train))
+    val_x = reused.tensor_pair(data.x_val, data.scaler.transform(data.z_val))
+    train_y = torch.tensor(data.y_train[:, None], dtype=torch.float32)
+    val_y = torch.tensor(data.y_val[:, None], dtype=torch.float32)
+    observer = ContinuousCheckpoints(data, directory, (train_x, val_x), (train_y, val_y),
+                                     saved, initialization_sha256)
+    start_epoch = int(saved["epoch"]) if saved else 0
+    model.fit(
+        train_x, train_y, batch_size=HP["batch_size"], epochs=MAX_EPOCHS - start_epoch,
+        callbacks=[observer], verbose=False, shuffle=True, num_workers=0,
+        val_data=(val_x, val_y), val_batch_size=HP["batch_size"],
+    )
+    return observer.rows

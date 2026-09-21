@@ -1,0 +1,66 @@
+from pathlib import Path
+from types import SimpleNamespace
+from contextlib import contextmanager
+from copy import deepcopy
+import ast
+import hashlib
+import importlib.metadata
+import json
+import math
+import os
+import platform
+import random
+import sys
+import time
+import warnings
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+from scipy.integrate import quad_vec
+from sklearn.preprocessing import StandardScaler
+import torch
+from torchtuples import Model
+import torchtuples as tt
+from IPython.display import display
+
+ROOT = next(p for p in (Path.cwd(), *Path.cwd().parents) if (p / "dqAux.py").is_file())
+EXPERIMENT = ROOT / "results/2026-09-15_heteroskedastic_epoch_drift_case6"
+NOTEBOOK = EXPERIMENT / "heteroskedastic_epoch_drift_case6.ipynb"
+PREVIOUS = ROOT / "results/2026-09-11_asymptotic_normality_case3"
+PREVIOUS_NOTEBOOK = PREVIOUS / "asymptotic_normality_case3.ipynb"
+DGP_SOURCE = ROOT / "results/2026-09-04-homoscedastic-simulation/simulate_homoscedastic.ipynb"
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+bytecode_setting = sys.dont_write_bytecode
+try:
+    sys.dont_write_bytecode = True
+    from dqAux import dqNetSparse, checkLoss
+finally:
+    sys.dont_write_bytecode = bytecode_setting
+
+def selected_definitions(path, names):
+    selected = {}
+    for cell in json.loads(path.read_text(encoding="utf-8"))["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+        for node in ast.parse("".join(cell["source"])).body:
+            if isinstance(node, (ast.FunctionDef, ast.ClassDef)) and node.name in names:
+                if node.name in selected:
+                    raise ValueError(f"Duplicate definition: {node.name}")
+                selected[node.name] = node
+    if set(selected) != set(names):
+        raise ValueError(f"Missing definitions in {path}: {set(names) - set(selected)}")
+    return [selected[name] for name in names]
+
+REUSED_DGP_NAMES = ("seed_all", "nonlinear_truth", "clip_neural_weights", "tensor_pair")
+REUSED_IO_NAMES = ("atomic_write", "run_lock")
+helper_namespace = dict(np=np, torch=torch, random=random, os=os, json=json, platform=platform,
+                        contextmanager=contextmanager)
+for path, names in ((DGP_SOURCE, REUSED_DGP_NAMES), (PREVIOUS_NOTEBOOK, REUSED_IO_NAMES)):
+    exec(compile(ast.Module(body=selected_definitions(path, names), type_ignores=[]),
+                 str(path), "exec"), helper_namespace)
+reused = SimpleNamespace(**{name: helper_namespace[name] for name in REUSED_DGP_NAMES})
+atomic_write = helper_namespace["atomic_write"]
+run_lock = helper_namespace["run_lock"]

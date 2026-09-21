@@ -1,0 +1,26 @@
+## 12. Optional oracle density and weighted projection
+
+**Secondary diagnostics only.** Nothing in this section enters the main training loop.
+Leave `RUN_ORACLE=False` to skip the calculation. The original latent training $G_{1:8}$
+is regenerated and retained by `make_case6`; no inverse-CDF reconstruction or projection network is used.
+
+Let $s(z)=\Phi(\operatorname{mean}(z-1))$, $c=2/(\pi\sqrt3)$ and
+$\sigma(X,z)=s(z)+(X_1+X_2)/10$. Then $f_0(U)=c/\sigma(U)$ and
+$$\varphi^*(z)=\frac{E[X/\sigma(X,z)\mid z]}{E[1/\sigma(X,z)\mid z]}.$$
+
+Conditional on $G_{1:8}=g$, the means of $(G_9,G_{10})$ are $\mu=\sum g_j/9$, their
+variances are $v=5/9$ and covariance $a=1/18$. Consequently,
+$$G_9\mid G_{10}=h,g\sim N\left(\mu+\tfrac1{10}(h-\mu),\,\tfrac{11}{20}\right).$$
+
+Because the revised scale depends on both $X_1$ and $X_2$, we sum over the two possible
+values of $X_1$ analytically and integrate over $G_{10}$ deterministically. Define
+$$p(h)=P(X_1=1\mid G_{10}=h,g)
+=\Phi\left(\frac{\mu+(h-\mu)/10}{\sqrt{11/20}}\right),\qquad x_2(h)=2\Phi(h),$$
+$$d_0(h)=s+x_2(h)/10,\qquad d_1(h)=d_0(h)+1/10,$$
+$$w(h)=\frac{1-p(h)}{d_0(h)}+\frac{p(h)}{d_1(h)}.$$
+For $T\sim N(0,1)$ and $h=\mu+\sqrt v T$, the needed moments are
+$$D=E_T[w(h)],\qquad N_1=E_T[p(h)/d_1(h)],\qquad N_2=E_T[x_2(h)w(h)],$$
+$$\varphi^*=(N_1/D,N_2/D).$$
+This exact conditional reduction gives smooth one-dimensional Gaussian integrands.
+`scipy.integrate.quad_vec` integrates all three moments with one worker and specified tight
+tolerances, checks convergence and records the integration error estimate. It makes no random draws.

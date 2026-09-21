@@ -1,0 +1,9 @@
+## 2. Fixed experiment configuration
+
+The saved Case 3 configuration supplies depth=2, width=32, minibatch=128, learning rate=0.005, seed convention and 80:20 split. The implementation is kept on CPU with one thread and deterministic algorithms.
+
+**Optimizer detail:** Case 3 constructs \`torchtuples.Model\` with its default \`tt.optim.AdamW\` wrapper. In the installed implementation this wraps **\`torch.optim.Adam\`**, with betas **(0.9, 0.99)** and zero decoupled weight decay. We specify those same settings explicitly, rather than accidentally adopting PyTorch's different default second beta.
+
+**Sparsity detail:** \`dqNetSparse\` applies the repository's random masks to its intermediate neural layers. The number of zeros is a binomial draw with probability 0.5; it is not forced to be exactly 50% in every row. Preserve this implementation, the input/output layers, ReLU, default dropout=1e-5 and the explicit linear-layer \`reset_parameters()\`.
+
+**Weight truncation:** raw theta and primary losses are recorded on the live, untruncated trajectory. At each reported epoch the original \`clip_neural_weights\` is applied to a **deep copy** for additional post-fit loss diagnostics. It never clips theta or masks. Applying post-fit truncation to the live model at epoch 200 would alter the subsequent trajectory; therefore checkpoint copies alone are truncated. Both raw and truncated checkpoint snapshots are retained.

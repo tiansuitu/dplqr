@@ -1,0 +1,31 @@
+def case6_m(z_raw):
+    return reused.nonlinear_truth(np.asarray(z_raw), 3)
+
+def case6_sigma(x_raw, z_raw):
+    x_raw, z_raw = np.asarray(x_raw), np.asarray(z_raw)
+    scale = (x_raw[:, 0] + x_raw[:, 1]) / 10 + norm.cdf(np.mean(z_raw - 1, axis=1))
+    if not np.isfinite(scale).all() or np.any(scale <= 0):
+        raise FloatingPointError("Case 6 scale must be positive and finite.")
+    return scale
+
+def make_case6(n_total, replication):
+    data_seed, fit_seed = seeds_for(n_total, replication)
+    rng = np.random.default_rng(data_seed)
+    x, z, latent = generate_case6_covariates(n_total, rng)
+    m = case6_m(z)
+    sigma = case6_sigma(x, z)
+    epsilon = rng.standard_t(df=3, size=n_total)
+    y = x @ THETA_0 + m + sigma * epsilon
+    order = rng.permutation(n_total)
+    n_fit = int(TRAIN_FRACTION * n_total)
+    tr, va = order[:n_fit], order[n_fit:]
+    scaler = StandardScaler().fit(z[tr])
+    digest = hashlib.sha256(b"".join(a.tobytes() for a in (x, z, y, order, latent))).hexdigest()
+    if not np.isfinite(y).all():
+        raise FloatingPointError("Non-finite generated response.")
+    return SimpleNamespace(
+        n_total=int(n_total), n_fit=n_fit, n_val=len(va), replication=int(replication),
+        data_seed=data_seed, fit_seed=fit_seed, data_sha256=digest,
+        x_train=x[tr], z_train=z[tr], y_train=y[tr], latent_train=latent[tr],
+        x_val=x[va], z_val=z[va], y_val=y[va], latent_val=latent[va], scaler=scaler,
+    )

@@ -1,0 +1,14 @@
+## 7. Continuous training loop with epoch checkpoints
+
+A fresh replication invokes \`model.fit(..., epochs=2000)\` **once**. The callback observes the
+same model at epochs 200, 500, 1000 and 2000, returning False throughout. Adam is never reset
+between them. Standard per-epoch validation monitoring uses the same torchtuples fitting path as Case 3.
+
+An interrupted process can reconstruct the seeded data and reload the latest **raw** model,
+optimizer, masks and RNG states. It then invokes fit only for the remaining epochs. This is a
+continuation of the saved trajectory, not a newly initialized checkpoint experiment.
+
+Recovery snapshots occur every 50 completed epochs and at every scientific checkpoint. Work
+after the most recent snapshot may be repeated after an interruption; already published checkpoint
+rows are not erased. \`elapsed_time\` is cumulative active time through the checkpoint, including
+diagnostic and saving overhead but excluding time while the process was stopped.

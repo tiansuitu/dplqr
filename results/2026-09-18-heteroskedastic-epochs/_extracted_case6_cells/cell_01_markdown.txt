@@ -1,0 +1,3 @@
+## 1. Imports and repository paths
+
+Reuse `dqAux.py` directly. Read only selected helper definitions from the notebooks used by the September 11 Case 3 experiment; never execute their simulation cells. No R dependency is needed.

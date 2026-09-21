@@ -1,0 +1,77 @@
+SHOW_MCSE_BARS = True
+
+def save_plot(fig, name):
+    figures = OUTPUT / "figures"
+    figures.mkdir(exist_ok=True)
+    fig.savefig(figures / name, dpi=160, bbox_inches="tight", facecolor="white")
+    plt.show()
+    plt.close(fig)
+
+def plot_epoch_diagnostics(frame, table):
+    if frame.empty:
+        print("No complete trajectories available for plots.")
+        return
+    colors = {1000: "tab:blue", 2000: "tab:orange"}
+    with plt.rc_context({"font.size": 12, "axes.titlesize": 12, "legend.fontsize": 10}):
+        for j in (1, 2):
+            symbol = rf"$\hat{{\theta}}_{j}$"
+            for metric, ylabel, filename in [
+                (f"mean_theta{j}", f"Monte Carlo mean of {symbol}", "mean"),
+                (f"abs_bias_theta{j}", f"Absolute bias of {symbol}", "absolute_bias"),
+                (f"rmse_theta{j}", f"RMSE of {symbol}", "rmse"),
+            ]:
+                fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
+                for n_total in N_LIST:
+                    group = table.loc[table.n_total == n_total].sort_values("epoch")
+                    if group.empty:
+                        continue
+                    q = int(group.Q_available.iloc[0])
+                    label = f"n={n_total}, Q={q}"
+                    if metric == f"mean_theta{j}" and SHOW_MCSE_BARS and group[f"mcse_mean_theta{j}"].notna().all():
+                        ax.errorbar(group.epoch, group[metric], yerr=group[f"mcse_mean_theta{j}"],
+                                    marker="o", capsize=3, color=colors[n_total], label=label)
+                    else:
+                        ax.plot(group.epoch, group[metric], marker="o", color=colors[n_total], label=label)
+                if metric == f"mean_theta{j}":
+                    ax.axhline(THETA_0[j - 1], color="black", ls="--",
+                               label=rf"True $\theta_{{0{j}}}$ = {THETA_0[j - 1]:g}")
+                    title = f"Case 6: does mean {symbol} stay near its true value as epochs increase?"
+                    if SHOW_MCSE_BARS:
+                        title += "\nBars show one MC standard error of the mean when available"
+                else:
+                    ax.set_ylim(bottom=0)
+                    title = f"Case 6: theta_{j} {filename.replace('_', ' ')} versus epoch"
+                ax.set(xlabel="Training epoch", ylabel=ylabel, xticks=CHECKPOINT_EPOCHS, title=title)
+                ax.legend(frameon=False)
+                save_plot(fig, f"theta{j}_{filename}_vs_epoch.png")
+
+            for n_total in N_LIST:
+                group = frame.loc[frame.n_total == n_total]
+                if group.empty:
+                    continue
+                values = [group.loc[group.epoch == epoch, f"theta_hat_{j}"].to_numpy()
+                          for epoch in CHECKPOINT_EPOCHS]
+                fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
+                positions = np.arange(1, len(CHECKPOINT_EPOCHS) + 1)
+                ax.boxplot(values, positions=positions, widths=.5, medianprops={"color": "black"},
+                           flierprops={"marker": ".", "markersize": 4})
+                ax.set_xticks(positions, [str(e) for e in CHECKPOINT_EPOCHS])
+                ax.axhline(THETA_0[j - 1], color="black", ls="--", label=f"True theta_{j} = {THETA_0[j - 1]:g}")
+                ax.set(xlabel="Training epoch", ylabel=f"Estimated coefficient {symbol}",
+                       title=f"Case 6: theta_{j} across epochs; n={n_total}, Q={len(values[0])}")
+                ax.legend(frameon=False)
+                save_plot(fig, f"theta{j}_n{n_total}_boxplots.png")
+
+        for n_total in N_LIST:
+            group = table.loc[table.n_total == n_total].sort_values("epoch")
+            if group.empty:
+                continue
+            fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
+            ax.plot(group.epoch, group.mean_train_check_loss, marker="o", label="Training")
+            ax.plot(group.epoch, group.mean_validation_check_loss, marker="o", label="Validation")
+            ax.set(xlabel="Training epoch", ylabel="Mean check loss (raw model)", xticks=CHECKPOINT_EPOCHS,
+                   title=f"Case 6: check loss versus epoch; n={n_total}, Q={int(group.Q_available.iloc[0])}")
+            ax.legend(frameon=False)
+            save_plot(fig, f"n{n_total}_check_loss_vs_epoch.png")
+
+plot_epoch_diagnostics(plot_raw, plot_summary)

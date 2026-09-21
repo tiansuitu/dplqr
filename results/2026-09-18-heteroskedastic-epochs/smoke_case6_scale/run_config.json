@@ -1,0 +1,73 @@
+{
+  "created_utc": "2026-09-18T04:49:43.187159+00:00",
+  "verify": false,
+  "tau": 0.5,
+  "theta0": [
+    1.0,
+    -1.0
+  ],
+  "hp": {
+    "depth": 2,
+    "width": 32,
+    "batch_size": 128,
+    "lr": 0.005
+  },
+  "adam_betas": [
+    0.9,
+    0.99
+  ],
+  "adam_eps": 1e-08,
+  "train_fraction": 0.8,
+  "n_list": [
+    400
+  ],
+  "epochs": [
+    10,
+    20,
+    40,
+    60,
+    80,
+    100,
+    150,
+    200
+  ],
+  "max_epochs": 200,
+  "reps": 5,
+  "base_seed": 20260918,
+  "designs": [
+    {
+      "name": "case6_c0.1_t3",
+      "sigma": "paper_case6",
+      "scale": 0.1,
+      "error_law": "t3"
+    },
+    {
+      "name": "case6_c1_t3",
+      "sigma": "paper_case6",
+      "scale": 1.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "case6_c10_t3",
+      "sigma": "paper_case6",
+      "scale": 10.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "case6_c15_t3",
+      "sigma": "paper_case6",
+      "scale": 15.0,
+      "error_law": "t3"
+    },
+    {
+      "name": "case6_c20_t3",
+      "sigma": "paper_case6",
+      "scale": 20.0,
+      "error_law": "t3"
+    }
+  ],
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python": "3.11.9",
+  "torch": "2.13.0+cpu",
+  "note": "Primary metric: bias/RMSE of theta_hat vs structural theta_0 across epochs. bias_vs_theta_tau only for affine-in-X sigma families."
+}

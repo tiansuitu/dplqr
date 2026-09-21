@@ -1,0 +1,95 @@
+previous_config = json.loads((PREVIOUS / "run/run_config.json").read_text(encoding="utf-8"))
+previous_identity = previous_config["identity"]
+assert previous_identity["case"] == 3 and previous_identity["tau"] == 0.5
+
+CASE, TAU = 6, 0.50
+THETA_0 = np.array([1.0, -1.0])
+Q = 70
+N_LIST = (1000, 2000)
+CHECKPOINT_EPOCHS = (200, 500, 1000, 2000)
+MAX_EPOCHS = 2000
+SAVE_EVERY = 50  # Epoch-boundary recovery snapshots; not additional scientific checkpoints.
+HP = dict(previous_identity["hp"])
+BASE_SEED = int(previous_identity["seed"])
+TRAIN_FRACTION = float(previous_identity["train_fraction"])
+THREADS = int(previous_identity["threads"])
+DEVICE = "cpu"
+ADAM_BETAS = (0.9, 0.99)
+ADAM_EPS = 1e-8
+OUTPUT_DIR = EXPERIMENT / "run_x1_x2"  # Separate DGP; preserve the earlier run/.
+RUN_ORACLE = False  # Optional post-estimation section only.
+
+assert HP == dict(depth=2, width=32, batch_size=128, lr=0.005)
+assert BASE_SEED == 20260904 and TRAIN_FRACTION == 0.8 and THREADS == 1
+assert TAU == 0.5 and np.array_equal(THETA_0, [1.0, -1.0])
+assert isinstance(Q, int) and Q >= 1
+assert MAX_EPOCHS == max(CHECKPOINT_EPOCHS) and tuple(sorted(set(CHECKPOINT_EPOCHS))) == CHECKPOINT_EPOCHS
+assert SAVE_EVERY > 0
+torch.set_num_threads(THREADS)
+torch.use_deterministic_algorithms(True)
+
+def sha256_file(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+# Verify that the reused scientific sources match those recorded by Case 3.
+for relative, digest in previous_identity["sources"].items():
+    path = ROOT / Path(relative.replace("\\", "/"))
+    if path in (ROOT / "dqAux.py", DGP_SOURCE):
+        if sha256_file(path) != digest:
+            raise ValueError(f"Source changed since Case 3: {relative}; inspect before using this configuration.")
+
+def definition_digest(path, names):
+    canonical = "\n".join(ast.dump(node, include_attributes=False) for node in selected_definitions(path, names))
+    return hashlib.sha256(canonical.encode()).hexdigest()
+
+def run_identity():
+    notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
+    implementation = "".join("".join(cell["source"]) for cell in notebook["cells"]
+        if "case6_implementation" in cell.get("metadata", {}).get("tags", []))
+    return dict(
+        schema=1, case=CASE, tau=TAU, theta=THETA_0.tolist(),
+        seed=BASE_SEED, train_fraction=TRAIN_FRACTION, hp=HP,
+        n_list=list(N_LIST), checkpoint_epochs=list(CHECKPOINT_EPOCHS), max_epochs=MAX_EPOCHS,
+        save_every=SAVE_EVERY, device=DEVICE, threads=THREADS, deterministic_algorithms=True,
+        optimizer="tt.optim.AdamW wrapping torch.optim.Adam",
+        adam_betas=list(ADAM_BETAS), adam_eps=ADAM_EPS, decoupled_weight_decay=0.0,
+        continuous_trajectory=True, early_stopping=False, validation="diagnostic only",
+        clipping="original helper on checkpoint copies only; raw live state always resumes",
+        sigma_formula="(x1+x2)/10 + Phi(mean(z-1)); user-requested x1+x2 specification",
+        theta_source="raw joint DPLQR check-loss optimization",
+        source_sha256={"dqAux.py": sha256_file(ROOT / "dqAux.py"),
+                       "reused_DGP_definitions": definition_digest(DGP_SOURCE, REUSED_DGP_NAMES),
+                       "reused_Case3_IO_definitions": definition_digest(PREVIOUS_NOTEBOOK, REUSED_IO_NAMES)},
+        implementation_sha256=hashlib.sha256(implementation.encode()).hexdigest(),
+        versions={name: importlib.metadata.version(name) for name in
+                  ("numpy", "pandas", "scipy", "scikit-learn", "torch", "torchtuples", "matplotlib")},
+        python=platform.python_version(), platform=platform.platform(),
+    )
+
+IDENTITY = run_identity()
+FINGERPRINT = hashlib.sha256(json.dumps(IDENTITY, sort_keys=True).encode()).hexdigest()
+
+def prepare_run():
+    output = OUTPUT_DIR.resolve()
+    if EXPERIMENT.resolve() not in output.parents:
+        raise ValueError("OUTPUT_DIR must be inside the new Case 6 experiment.")
+    output.mkdir(parents=True, exist_ok=True)
+    with run_lock(output):
+        path = output / "run_config.json"
+        if path.exists():
+            old = json.loads(path.read_text(encoding="utf-8"))
+            if old["identity"] != IDENTITY or old["fingerprint"] != FINGERPRINT:
+                raise ValueError("Scientific settings/source/environment changed; use a new OUTPUT_DIR.")
+            if Q < old["requested_Q"]:
+                raise ValueError("Do not reduce Q in an existing run; use a fresh OUTPUT_DIR.")
+            old.update(requested_Q=Q, expected_rows=len(N_LIST)*Q*len(CHECKPOINT_EPOCHS))
+            atomic_write(path, old)
+        else:
+            if (output / "replications").exists() or (output / "raw_replications.csv").exists():
+                raise ValueError("Existing outputs without matching configuration; use a fresh OUTPUT_DIR.")
+            atomic_write(path, dict(identity=IDENTITY, fingerprint=FINGERPRINT, requested_Q=Q,
+                status="configured", completed_rows=0, expected_rows=len(N_LIST)*Q*len(CHECKPOINT_EPOCHS)))
+    return output
+
+OUTPUT = prepare_run()
+print(json.dumps(dict(**IDENTITY, requested_Q=Q, output=str(OUTPUT.relative_to(ROOT))), indent=2))

@@ -1,0 +1,47 @@
+SUMMARY_COLUMNS = ["n_total", "n_fit", "epoch", "Q_available", "Q_requested", "complete",
+    "mean_theta1", "mean_theta2", "bias_theta1", "bias_theta2", "abs_bias_theta1", "abs_bias_theta2",
+    "mc_sd_theta1", "mc_sd_theta2", "rmse_theta1", "rmse_theta2", "mcse_mean_theta1", "mcse_mean_theta2",
+    "mean_train_check_loss", "mean_validation_check_loss"]
+
+def summarize_results(frame):
+    records = []
+    for (n_total, epoch), group in frame.groupby(["n_total", "epoch"], sort=True):
+        q = len(group)
+        assert group.n_fit.nunique() == 1
+        row = dict(n_total=int(n_total), n_fit=int(group.n_fit.iloc[0]), epoch=int(epoch),
+                   Q_available=q, Q_requested=Q, complete=q == Q,
+                   mean_train_check_loss=float(group.train_check_loss.mean()),
+                   mean_validation_check_loss=float(group.validation_check_loss.mean()))
+        for j in (1, 2):
+            values = group[f"theta_hat_{j}"].to_numpy(dtype=float)
+            errors = values - THETA_0[j - 1]
+            sd = float(values.std(ddof=1)) if q > 1 else np.nan
+            row.update({f"mean_theta{j}": float(values.mean()), f"bias_theta{j}": float(errors.mean()),
+                        f"abs_bias_theta{j}": float(abs(errors.mean())), f"mc_sd_theta{j}": sd,
+                        f"rmse_theta{j}": float(np.sqrt(np.mean(errors**2))),
+                        f"mcse_mean_theta{j}": sd / np.sqrt(q)})
+        records.append(row)
+    return pd.DataFrame(records, columns=SUMMARY_COLUMNS)
+
+raw = read_saved_results()
+summary = summarize_results(raw)
+plot_raw = raw.copy()
+plot_summary = summary.copy()
+if raw.empty:
+    print("No saved checkpoints yet. Run the Monte Carlo cell manually before making results.")
+else:
+    counts = raw.groupby(["n_total", "epoch"]).size().reindex(
+        pd.MultiIndex.from_product([N_LIST, CHECKPOINT_EPOCHS], names=["n_total", "epoch"]), fill_value=0)
+    print("Actual available replication counts:")
+    display(counts.rename("Q_available").reset_index())
+    if not counts.eq(Q).all():
+        print("Run incomplete: tables use actual Q; plots use complete paired trajectories only.")
+    atomic_write(OUTPUT / "summary.csv", summary, "csv")
+    display(summary.round(5))
+    sizes = raw.groupby(["n_total", "replication"]).epoch.nunique()
+    complete_keys = sizes[sizes == len(CHECKPOINT_EPOCHS)].reset_index()[["n_total", "replication"]]
+    plot_raw = raw.merge(complete_keys, on=["n_total", "replication"], how="inner", validate="many_to_one")
+    plot_summary = summarize_results(plot_raw)
+    atomic_write(OUTPUT / "plot_summary.csv", plot_summary, "csv")
+    print("Complete trajectories used by the plots:")
+    display(plot_raw.groupby("n_total").replication.nunique().rename("Q_paired").reset_index())

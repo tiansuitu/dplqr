@@ -1,0 +1,90 @@
+RAW_COLUMNS = [
+    "case", "tau", "n_total", "n_fit", "n_val", "replication", "seed", "data_seed", "fit_seed",
+    "data_sha256", "initialization_sha256", "epoch", "optimizer_updates",
+    "theta_hat_1", "theta_hat_2", "theta0_1", "theta0_2",
+    "error_theta1", "error_theta2", "squared_error_theta1", "squared_error_theta2",
+    "train_check_loss", "validation_check_loss", "train_check_loss_clipped",
+    "validation_check_loss_clipped", "elapsed_time",
+]
+
+def replication_directory(n_total, replication):
+    return OUTPUT / "replications" / f"n_{n_total}_rep_{replication:06d}"
+
+def publish_rows(directory, rows):
+    for row in rows:
+        path = directory / f"result_epoch_{row['epoch']:04d}.json"
+        value = dict(fingerprint=FINGERPRINT, row=row)
+        if path.exists():
+            if json.loads(path.read_text(encoding="utf-8")) != value:
+                raise ValueError(f"Existing checkpoint result conflicts: {path}")
+        else:
+            atomic_write(path, value)
+
+def read_saved_results():
+    rows = []
+    expected = {(n, r, e) for n in N_LIST for r in range(1, Q + 1) for e in CHECKPOINT_EPOCHS}
+    for path in sorted((OUTPUT / "replications").glob("n_*_rep_*/result_epoch_*.json")):
+        saved = json.loads(path.read_text(encoding="utf-8"))
+        row = saved["row"]
+        key = (row["n_total"], row["replication"], row["epoch"])
+        if saved["fingerprint"] != FINGERPRINT or key not in expected:
+            raise ValueError(f"Incompatible result: {path}")
+        if path.parent != replication_directory(key[0], key[1]):
+            raise ValueError(f"Result path/key mismatch: {path}")
+        assert row["seed"] == seeds_for(key[0], key[1])[0]
+        assert row["fit_seed"] == seeds_for(key[0], key[1])[1]
+        assert row["n_fit"] == int(TRAIN_FRACTION * row["n_total"])
+        assert all(np.isfinite(v) for v in row.values() if isinstance(v, (int, float)))
+        rows.append(row)
+    frame = pd.DataFrame(rows, columns=RAW_COLUMNS)
+    if not frame.empty:
+        if frame.duplicated(["n_total", "replication", "epoch"]).any():
+            raise ValueError("Duplicate result keys.")
+        for column in ("data_sha256", "initialization_sha256", "seed", "fit_seed", "n_fit"):
+            assert frame.groupby(["n_total", "replication"])[column].nunique().eq(1).all()
+        frame = frame.sort_values(["n_total", "replication", "epoch"]).reset_index(drop=True)
+    return frame
+
+def export_raw_results():
+    frame = read_saved_results()
+    path = OUTPUT / "raw_replications.csv"
+    if path.exists():
+        old = pd.read_csv(path, float_precision="round_trip")
+        old_keys = set(map(tuple, old[["n_total", "replication", "epoch"]].to_numpy()))
+        new_keys = set(map(tuple, frame[["n_total", "replication", "epoch"]].to_numpy()))
+        if not old_keys.issubset(new_keys):
+            raise ValueError("CSV has rows missing from checkpoint JSON; refusing to erase them.")
+        if old_keys:
+            aligned = frame.set_index(["n_total", "replication", "epoch"])
+            old_indexed = old.set_index(["n_total", "replication", "epoch"])
+            pd.testing.assert_frame_equal(
+                old_indexed, aligned.loc[old_indexed.index, old_indexed.columns],
+                check_dtype=False, check_exact=True)
+    atomic_write(path, frame, "csv")
+    return frame
+
+def set_run_status(status, error=None):
+    path = OUTPUT / "run_config.json"
+    metadata = json.loads(path.read_text(encoding="utf-8"))
+    metadata.update(requested_Q=Q, status=status, error=error,
+                    expected_rows=len(N_LIST)*Q*len(CHECKPOINT_EPOCHS),
+                    completed_rows=len(read_saved_results()))
+    atomic_write(path, metadata)
+
+def run_experiment():
+    with run_lock(OUTPUT):
+        set_run_status("running")
+        try:
+            for n_total in N_LIST:
+                for replication in range(1, Q + 1):
+                    # Regenerate once per trajectory, never once per checkpoint epoch.
+                    data = make_case6(n_total, replication)
+                    fit_continuous(data, replication_directory(n_total, replication))
+            frame = export_raw_results()
+            if len(frame) != len(N_LIST) * Q * len(CHECKPOINT_EPOCHS):
+                raise RuntimeError("The requested grid is incomplete.")
+            set_run_status("complete")
+        except BaseException as exc:
+            set_run_status("interrupted_or_failed", repr(exc))
+            raise
+    return frame

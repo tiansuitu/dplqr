@@ -1,0 +1,34 @@
+Wrote C:\Users\Tiansui Tu\Documents\GitHub\dplqr\results\2026-09-21_case1_oracle_diagnostics\experiment2_fixed_theta_nn\run\config.json
+{
+  "experiment": "experiment2_fixed_theta_nn",
+  "N_VALUES": [
+    1000,
+    2000
+  ],
+  "Q": 50,
+  "BASE_SEED": 20260921,
+  "TAU": 0.5,
+  "THETA0": [
+    1.0,
+    -1.0
+  ],
+  "M0_COEF": 0.56,
+  "DF_T": 3,
+  "F0": 0.3675525969478614,
+  "WALD_Z": 1.959963984540054,
+  "HIDDEN": [
+    32,
+    32,
+    16
+  ],
+  "EPOCHS": 1000,
+  "LEARNING_RATE": 0.001,
+  "BATCH_SIZE": 128,
+  "early_stopping": false,
+  "sparsity_mask": false,
+  "theta_during_m_train": "fixed_at_theta0",
+  "theta_solver": "scipy.optimize.linprog(method='highs') L1 / median LP",
+  "device": "cpu",
+  "note": "NN m with theta glued at truth; then convex theta; oracle f0 and varphi*."
+}
+Already completed: 4 rows

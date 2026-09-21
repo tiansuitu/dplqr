@@ -1,0 +1,3 @@
+# EXPENSIVE: manually execute this cell to run/resume the full configured experiment.
+# One continuous trajectory per (n_total, replication); no smoke test or pilot.
+raw = run_experiment()

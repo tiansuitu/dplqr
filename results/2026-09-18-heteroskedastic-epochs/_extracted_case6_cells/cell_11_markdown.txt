@@ -1,0 +1,10 @@
+## 6. Reused joint DPLQR model and check loss
+
+The model is \`dqNetSparse(2, 8, ..., [2, 32], sparseRatio=0.5)\`, exactly as in Case 3.
+Its linear layer and nonlinear network are optimized jointly by the original \`checkLoss(tau=0.5)\`.
+No residualization, projection network, oracle weighting, or nuisance density is involved.
+
+Full-sample checkpoint losses use eval mode (dropout disabled) and are weighted by actual batch
+sizes. They are diagnostic evaluations of the current parameters, not averages of losses from
+different parameter values encountered during an epoch. Additional clipped-copy losses follow the
+previous post-fit nuisance truncation.

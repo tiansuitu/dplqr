@@ -1,0 +1,10 @@
+## 9. Monte Carlo summaries
+
+Use all saved checkpoint rows for the primary summary, and print actual Q. Bias is the mean error;
+absolute bias is the absolute value of that mean, not mean absolute error. MC SD uses divisor Q-1,
+RMSE averages squared error with divisor Q, and the MC standard error of the mean is MC SD / sqrt(actual Q).
+
+During an interrupted run, different epochs might contain different subsets of replications.
+The plots below therefore use only replications with **all four checkpoints**. Their actual counts
+and a separate \`plot_summary.csv\` make that restriction explicit. Once the run finishes, both
+summaries use all Q=70 replications in every cell.

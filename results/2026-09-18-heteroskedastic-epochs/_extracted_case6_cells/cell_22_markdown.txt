@@ -1,0 +1,14 @@
+## 11. Paired trajectory movement relative to epoch 200
+
+For each replication compute $\hat\theta_j(e)-\hat\theta_j(200)$ at e=500,1000,2000.
+The plot shows the mean **within-replication change**, with one paired MC SE.
+The CSV also includes the mean change in absolute coefficient error and in training/validation loss.
+A positive signed movement need not be movement away from truth; use the change in absolute error
+and the primary bias plots to assess direction.
+
+Interpretation after running:
+- Does mean theta move toward or away from its true reference as training continues?
+- Does lower training loss coincide with increased bias or RMSE?
+- Is that pattern larger at n=1000 or n=2000, and is it large relative to MC uncertainty?
+- Smaller errors at larger n are finite-sample evidence, not a mathematical proof of asymptotic consistency.
+No conclusions or numerical results are prefilled in this notebook.

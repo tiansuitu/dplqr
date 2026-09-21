@@ -1,0 +1,6 @@
+## 4. Exact Gaussian-copula covariates
+
+Draw a 10-dimensional normal with diagonal covariance 1 and all off-diagonals 0.5.
+Transform with $2\Phi$, set $X_1=1\{\widetilde Z_9>1\}$, $X_2=\widetilde Z_{10}$ and
+$Z=\widetilde Z_{1:8}$. Retain the raw latent $G_{1:8}$ internally for the optional oracle section.
+This is the previous generator with the latent matrix retained; no alternative copula is introduced.

@@ -1,0 +1,56 @@
+ORACLE_QUAD_EPSABS = 1e-10
+ORACLE_QUAD_EPSREL = 1e-9
+ORACLE_QUAD_BATCH = 128
+
+def f0_true(x_raw, z_raw):
+    return (2 / (np.pi * np.sqrt(3))) / case6_sigma(x_raw, z_raw)
+
+def oracle_varphi_case6(z_raw, latent_g):
+    z_raw, latent_g = np.asarray(z_raw, dtype=float), np.asarray(latent_g, dtype=float)
+    if z_raw.shape != latent_g.shape or z_raw.ndim != 2 or z_raw.shape[1] != 8:
+        raise ValueError("Expected matching raw Z and latent G arrays of shape (n,8).")
+    if not np.isfinite(z_raw).all() or not np.isfinite(latent_g).all():
+        raise ValueError("Non-finite oracle inputs.")
+    if np.any((z_raw < 0) | (z_raw > 2)):
+        raise ValueError("Use raw Z, not StandardScaler-transformed inputs.")
+    np.testing.assert_allclose(z_raw, 2 * norm.cdf(latent_g), rtol=1e-12, atol=1e-12)
+    v, a = 5/9, 1/18
+    sd = np.sqrt(v)
+    beta = a / v
+    conditional_sd = np.sqrt(v - a*a/v)
+    phi = np.empty((len(z_raw), 2))
+    maximum_error = 0.0
+    for start in range(0, len(z_raw), ORACLE_QUAD_BATCH):
+        stop = min(start + ORACLE_QUAD_BATCH, len(z_raw))
+        mu = latent_g[start:stop].sum(axis=1) / 9
+        s = norm.cdf(np.mean(z_raw[start:stop] - 1, axis=1))
+
+        def integrand(t):
+            h = mu + sd * t  # G10 conditional on the observed latent G1:8.
+            x2 = 2 * norm.cdf(h)
+            p1 = norm.cdf((mu + beta * (h - mu)) / conditional_sd)
+            sigma0 = s + x2 / 10
+            sigma1 = sigma0 + 0.1
+            weighted_x1 = p1 / sigma1
+            inverse_scale = (1 - p1) / sigma0 + weighted_x1
+            return norm.pdf(t) * np.column_stack(
+                (inverse_scale, weighted_x1, x2 * inverse_scale))
+
+        moments, error, info = quad_vec(
+            integrand, -np.inf, np.inf, epsabs=ORACLE_QUAD_EPSABS, epsrel=ORACLE_QUAD_EPSREL,
+            norm="max", workers=1, limit=1000, full_output=True,
+        )
+        if not info.success or not np.isfinite(moments).all():
+            raise RuntimeError(f"Oracle integration failed: {info.message}")
+        maximum_error = max(maximum_error, float(error))
+        denominator = moments[:, 0]
+        if np.any(denominator <= 0):
+            raise FloatingPointError("Oracle inverse-scale expectation must be positive.")
+        phi[start:stop] = moments[:, 1:] / denominator[:, None]
+    tolerance = 1e-8
+    assert np.isfinite(phi).all() and phi.shape == (len(z_raw), 2)
+    assert np.all((phi[:, 0] >= -tolerance) & (phi[:, 0] <= 1+tolerance))
+    assert np.all((phi[:, 1] >= -tolerance) & (phi[:, 1] <= 2+tolerance))
+    # Remove only possible floating-point excursions beyond the exact conditional-mean support.
+    phi = np.clip(phi, [0, 0], [1, 2])
+    return phi, maximum_error
