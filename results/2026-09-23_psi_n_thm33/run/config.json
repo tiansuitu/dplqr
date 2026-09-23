@@ -1,0 +1,29 @@
+{
+  "purpose": "Psi_n = o_p(n^{-1/2}) diagnostic for ZW Theorem 3.3",
+  "N_VALUES": [
+    500,
+    1000,
+    2000
+  ],
+  "Q": 30,
+  "EPOCHS": 500,
+  "LEARNING_RATE": 0.001,
+  "BATCH_SIZE": 128,
+  "HIDDEN": [
+    16,
+    16
+  ],
+  "BASE_SEED": 20260923,
+  "TAU": 0.5,
+  "THETA0": 1.0,
+  "DGP": {
+    "Z": "Uniform(0,1)^2",
+    "phi_star": "0.5 + 0.3*sin(2*pi*Z1) + 0.3*Z1*Z2",
+    "X": "phi_star(Z) + N(0,0.5^2)",
+    "m0": "0.5*sin(2*pi*Z1) + 0.5*(Z2-0.5)^2 + 0.3*cos(2*pi*Z1*Z2)",
+    "epsilon": "N(0,1)",
+    "Y": "theta0*X + m0(Z) + epsilon"
+  },
+  "fitting": "joint Adam (theta, m_NN); no early stopping",
+  "seed_formula": "BASE_SEED + 1000003*n + 1009*rep"
+}

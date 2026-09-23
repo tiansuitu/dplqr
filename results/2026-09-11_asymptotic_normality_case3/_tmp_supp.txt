@@ -1,0 +1,1063 @@
+        Supplement to “Neural Networks for
+        Partially Linear Quantile Regression”
+
+                                Qixian Zhong
+      Department of Statistics and Data Science, School of Economics,
+          Wang Yanan Institute for Studies in Economics (WISE),
+ and MOE Key Laboratory of Econometrics, Xiamen University, Xiamen, China
+                                     and
+                              Jane-Ling Wang
+       Department of Statistics, University of California, Davis, U.S.A.
+
+
+
+
+    This supplementary material contains the technical proofs and additional numerical
+
+studies for the results of the paper.
+
+
+
+A      Proof of Theorems
+
+Proof of Theorem 3.1. Let β̂ = (θ̂, m̂), β0 = (θ0 , m0 ) and d(β1 , β2 ) = [E{x> θ1 + m1 (Z) −
+
+x> θ2 − m2 (Z)}2 ]1/2 , for any β1 = (θ1 , m1 ) and β2 = (θ2 , m2 ). We first show that
+
+                                             p
+                                              − 0, as n → ∞.
+                                   d(β̂, β0 ) →
+
+
+    By Lemma 5 in Schmidt-Hieber (2020) and the fact |ρτ (u) − ρτ (v)| ≤ 2|u − v| for all
+
+u, v ∈ R, we know that {ρτ (Y − θ> X − m(Z)) | β = (θ, m) ∈ RpA × MA } is P-Glivenko-
+
+Cantelli. Hence
+                                                      p
+                            sup                        − 0, as n → ∞,
+                                     |Ln (β) − L0 (β)| →                                  (1)
+                         β∈RpA ×MA
+
+where L0 (β) = Eρτ (Y − X > θ − m(Z)).
+
+                                                 1
+   By Assumption 1 – 3, a similar proof for Lemma 3.3 in He and Shi (1994) implies that,
+
+for any  > 0,
+
+                                          inf        L0 (β) > L0 (β0 ).                                     (2)
+                                       d(β,β0 )>,
+                                      β∈RpA ×MA
+
+For the true function m0 , let
+
+                     m∗ = arg min km − m0 kL2 ([0,1]q ) and β ∗ = (θ0 , m∗ ).
+                               m∈MA
+
+
+Then, we have Ln (β̂) ≤ Ln (β ∗ ) by the definition of β̂. This and (1), (2) imply that
+
+                                      d(β̂, β ∗ ) → 0, as n → ∞.
+
+On the other hand, by equation (26) in Schmidt-Hieber (2020), we have
+
+                                    km∗ − m0 kL2 ([0,1]q ) = O(rn ).                                        (3)
+
+It follows that
+
+                  d(β̂, β0 ) ≤ d(β̂, β ∗ ) + km∗ − m0 kL2 ([0,1]q ) → 0, as n → ∞.
+
+This completes the proof of the consistency of β̂.
+                                                                     QL                  PL
+   Next we prove d(β̂, β0 ) = Op (rn log2 n). Write R = L                 k=0 (qk + 1)    k=1 qk−1 qk and
+
+
+                    Aδ = {β ∈ RpA × M(s, L, q, A) | δ/2 ≤ d(β, β ∗ ) ≤ δ}.                                  (4)
+
+We verify that, for any δ > 0,
+
+                               √
+                    E∗ [ sup    n{(Ln − L0 )(β ∗ ) − (Ln − L0 )(β)}] . φn (δ),                              (5)
+                       β∈Aδ
+                                                q
+where E∗ is an outer measure, φn (δ) = δ         s log Rδ + √sn log Rδ , and an . bn means an ≤ cbn
+
+for some constant c > 0.
+
+   Denote ρτ (β) = ρτ (Y − X > θ − m(Z)) and Bδ = {ρτ (β ∗ ) − ρτ (β) | β ∈ Aδ }. For any
+
+β, β1 ∈ Aδ , we have E|ρτ (β) − ρτ (β1 )|2 ≤ 4d2 (β, β1 ). Lemma 5 in Schmidt-Hieber (2020)
+
+then implies that
+                                                                            R
+                               log(1 + N[ ] (, Bδ , L2 (P ))) . s log        ,
+                                                                            
+
+                                                        2
+where N[ ] (, Bδ , L2 (P )) is the bracket number of Bδ with L2 (P ) norm. It follows that
+                                        Z δq                                r
+                                                                                  R
+                        J[ ] (δ, Bδ ) =     1 + N[ ] (, Bδ , L2 (P ))d . δ s log .
+                                         0                                        δ
+
+By Lemma 3.4.2 in Van der Vaart and Wellner (1996), we conclude that
+
+                √                                                      √
+   E∗ [ sup         n{(Ln − L0 )(β ∗ ) − (Ln − L0 )(β)}] = E∗ [ sup     n(Pn − P){ρτ (β ∗ ) − ρτ (β)}]
+         β∈Aδ                                                   β∈Aδ
+                                                                         n J (δ, B )     o
+                                                                            [ ]   δ
+                                                          . J[ ] (δ, Bδ )       √    + 1
+                                                                             δ2 n
+
+                                                          = φn (δ).
+
+    Let ηn = rn log2 n. It is clear that
+
+                                  1              √
+                                      φn (ηn ) .   n and Ln (β̂) ≤ Ln (β ∗ ).                            (6)
+                                  ηn2
+
+Then with (5), (6) and Theorem 3.4.1 in Van der Vaart and Wellner (1996), we have
+
+d(β̂, β ∗ ) = Op (ηn ).
+
+    Moreover, by Assumption 3 and the definition of ϕ∗ , we have
+
+   d2 (β̂, β0 ) = E{X > (θ̂ − θ0 ) + m̂(Z) − m0 (Z)}2
+                  1
+                ≥   E[f (0|U ){X > (θ̂ − θ0 ) + m̂(Z) − m0 (Z)}2 ]
+                 c0
+                 1
+                = E[f (0|U ){(X − ϕ∗ (Z))> (θ̂ − θ0 ) + (θ̂ − θ0 )> ϕ∗ (Z) + m̂(Z) − m0 (Z)}2 ]
+                 c0
+                 1
+                = E[f (0|U ){(X − ϕ∗ (Z))> (θ̂ − θ0 )}2 ]
+                 c0
+                    1
+                 + E[f (0|U ){(θ̂ − θ0 )> ϕ∗ (Z) + m̂(Z) − m0 (Z)}2 ].
+                    c0
+
+Since the matrix E[f (0|U ){X − ϕ∗ (Z)}{X − ϕ∗ (Z)}> ] is positive definite, it follows that
+
+kθ̂ − θ0 k = Op (rn log2 n) and thus km̂ − m0 kL2 ([0,1]q ) = Op (rn log2 n). This completes the
+
+proof.
+
+
+
+Proof of Theorem 3.2. For simplicity, we only consider the proof for the median quantile
+
+regression case, when τ = 0.5. To derive the minimax lower bound, it suffices to show that,
+
+                                                      3
+when the error  is the standard normal distribution and the parameter θ0 is known and
+                                              ¯ B) in Assumption 1, such that
+fixed, there exists a subset H∗ of H(J, γ, d, d,
+
+                                                                            
+                  lim lim inf sup P(θ0 ,m0 ,f ) km̂ − m0 kL2 ([0,1]q ) ≥ Crn = 1,               (7)
+                 C→∞ n→∞ m̂ m0 ∈H∗
+
+
+where f is the probability density function of a standard normal distribution. Then this
+
+reduces to a nonparametric regression with normal errors. Hence, (7) holds by Theorem 3
+
+in Schmidt-Hieber (2020).
+
+
+
+Proof of Theorem 3.3. For β̂ = (θ̂, m̂), we write ζ = θ − θ0 , ζ̂ = θ̂ − θ0 , h(Z) =
+
+m(Z)−m0 (Z)+(θ−θ0 )> ϕ∗ (Z), ĥ(Z) = m̂(Z)−m0 (Z)+(θ̂−θ0 )> ϕ∗ (Z) and X̃ = X−ϕ∗ (Z).
+
+These imply that
+                    n                            n
+                 1X              >            1X
+                       ρτ (Yi − θ X − m(Z)) =       ρτ (i − ζ > X̃i − h(Zi )).
+                 n i=1                        n i=1
+                        Pn                 >
+Denote Ln (ζ, h) = n1     i=1 ρτ (i − ζ       X̃i − h(Zi )). We define the subgradient of the loss
+
+function Ln at ζ as
+                                         ∂Ln (ζ, h)
+                           Ψn (ζ, h) =              = Pn ψτ (X̃, Z; ζ, h),
+                                           ∂ζ
+
+where ψτ (X̃, Z; ζ, h) = −{τ − 1( − ζ > X̃ − h(Z) < 0)}X̃. Let Ψ0 (ζ, h) = Eψτ (X̃, Z; ζ, h).
+
+With Aδ defined in (4), we further define Ãδ = {(ζ, h) | ζ = θ − θ0 , h(Z) = m(Z) − m0 (Z) +
+
+(θ − θ0 )> ϕ∗ (Z), (θ, m) ∈ Aδ } and Cδ = {ψτ (ζ, h) − ψτ (ζ0 , h0 ) | (ζ, h) ∈ Ãδ and (ζ0 , h0 ) =
+
+(0, 0)}. Then in analogy to the proof of Theorem 3.1, we have, for any δ > 0,
+                                   Z δq                                r
+                                                                             R
+                   J[ ] (δ, Cδ ) =     1 + N[ ] (, Cδ , L2 (P ))d . δ s log .
+                                    0                                        δ
+
+
+
+
+                                                     4
+Thus it follows Lemma 3.4.2 in Van der Vaart and Wellner (1996), then,
+                                      √
+                      E∗ { sup            n[(Ψn − Ψ0 )(ζ, h) − (Ψn − Ψ0 )(ζ0 , h0 )] }
+                          (ζ,h)∈Cδ
+
+                                      √
+                    =E∗ { sup             n(Pn − P)[ψτ (X̃, Z; ζ, h) − ψτ (X̃, Z; ζ0 , h0 )] }
+                          (ζ,h)∈Cδ
+                                  n J (δ, C )     o
+                                     [ ]   δ
+                    .J[ ] (δ, Cδ )       √    + 1
+                                      δ2 n
+
+                    =φn (δ).
+
+Since (ζ̂, ĥ) converges to (ζ0 , h0 ) at rate rn log2 n, then with δn = rn log2 n,
+              √
+                  n[(Ψn − Ψ0 )(ζ, h)|(ζ,h)=(ζ̂,ĥ) − (Ψn − Ψ0 )(ζ0 , h0 )] . φn (δn ) = op (1),
+
+or, written alternatively,
+  √                                                   √
+      n{Ψ0 (ζ, h)|(ζ,h)=(ζ̂,ĥ) + Ψn (ζ0 , h0 )} =        n{Ψn (ζ, h)|(ζ,h)=(ζ̂,ĥ) + Ψ0 (ζ0 , h0 )} + op (1).       (8)
+
+                                                                                            Pn
+Let Ỹi = i − ĥ(Zi ), i = 1, . . . , n. Then ζ̂ is the minimizer of L∗n (ζ) = n1             i=1 ρτ (Ỹi − ζ
+                                                                                                                 >
+                                                                                                                     X̃i )
+
+with respect to ζ and
+                                                      n
+                                       dL∗n (ζ)    1X
+             Ψn (ζ, h) (ζ,h)=(ζ̂,ĥ) =           =       −{τ − 1(Ỹi − ζ̂ > X̃i < 0)}X̃i
+                                         dζ ζ=ζ̂   n i=1
+
+Since L∗n is a continuous piecewise function of ζ, it follows that the subgradient is bounded
+
+by the difference between the right and left derivatives. Thus,
+                                         n
+                          dL∗n (ζ)    2X
+                                    ≤       1(Ỹi = ζ̂ > X̃i )|X̃i |
+                            dζ ζ=ζ̂   n i=1
+                                      n X n                    o            |X̃ | 
+                                                                                i
+                                    ≤ 2      1(Ỹi = ζ̂ > X̃i ) max
+                                         i=1
+                                                                 i=1,...,n     n
+                                                     1
+                                             = op ( √ ),
+                                                      n
+where | · | and max(·) operate component-wise on vector and the last equality holds due
+
+to Assumption 2, Assumption 6 and the fact ni=1 1(Ỹi = ζ̂ > X̃i ) ≤ p by Lemma 2.1 in
+                                             P
+
+El-Attar et al. (1979) and Sard’s theorem in Milnor (1965). Moreover, a calculation yields
+
+Ψ0 (ζ0 , h0 ) = 0, so the left hand side of (8) satisfies
+                               √
+                                   n{Ψ0 (ζ, h)|(ζ,h)=(ζ̂,ĥ) + Ψn (ζ0 , h0 )} = op (1),
+
+                                                           5
+or equivalently,
+                           √                               √
+                               nΨ0 (ζ, h)|(ζ,h)=(ζ̂,ĥ) = − nΨn (ζ0 , h0 ) + op (1).
+
+   On the other hand, applying the Taylor’s expansion for Ψ0 (ζ, h)|(ζ,h)=(ζ̂,ĥ) at (ζ0 , h0 ), we
+
+obtain
+
+                  Ψ0 (ζ, h)|(ζ,h)=(ζ̂,ĥ) = 2E{fτ (0|U )X̃ X̃ > }(ζ̂ − ζ0 ) + O(d2 (β̂, β0 )).
+
+Here the derivative with respect to h is based on the derivative of some smooth curve
+
+{h(t) : t ∈ R, h(0) = h0 and h(1) = ĥ} with respect to t. Since ζ̂ − ζ0 = θ̂ − θ0 and γ̄k̄ > d¯k̄ /2.
+
+It follows that
+
+      √                1                        √
+          n(θ̂ − θ0 ) = [E{fτ (0|U )X̃ X̃ > }]−1 nΨn (ζ0 , h0 ) + op (1) → N (0, Σ−1    −1
+                                                                                  2 Σ1 Σ2 ).
+                       2
+
+Therefore, the result follows.
+
+
+
+
+                                                       6
+B       Additional Numerical Results
+
+B.1       Simulations
+
+Table 5 - Table 7 show the additional simulation results with homoscedastic random errors
+
+in Section 5.1. Table 8 - Table 11 show the numerical results for the simulation with
+
+heteroscedastic random errors in Section 5.2. Table 12 is the numerical results under
+
+different proportion of the neural weights being zero.
+
+
+Table 5: Bias and standard deviation (in parentheses) of θ̂1 for the LQR, PLAQR and
+
+DPLQR methods under homoscedastic random errors.
+
+                                     τ = 0.25                        τ = 0.50                         τ = 0.75
+
+ θ    Case          n      LQR       PLAQR      DPLQR       LQR      PLAQR      DPLQR       LQR       PLAQR      DPLQR
+
+                          0.0785     0.0820     0.1194     -0.0119   0.0307     0.0643     -0.0658    -0.0729    0.1218
+                   1000
+      Case 1              (0.3106)   (0.3246)   (0.3373)   (0.2826) (0.3038)    (0.3192)   (0.2977) (0.3278)     (0.3315)
+
+      (linear)            0.0638     0.0731     0.0886     -0.0104   0.0274     0.0419     -0.0543    0.0607     0.0653
+                   2000
+                          (0.2246)   (0.2298)   (0.2317)   (0.1949) (0.2184)    (0.2236)   (0.2394)   (0.2429)   (0.2558)
+
+                          0.0763     0.0281     0.0453     0.0593    -0.0183    0.0313     -0.0884    -0.0277    0.0482
+                   1000
+      Case 2              (0.3547)   (0.2494)   (0.2605)   (0.2708) (0.1943)    (0.2005)   (0.3425) (0.2448)     (0.2522)
+ θ2
+      (additive)          0.0697     -0.0135    0.0334     -0.0527   -0.0212    0.0262     -0.0735    -0.0104    0.0319
+                   2000
+                          (0.2280)   (0.1746)   (0.1899)   (0.1984) (0.1329)    (0.1506)   (0.2386)   (0.1636)   (0.1781)
+
+                          0.1188     -0.0929    0.0672     -0.1009   -0.0884    0.0445     -0.1256    -0.0998    0.0615
+                   1000
+      Case 3              (0.3285)   (0.3086)   (0.2702)   (0.2699) (0.2503)    (0.2116)   (0.3291) (0.3108)     (0.2882)
+
+      (deep)              0.1052     0.0878     0.0556     -0.0933   -0.0675    0.0381     -0.1183    0.0893     0.0405
+                   2000
+                          (0.2231)   (0.2106)   (0.1986)   (0.1869) (0.1773)    (0.1496)   (0.2297)   (0.2212)   (0.2015)
+
+
+
+
+                                                            7
+Table 6: Empirical coverage probability of the 95% confidence interval for θ2 by the LQR,
+
+PLAQR and DPLQR methods under homoscedastic random errors.
+
+                                            τ = 0.25                         τ = 0.50                        τ = 0.75
+
+ θ    Case              n        LQR       PLAQR       DPLQR       LQR      PLAQR       DPLQR      LQR       PLAQR DPLQR
+
+      Case 1       1000.         0.910      0.890       0.885      0.935     0.910       0.900     0.925     0.895      0.895
+
+      (linear)     2000          0.935      0.910       0.915      0.940     0.920       0.925     0.930      0.925     0.925
+
+      Case 2       1000          0.890      0.910       0.895      0.910     0.925       0.915     0.915     0.920      0.910
+ θ2
+      (additive)   2000          0.910      0.935       0.920      0.935     0.945       0.940     0.915     0.930      0.925
+
+      Case 3       1000          0.895      0.900       0.910      0.910     0.920       0.925     0.905     0.905      0.915
+
+      (deep)       2000          0.910      0.920       0.930      0.925     0.930       0.940     0.915     0.915      0.935
+
+
+
+
+Table 7: Empirical coverage probability of the 95% confidence interval for θ = (θ1 , θ2 )
+
+and mean of the variance estimates (in parentheses) of θ̂ = (θ̂1 , θ̂2 ) for the proposed and
+
+bootstrap methods for Case 3 (deep) under homoscedastic random errors. The results are
+
+based on 200 simulation runs with 300 bootstraps per run. PM: proposed method, BM:
+
+bootstrap method.
+
+                                            τ = 0.25                   τ = 0.50              τ = 0.75
+
+                   θ         n           PM           BM          PM          BM          PM         BM
+
+                                         0.910       0.865       0.930       0.895       0.925       0.875
+                            1000
+                                    (0.1290)        (0.1189)    (0.1143)    (0.0982)    (0.1293)   (0.1168)
+                   θ1
+                                         0.935       0.905       0.955       0.910       0.945       0.900
+                            2000
+                                    (0.0909)        (0.0862)    (0.0797)    (0.0716)    (0.0921)   (0.0816)
+
+                                         0.910       0.825       0.925       0.850       0.915       0.805
+                            1000
+                                    (0.2477)        (0.2321)    (0.2193)    (0.2063)    (0.2480)   (0.2373)
+                   θ2
+                                         0.930       0.850       0.940       0.870       0.935       0.855
+                            2000
+                                    (0.1751)        (0.1614)    (0.1535)    (0.1439)    (0.1772)   (0.1676)
+
+
+
+
+                                                                   8
+Table 8: Bias and standard deviation (in parentheses) of θ̂ for the LQR, PLAQR and
+
+DPLQR methods under heteroscedastic random errors.
+
+                                     τ = 0.25                         τ = 0.50                          τ = 0.75
+
+ θ    Case          n      LQR       PLAQR      DPLQR       LQR       PLAQR       DPLQR       LQR       PLAQR      DPLQR
+
+                          0.0088     -0.0097    0.0122     -0.0082    -0.0095     0.0110     -0.0094    -0.0127    0.0132
+                   1000
+      Case 4              (0.0688)   (0.0721)   (0.0762)   (0.0543)   (0.0633)    (0.0647)   (0.0617)   (0.0701)   (0.0735)
+
+      (linear)            -0.0062    0.0074     0.0087     -0.0050     0.0076     0.0086     -0.0054    -0.0070    0.0085
+                   2000
+                          (0.0453)   (0.0583)   (0.0613)   (0.0367)   (0.0486)    (0.0502)   (0.0446)   (0.0562)   (0.0605)
+
+                          0.0219     0.0170     0.0183     -0.0199    -0.0154     -0.0176    -0.0205    -0.0178    -0.0181
+                   1000
+      Case 5              (0.0573)   (0.0427)   (0.0523)   (0.0422)   (0.0345)    (0.0401)   (0.0543)   (0.0396)   (0.0495)
+ θ1
+      (additive)          -0.0181    0.0159     0.0169     -0.0152    -0.0132     -0.0141    -0.0172    -0.0149    -0.0155
+                   2000
+                          (0.0408)   (0.0317)   (0.0353)   (0.0265)   (0.0255)    (0.0261)   (0.0388)   (0.0298)   (0.0339)
+
+                          -0.0109    0.0097     0.0071     -0.0107    -0.0100     0.0036     -0.0131    -0.0124    0.0035
+                   1000
+      Case 6              (0.0812)   (0.0733)   (0.0585)   (0.0671)   (0.0631)    (0.0453)   (0.0820)   (0.0776)   (0.0554)
+
+      (deep)              -0.0087    0.0076     0.0031     -0.0101    -0.0092     0.0028     -0.0113    -0.0105    0.0036
+                   2000
+                          (0.0610)   (0.0584)   (0.0428)   (0.0505)   (0.0456)    (0.0334)   (0.0597)   (0.0512)   (0.0424)
+
+                          0.0091     0.0103     0.0134     0.0072     -0.0094     0.0116     -0.0095    -0.0110    0.0142
+                   1000
+      Case 4              (0.1208)   (0.1239)   (0.1342)   (0.0918)   (0.0971 )   (0.1098)   (0.1096)   (0.1144)   (0.1319)
+
+      (linear)            0.0059     -0.0079    0.0101     0.0047     -0.0061     0.0096     0.0064     0.0075     0.0113
+                   2000
+                          (0.0818)   (0.0876)   (0.0927)   (0.0710)   (0.0735)    (0.0802)   (0.0791)   (0.0841)   (0.0905)
+
+                          -0.0416    0.0173     0.0258     -0.0385    -0.0128     0.0209     -0.0454    -0.0208    0.0388
+                   1000
+      Case 5              (0.1097)   (0.0707)   (0.0953)   (0.0871)   (0.0614)    (0.0754)   (0.0914)   (0.0684)   (0.0821)
+ θ2
+      (additive)          0.0339     0.0137     0.0186     -0.0290    -0.0093     0.0128     -0.0358    -0.0142    0.0216
+                   2000
+                          (0.0756)   (0.0517)   (0.0613)   (0.0578)   (0.0411)    (0.0484)   (0.0614)   (0.0467)   (0.0635)
+
+                          0.0684     0.0585     0.0454     -0.0536    -0.0437     0.0355     0.0656     0.0582     0.0484
+                   1000
+      Case 6              (0.1410)   (0.1093)   (0.0990)   (0.1124)   (0.0898)    (0.0815)   (0.1416)   (0.1244)   (0.1012)
+
+      (deep)              0.0578     0.0503     0.0388     -0.0413    -0.0309     0.0247     -0.0538    -0.0464    0.0364
+                   2000
+                          (0.0886)   (0.0874)   (0.0609)   (0.0826)   (0.0732)    (0.0596)   (0.0928)   (0.0894)   (0.0701)
+
+
+
+
+                                                             9
+Table 9: Empirical coverage probability of the 95% confidence interval for θ = (θ1 , θ2 ) by
+
+the LQR, PLAQR and DPLQR methods under heteroscedastic random errors.
+
+                                  τ = 0.25                   τ = 0.50                   τ = 0.75
+
+ θ    Case          n     LQR     PLAQR      DPLQR   LQR     PLAQR DPLQR        LQR     PLAQR DPLQR
+
+      Case 4       1000   0.905   0.900      0.875   0.920   0.910      0.900   0.900   0.900      0.885
+
+      (linear)     2000   0.925   0.915      0.915   0.935   0.920      0.925   0.930   0.925      0.915
+
+      Case 5       1000   0.890   0.910      0.910   0.905   0.920      0.915   0.900   0.915      0.910
+ θ1
+      (additive)   2000   0.915   0.935      0.930   0.920   0.945      0.935   0.910   0.950      0.925
+
+      Case 6       1000   0.890   0.905      0.915   0.905   0.905      0.920   0.900   0.910      0.920
+
+      (deep)       2000   0.910   0.915      0.935   0.910   0.925      0.940   0.910   0.920      0.960
+
+      Case 4       1000   0.900   0.895      0.885   0.915   0.895      0.890   0.915   0.910      0.900
+
+      (linear)     2000   0.925   0.910      0.915   0.935   0.925      0.930   0.930   0.915      0.910
+
+      Case 5       1000   0.900   0.915      0.905   0.915   0.925      0.915   0.915   0.920      0.910
+ θ2
+      (additive)   2000   0.915   0.925      0.920   0.920   0.935      0.925   0.920   0.935      0.925
+
+      Case 6       1000   0.895   0.905      0.920   0.910   0.910      0.925   0.900   0.910      0.920
+
+      (deep)       2000   0.910   0.920      0.935   0.915   0.920      0.940   0.915   0.925      0.940
+
+
+
+
+                                                     10
+Table 10: Empirical coverage probability of the 95% confidence interval for θ = (θ1 , θ2 )
+
+and mean of the variance estimates (in parentheses) of θ̂ = (θ̂1 , θ̂2 ) for the proposed and
+
+bootstrap methods for Case 6 (deep) under heteroscedastic random errors. The results are
+
+based on 200 simulation runs with 300 bootstraps per run. PM: proposed method, BM:
+
+bootstrap method.
+
+                                      τ = 0.25             τ = 0.50             τ = 0.75
+
+                   θ      n        PM          BM       PM         BM        PM        BM
+
+                                  0.915       0.910    0.920      0.925     0.920     0.910
+                         1000
+                                 (0.0515)    (0.0538) (0.0473)   (0.0453) (0.0522)   (0.0515)
+                   θ1
+                                  0.935       0.965    0.940      0.965     0.960     0.930
+                         2000
+                                 (0.0416)    (0.0403) (0.0366)   (0.0343) (0.0425)   (0.0413)
+
+                                  0.920       0.865    0.925      0.885     0.920     0.875
+                         1000
+                                 (0.0989)    (0.0849) (0.0908)   (0.0774) (0.1001)   (0.0890)
+                   θ2
+                                  0.935       0.900    0.940      0.920     0.940     0.910
+                         2000
+                                 (0.0654)    (0.0647) (0.0607)   (0.0593) (0.0683)   (0.0654)
+
+
+
+
+Table 10: Relative mean squared error of m̂ for the LQR, PLAQR and DPLQR methods
+
+under heteroscedastic random errors.
+
+                                  τ = 0.25                       τ = 0.50                       τ = 0.75
+
+ Case          n        LQR      PLAQR       DPLQR      LQR      PLAQR DPLQR         LQR        PLAQR DPLQR
+
+ Case 4       1000      0.0024    0.0032      0.0048   0.0011    0.0021     0.0028   0.0023     0.0032     0.0038
+
+ (linear)     2000      0.0011    0.0021      0.0030   0.0005    0.0009     0.0015   0.0011     0.0019     0.0026
+
+ Case 5       1000      0.0039    0.0035      0.0038   0.0030    0.0025     0.0026   0.0035     0.0029     0.0031
+
+ (additive)   2000      0.0030    0.0023      0.0027   0.0024    0.0020     0.0022   0.0029     0.0026     0.0028
+
+ Case 6       1000      0.0224    0.0205      0.0142   0.0154    0.0147     0.0093   0.0208     0.0179     0.0123
+
+ (deep)       2000      0.0198    0.0196      0.0105   0.0144    0.0144     0.0062   0.0153     0.0143     0.0098
+
+
+
+
+                                                          11
+Table 11: Mean and standard deviation (in parentheses) of the excess risk to evaluate pre-
+
+diction for the LQR, PLAQR and DPLQR methods under heteroscedastic random errors.
+
+                                τ = 0.25                       τ = 0.50                         τ = 0.75
+
+ Case          n      LQR       PLAQR      DPLQR       LQR     PLAQR      DPLQR       LQR       PLAQR      DPLQR
+
+                     0.0021     0.0028     0.0032     0.0025    0.0030    0.0035     0.0021     0.0029     0.0033
+              1000
+ Case 4              (0.0011)   (0.0022)   (0.0024)   (0.0015) (0.0026)   (0.0030)   (0.0012)   (0.0022)   (0.0023)
+
+ (linear)            0.0010     0.0014     0.0021     0.0012    0.0019    0.0025     0.0011     0.0014     0.0019
+              2000
+                     (0.0006)   (0.0014)   (0.0016)   (0.0007) (0.0016)   (0.0020)   (0.0007)   (0.0015)   (0.0016)
+
+                     0.0169     0.0093     0.0133     0.0189    0.0102    0.0142     0.0158     0.0097     0.0125
+              1000
+ Case 5              (0.0034)   (0.0023)   (0.0029)   (0.0037) (0.0026)   (0.0032)   (0.0036)   (0.0022)   (0.0029)
+
+ (additive)          0.0160     0.0083     0.0098     0.0168    0.0091    0.0108     0.0139     0.0071     0.0090
+              2000
+                     (0.0028)   (0.0019)   (0.0021)   (0.0030) (0.0021)   (0.0023)   (0.0029)   (0.0021)   (0.0022)
+
+                     0.0147     0.0122     0.0111     0.0201    0.0154    0.0139     0.0182     0.0115     0.0112
+              1000
+ Case 6              (0.0045)   (0.0037)   (0.0033)   (0.0048) (0.0039)   (0.0034)   (0.0051)   (0.0048)   (0.0032)
+
+ (deep)              0.0139     0.0109     0.0086     0.0195    0.0135    0.0106     0.0175     0.0102     0.0088
+              2000
+                     (0.0039)   (0.0031)   (0.0023)   (0.0042) (0.0033)   (0.0026)   (0.0038)   (0.0033)   (0.0023)
+
+
+
+
+                                                         12
+Table 12: Relative mean square error of m̂ under Case 3 (deep) and Case 6 (deep) with ω
+
+(percentage) of weights being zero.
+
+
+                            Case 3 (deep)                      Case 6 (deep)
+
+           n        ω=30% ω=50% ω=70% ω=30% ω=50% ω=70%
+
+           1000     0.0208      0.0209      0.0218     0.0091      0.0093      0.0097
+
+           2000     0.0155      0.0159      0.0161     0.0060      0.0062      0.0069
+
+
+
+B.2     Additional Data Applications
+
+We also apply the proposed method to two more data set, i.e., Boston Housing and Concrete
+
+Compressive Strength data.
+
+
+B.2.1    Concrete Compressive Strength Data
+
+We apply the proposed methodology, along with the competing methods, to the Concrete
+
+Compressive Strength Data Set (Yeh, 1998) available on the UCI machine learning repos-
+
+itory. The data consist of n = 1030 observations, with the response being a continuous
+
+variable of concrete compressive strength (CCS), and eight covariates: cement (Z1 ), water
+
+(Z2 ), fly ash (Z3 ), blast furnace slag (Z4 ), superplasticizer (Z5 ), coarse aggregate (Z6 ), fine
+
+aggregate (Z7 ) and age of the mixture in days (Z8 ), of which the first seventh covariates are
+
+the ingredients in high-performance concrete (HPC). For concrete technology, the water-
+
+cement ratios (WCR) has been recognized as the most useful and significant advancement
+
+for CCS (Yeh, 1998). Here we not only explore the association between WCR and CCS,
+
+but also predict the CCS of HPC from the covariates.
+
+   Similar to the analysis in Natality Birth and Boston Housing Data, we model the data
+
+with four approaches: LQR, PLAQR, DPLQR and DNQR. Here we treat log CCS as the
+
+
+                                                13
+                   Estimated coefficient θ^τ using DPLQR                            Estimated coefficient θ^τ using LQR                            Estimated coefficient θ^τ using PLAQR
+
+
+
+      −0.6
+
+
+
+
+                                                                       −0.6
+
+
+
+
+                                                                                                                                      −0.6
+      −0.8
+
+
+
+
+                                                                       −0.8
+
+
+
+
+                                                                                                                                      −0.8
+      −1.0
+
+
+
+
+                                                                       −1.0
+
+
+
+
+                                                                                                                                      −1.0
+θ^τ
+
+
+
+
+                                                                 θ^τ
+
+
+
+
+                                                                                                                                θ^τ
+      −1.2
+
+
+
+
+                                                                       −1.2
+
+
+
+
+                                                                                                                                      −1.2
+      −1.4
+
+
+
+
+                                                                       −1.4
+
+
+
+
+                                                                                                                                      −1.4
+      −1.6
+
+
+
+
+                                                                       −1.6
+
+
+
+
+                                                                                                                                      −1.6
+             0.0     0.2       0.4         0.6    0.8      1.0                0.0    0.2       0.4         0.6     0.8    1.0                0.0     0.2       0.4         0.6     0.8     1.0
+                               Quantile level τ                                                Quantile level τ                                                Quantile level τ
+
+
+
+
+Figure 5: Estimation for θτ with τ ∈ [0.02, 0.98] and 95% confidence interval using DPLQR
+
+(left panel), LQR (middle panel) and PLAQR (right panel) in Concrete Compressive
+
+Strength Data.
+
+response, WCR, i.e, Z2 /Z1 , as the linear predictor X. Figure 5 with the parametric esti-
+
+mates and the 95% confidence interval under LQR, PLAQR, DPLQR, suggests that there
+
+is a strong association between WCR and CCS. The negative estimates further support the
+
+Abrams rule in civil engineering that increase in the WCR tends to decrease the strength
+
+of concrete (Gorse et al., 2012). Among the first three approaches, DPLQR produced nar-
+
+rower 95% confidence intervals area (0.2891) for the parameter a than the LQR (0.3408)
+
+and PLAQR (0.3137). The prediction results in Figure 6 further reveal that our method
+
+not only improves the prediction accuracy compared to LQR and PLAQR. In addition,
+
+although the proposed model is a submodel of the DNQR, its performance in prediction is
+
+comparable. Thus, compared to the fully nonparametric approach (DNQR), the partially
+
+linear approach (DPLQR) trades a small amount of prediction accuracy for interpretibility
+
+and has the best performance among the three interpretable approaches, i.e., LQR, PLAQR
+
+and DPLQR.
+
+
+
+
+                                                                                                14
+                                                          Prediction performance
+
+
+
+
+                                            0.15
+                   Check loss on test set
+                                            0.10
+                                            0.05
+                                            0.00
+
+
+
+
+                                                   0.0   0.2    0.4       0.6     0.8   1.0
+                                                               Quantile level τ
+
+
+
+
+Figure 6: Check loss evaluated on test set with quantile levels τ ∈ [0.02, 0.98] under four
+
+models (LQR, PLAQR, DPLQR and DNQR) in Concrete Compressive Strength Data.
+
+Dotted line: LQR (ACL=0.1052); dashed line: PLAQR (ACL=0.0786); solid line: DPLQR
+
+(ACL=0.0675); dot-dashed line: DNQR (ACL=0.0626).
+
+
+B.2.2   Boston Housing Data
+
+The Boston Housing Data, available from the R package mlbench, is a benchmark dataset
+
+for quantile regression analysis. In Harrison and Rubinfeld (1978), 506 observations were
+
+examined to study the housing prices based on various demographic and socioeconomic
+
+predictors. The variables are: median house price (Y ), per capita crime rate by town (X1 ),
+
+a river boundary indicator (X2 ), proportion of non-retail business acres per town (X3 ),
+
+proportion of residential land zoned for lots (X4 ), nitrogen oxides concentration (X5 ),
+
+average number of rooms per dwelling (X6 ), proportion of owner-occupied units built prior
+
+to 1940 (X7 ), weighted mean of distances to five Boston employment centers (X8 ), index
+
+
+                                                                  15
+of accessibility to radial highways (X9 ), full-value property-tax rate (X10 ), pupil-teacher
+
+ratio by town (X11 ), the proportion of black individuals by town (X12 ), the percentage of
+
+the population classified as lower status (X13 ).
+
+   Since the work of Thaler (1978), economists have tried to understand the impact of
+
+crime rate on housing price. To address this question, we model X1 (per capita crime rate
+
+by town) as the parametric predictor to study the effect of the crime rates on house price.
+
+All other covariates are treated as the nonparametric predictors, i.e.,
+
+
+                          log Y = θ1 X1 + m(X2 , X3 , . . . , X13 ) + .
+
+
+We also consider the linear quantile regression (LQR), partially linear additive quantile
+
+regression (PLAQR) and the deep nonparametric quantile regression [DNQR, see Padilla
+
+et al. (2020) and Shen et al. (2021)], which treats all thirteen covariates as components
+
+of a nonparametric regression model, i.e., log Y = m(X1 , X2 , X3 , . . . , X13 ) + . Note that
+
+DNQR does not offer direct treatment effects.
+
+   The estimates θ̂1 from the quantile levels τ ∈ [0.02, 0.98] are shown in Figure 7, revealing
+
+that the crime rate has a significant effect on the price of a house and house prices are higher
+
+in areas with lower crime rates. Figure 8 displays the prediction error in terms of check loss
+
+on randomly hold-out test set (20% of data). It shows the proposed method is considerably
+
+better than the LQR and PLADR methods and is comparable to DNQR.
+
+
+
+
+                                               16
+                    Estimated coefficient θ^τ using DPLQR                                                        Estimated coefficient θ^τ using LQR                                    Estimated coefficient θ^τ using PLAQR
+
+
+
+      0.01
+
+
+
+
+                                                                                                 0.01
+
+
+
+
+                                                                                                                                                                        0.01
+      0.00
+
+
+
+
+                                                                                                 0.00
+
+
+
+
+                                                                                                                                                                        0.00
+θ^τ
+
+
+
+
+                                                                                           θ^τ
+
+
+
+
+                                                                                                                                                                  θ^τ
+      −0.01
+
+
+
+
+                                                                                                 −0.01
+
+
+
+
+                                                                                                                                                                        −0.01
+      −0.02
+
+
+
+
+                                                                                                 −0.02
+
+
+
+
+                                                                                                                                                                        −0.02
+      −0.03
+
+
+
+
+                                                                                                 −0.03
+
+
+
+
+                                                                                                                                                                        −0.03
+              0.0     0.2       0.4         0.6                             0.8      1.0                 0.0     0.2       0.4          0.6          0.8   1.0                  0.0         0.2     0.4         0.6    0.8      1.0
+                                Quantile level τ                                                                            Quantile level τ                                                        Quantile level τ
+
+
+
+
+Figure 7: Estimation for θτ with τ ∈ [0.02, 0.98] and 95% confidence interval using DPLQR
+
+(left panel), LQR (middle panel) and PLAQR (right panel) in Boston Housing Data.
+
+
+
+                                                                                                               Prediction performance
+                                                                             0.06
+                                                   Check loss on test set
+                                                                             0.04
+                                                                             0.02
+                                                                             0.00
+
+
+
+
+                                                                                    0.0                  0.2             0.4                   0.6          0.8                       1.0
+                                                                                                                       Quantile level τ
+
+
+
+
+Figure 8: Check loss evaluated on test set with quantile levels τ ∈ [0.02, 0.98] under
+
+four models (LQR, PLAQR, DPLQR and DNQR) in Boston Housing Data.                                                                                                                                                         Dotted
+
+line: LQR (ACL=0.0508); dashed line: PLAQR LQR (ACL=0.0458); solid line: DPLQR
+
+(ACL=0.0425); dot-dashed line: DNQR (ACL=0.0430). Solid line and dot-dashed line
+
+almost overlap.
+
+                                                                                                                             17
+C     Tuning Parameters
+
+Based on the check loss on validation set, we used grid search to choose tuning parameters
+
+among a set of candidates. The candidates for simulations and data analysis are given in
+
+Table 13 and 14, respectively.
+
+              Table 13: Candidates of tuning parameters in the simulations
+
+
+                    Tunning parameters      Possible values
+
+                    Depth                   {1, 2, 3, 5}
+
+                    Width                   {16, 32, 64}
+
+                    Epoch                   {200, 500}
+
+                    Minibatch               {64, 128}
+
+                    Early stop              {200, 300}
+
+                    Learning rate           {0.001, 0.005, 0.01, 0.05}
+
+
+
+             Table 14: Candidates of tuning parameters in the data analysis
+
+                    Tunning parameters Possible values
+
+                    Depth                 {2, 3, 5, 8, 10}
+
+                    Width                 {64, 128, 256}
+
+                    Epoch                 {500, 600}
+
+                    Minibatch             {128, 256}
+
+                    Early stop            {200, 300, 500}
+
+                    Learning rate         {0.0001, 0.0005, 0.001, 0.01}
+
+
+
+
+                                           18
+References
+
+El-Attar, R. A., Vidyasagar, M., and Dutta, S. R. K. (1979), “An algorithm for l1 -norm
+
+  minimization with application to nonlinear l1 -approximation,” SIAM Journal on Numer-
+
+  ical Analysis, 16, 70–86.
+
+Gorse, C., Johnston, D., and Pritchard, M. (2012), A Dictionary of Construction, Survey-
+
+  ing, and Civil Engineering, Oxford: Oxford University Press.
+
+Harrison, D. and Rubinfeld, D. L. (1978), “Hedonic housing prices and the demand for
+
+  clean air,” Journal of Environmental Economics and Management, 5, 81–102.
+
+He, X. and Shi, P. (1994), “Convergence rate of B-spline estimators of nonparametric
+
+  conditional quantile functions,” Journal of Nonparametric Statistics, 3, 299–308.
+
+Milnor, J. W. (1965), Topology from the Differentiable Viewpoint, Charlottesville, VA.: The
+
+  University Press of Virginia.
+
+Padilla, O. H. M., Tansey, W., and Chen, Y. (2020), “Quantile regression with ReLU
+
+  Networks: Estimators and minimax rates,” arXiv preprint arXiv:2010.08236.
+
+Schmidt-Hieber, J. (2020), “Nonparametric regression using deep neural networks with
+
+  ReLU activation function,” The Annals of Statistics, 48, 1875–1897.
+
+Shen, G., Jiao, Y., Lin, Y., Horowitz, J. L., and Huang, J. (2021), “Deep Quantile Re-
+
+  gression: Mitigating the Curse of Dimensionality Through Composition,” arXiv preprint
+
+  arXiv:2107.04907.
+
+Thaler, R. (1978), “A note on the value of crime control: evidence from the property
+
+  market,” Journal of Urban Economics, 5, 137–145.
+
+Van der Vaart, A. W. and Wellner, J. A. (1996), Weak Convergence and Empirical Pro-
+
+  cesses, New York: Springer.
+
+                                            19
+Yeh, I.-C. (1998), “Modeling of strength of high-performance concrete using artificial neural
+
+  networks,” Cement and Concrete Research, 28, 1797–1808.
+
+
+
+
+                                             20
+

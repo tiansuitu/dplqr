@@ -1,0 +1,16 @@
+{
+  "numerical_test_groups_passed": 5,
+  "baseline_matches_previous_implementation": true,
+  "population_score_matches_independent_quadrature": true,
+  "population_derivative_matches_J": true,
+  "notebook_training_disabled_execution": "passed",
+  "notebook_training_enabled_smoke_execution": "passed",
+  "smoke_n_values": [
+    32,
+    48
+  ],
+  "smoke_reps": 2,
+  "inline_and_display_math_visual_check": "passed",
+  "old_run_preservation_check": "passed",
+  "production_monte_carlo_started": false
+}

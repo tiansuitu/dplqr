@@ -1,0 +1,18 @@
+{
+  "notebook_structure_and_code_syntax": "passed",
+  "math_delimiters": "passed",
+  "LP_sign_regression": "passed",
+  "LP_objective_and_translation_cases": 24,
+  "smoke_grid": {
+    "n": [
+      32,
+      48
+    ],
+    "Q": 2,
+    "epochs": 2
+  },
+  "smoke_loop_summary_four_figures_and_restart": "passed",
+  "residual_reparameterization_and_score_identity": "passed",
+  "production_monte_carlo_run": false,
+  "browser_visual_check": "Inline and display mathematics render correctly in nbconvert preview"
+}

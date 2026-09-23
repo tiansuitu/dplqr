@@ -1,0 +1,1281 @@
+
+PDF PAGE 1
+Journal of Business & Economic Statistics
+ISSN: 0735-0015 (Print) 1537-2707 (Online) Journal homepage: www.tandfonline.com/journals/ubes20
+Neural Networks for Partially Linear Quantile
+Regression
+Qixian Zhong & Jane-Ling Wang
+To cite this article: Qixian Zhong & Jane-Ling Wang (2024) Neural Networks for Partially
+Linear Quantile Regression, Journal of Business & Economic Statistics, 42:2, 603-614, DOI:
+10.1080/07350015.2023.2208183
+To link to this article:  https://doi.org/10.1080/07350015.2023.2208183
+View supplementary material 
+Published online: 02 Jun 2023.
+Submit your article to this journal 
+Article views: 2462
+View related articles 
+View Crossmark data
+Citing articles: 17 View citing articles 
+Full Terms & Conditions of access and use can be found at
+https://www.tandfonline.com/action/journalInformation?journalCode=ubes20
+
+PDF PAGE 2
+JOURNALOFBUSINESS&ECONOMICSTATISTICS
+2024,VOL.42,NO.2,603–614
+https://doi.org/10.1080/07350015.2023.2208183
+Neural Networks for Partially Linear Quantile Regression
+QixianZhonga andJane-LingWang b
+aDepartment of Statistics and Data Science, School of Economics, Wang Yanan Institute for Studies in Economics (WISE), and MOE Key Laboratory of
+Econometrics,XiamenUniversity,Xiamen,China; bDepartmentofStatistics,UniversityofCalifornia,Davis,Davis,CA
+ABSTRACT
+Deep learning has enjoyed tremendous success in a variety of applications but its application to quantile
+regression remains scarce. A major advantage of the deep learning approach is its flexibility to model
+complexdatainamoreparsimoniouswaythannonparametricsmoothingmethods.However,while deep
+learning brought breakthroughs in prediction, it is not well suited for statistical inference due to its black
+box nature. In this article, we leverage the advantages of deep learning and apply it to quantile regression
+where the goal is to produce interpretable results and perform statistical inference. We achieve this by
+adoptingasemiparametricapproachbasedonthepartiallylinearquantileregressionmodel,wherecovari-
+ates of primary interest for statistical inference are modeled linearly and all other covariates are modeled
+nonparametrically by means of a deep neural network. In addition to the new methodology, we provide
+theoretical justification for the proposed model by establishing the root-n consistency and asymptotically
+normality of the parametric coefficient estimator and the minimax optimal convergence rate of the neural
+nonparametric function estimator. Across several simulated and real data examples, the proposed model
+empiricallyproducessuperiorestimatesandmoreaccuratepredictionsthanvariousalternativeapproaches.
+ARTICLE HISTORY
+ReceivedFebruary2022
+AcceptedApril2023
+KEYWORDS
+Curseofdimensionality;
+Deeplearning;
+Interpretability;
+Semiparametricregression;
+Stochasticgradientdescent
+1. Introduction
+With advances in computational power and the availability of
+large data, deep learning has emerged as a powerful data anal-
+ysis tool in a wide variety of applications, such as computer
+vision (Krizhevsky, Sutskever, and Hinton2012), economics
+(Heaton, Polson, and Witte2017) and business (Nolle, Seeliger,
+andMühlhäuser 2018).Deeplearningestimatesafunctionfrom
+data using neural networks which compose multiple (parame-
+terized) nonlinear transformations. These inferred transforma-
+tions are jointly optimizedend-to-end in order to produce the
+optimal overall map rather than independently estimating each
+transformationinaseparatestage.
+Roughlyspeaking,aneuralnetwork,whichconsistsofseveral
+layers and neurons between the input and output layers, is
+a composite function [see formula (1)] with a recursive con-
+catenation of an affine linear function and a simple nonlinear
+map. The success of neural networks is attributed to their pow-
+erful capacity to represent unknown functions. For example,
+Cybenko (1989) and Hornik, Stinchcombe, and White (1989)
+s h o w e dt h a ta n yc o n t i n u o u sf u n c t i o n sc a nb ea p p r o x i m a t e db y
+shallow neural networks to any degree of accuracy. Telgarsky
+(2016)andY arotsky(2017)furthershowedthatdeepneuralnet-
+works enjoy a better representational power than their shallow
+counterparts.
+Despitetheirsuperiorempiricalperformance,deeplearning
+models, mostly a black box, often lack intepretability and the-
+oretical support. Different approaches have emerged in recent
+CONTACT Jane-LingWang janelwang@ucdavis.edu DepartmentofStatistics,UniversityofCalifornia,Davis,Davis,CA.
+Supplementarymaterialsforthisarticleareavailableonline.Pleasegoto www.tandfonline.com/UBES.
+workstoexaminevariousaspectsofinterpretabledeeplearning
+models. For instance, the saliency-based (Zeiler and Fergus
+2014)methodaimsatprovidingposthocexplanationsforacer-
+taintypeofneuralnetworks.Chernozhukovetal.( 2017)andMi
+etal.( 2021)employedneuralnetworksinsemiparametricmean
+regression models to study the causal effect between variables.
+For additional work on intepretable deep learning models, we
+refer readers to the recent review paper by Rudin (2019)a n d
+referencestherein.
+Unliketheaboveapproaches,thisarticleadoptsthestatistical
+model-basedapproachforinterpretabilitybyconstructingneu-
+ral networks for a partially linear quantile regression (PLQR)
+problem. Specifically, we model the covariates of interest with
+a linear predictor for interpretability and statistical inference
+andmodelthenonparametriccomponentwithneuralnetworks.
+TheproposeddeeplearningmethodforPLQRisabbreviatedas
+DPLQR.Asasemiparametricapproach,DPLQRnotonlyoffers
+interpretibility for the parametric component but also allows
+model flexibility for the nonparametric component. Impor-
+tantly, it avoids the curse of dimensionality of nonparametric
+smoothing methods through the strength of neural networks
+to detect the structure, often low-dimensional, of the data. We
+further provide mathematical support for the DPLQR, which
+not only quantifies the uncertainty of the inference but also
+revealswhydeeplearningworks.
+SincetheseminalworkofKoenkerandBassett( 1978),quan-
+tileregressionhasbeenextensivelyinvestigated,includinglinear
+©2023AmericanStatisticalAssociation
+
+PDF PAGE 3
+604 Q.ZHONGANDJ.-L.WANG
+quantile regression (Koenker and Bassett1978;P o r t n o y1991),
+nonparametric quantile regression (Samanta1989;J o n e sa n d
+Hall 1990;C h a u d h u r i1991; Li and Racine2008;G u e r r ea n d
+Sabbah 2012; Kong, Linton, and Xia2013;F a n g ,L i ,a n dY a n
+2021)andsemiparametricquantileregression(HeandShi 1996;
+Lee2003;W u,Y u,andY u2010;CaiandXiao 2012;KongandXia
+2012;N oh,Ghouch,andV anK eilegom2015;FanandLiu 2016;
+MaandHe 2016;Bhattacharya,Gimenes,andGuerre 2021).For
+acomprehensiveintroductionofquantileregression,wereferto
+the monographs by Koenker (2005)a n dK o e n k e re ta l .(2017).
+Compared to the least squares regression approach that focuses
+on the conditional mean of the response, quantile regression
+offers a more expansive view of the effect of covariates on the
+response. Moreover, quantile regression is more robust against
+outlierswhenthedistributionoftheresponseisheavy-tailedor
+skewed(Koenker 2005).
+While linear and nonparametric quantile regression have
+been well developed, theory and methodology for partially lin-
+ear quantile regression models are lagging and existing work
+mainly focuses on the partially linear additive quantile regres-
+sion(Lian 2012;H oshino2014;SherwoodandWang 2016)and
+partially linear single-index quantile regression (Wu and Yu
+2014;Zha n g,Lia n,a ndY u2017,2020).Thisapproachincorpo-
+rateslinearregressioneffectsforsomecovariatesandanadditive
+or single-index model with smooth but unknown regression
+functions for the remaining covariates. Such approaches alle-
+v i a t et h ec u r s eo fd i m e n s i o n a l i t yb u tt h e ya r en o ta m e n a b l e
+tointeractionsornon-single-indexstructureamongcovariates.
+Meanwhile,existingfullynonparametricapproachessufferfrom
+a severe curse of dimensionality, so they are only effective
+for very low-dimensional covariates. In contrast, the proposed
+DPLQR not only retains the linear component of the model to
+interprettheeffectsofprimarycovariates,suchastheeffectofa
+treatment,butalsoenjoystheflexibilityofafullynonparametric
+modelthatismoreresilienttothecurseofdimensionality.
+Applications of deep learning to quantile regression have
+emerged in recent years, such as in climate prediction (Hatalis
+et al.2017) and electricity and power systems (Gan et al.2018).
+However, theoretical understanding of quantile regression with
+neural networks remains scarce and limited to nonparamet-
+ric quantile regression. Romano, Patterson, and Candes (2019)
+employed conformal methods to construct prediction inter-
+vals for the response but did not address estimation of the
+conditional quantile function. Jantre, Bhattacharya, and Maiti
+(2020)developedconsistencyresultsfornonparametricquantile
+function estimators with a single-hidden-layer neural network.
+However,theimplementationoftheirprocedurerequiresexpo-
+nentialtimeforthecomputation,comparedtopolynomialtime
+for deep neural networks (Rolnick and Tegmark2017). As we
+were wrapping up the first version of our research findings, we
+became aware of a related work that was independently devel-
+oped by Padilla, Tansey, and Chen (2020). Although this work
+also explored the convergence rate of the conditional quantile
+function estimator, it is substantially different from ours. First,
+they focused on a black-box nonparametric approach to esti-
+matethequantilefunction,whileweareinterestedinbothesti-
+mationandinterpretability,aswellasstatisticalinferenceforthe
+model. For instance, it is of interest to study whether maternal
+educationhasaneffectonbirthweightofinfants,sincelowbirth
+weightisassociatedwithsubsequenthealthproblems(Badshah
+etal. 2008).Thevanillaversionofthedeeplearningapproachin
+Padilla, Tansey, and Chen (2020)i sn o tg e a r e dt o w a r dp r o v i d -
+ing statistical inference for the effect of maternal education. In
+contrast, the proposed model not only addresses the inference
+issuebutalsoachievescomparablepredictionerrorsforNatality
+BirthDataasshownin Section6.Second,thetheoreticalanalysis
+of their work only holds for continuous covariates while our
+theory covers both continuous and discrete covariates, and we
+establish asymptotic normality for the estimates of the linear
+component. Recently, another related approach was considered
+byShenetal.( 2021).Clearly,thereisrisinginterestinemploying
+deeplearningtoquantileregression.
+To summarize, the major contributions of our article are
+4-fold.
+1. We introduce DPLQR to shed new light on an interpretable
+deep learning model which overcomes the drawback of a
+black-box deep learning approach. Previous attempts fail to
+provide uncertainty quantification. In contrast, we develop
+confidenceintervalsfortheeffectsoflinearcovariates,which
+are of interest to practitioners. Our approach can thus be
+viewed as a bridge between machine learning and statistical
+inference.
+2. We provide theoretical justification for the deep learning
+approachbyestablishingminimaxoptimalconvergencerates
+(uptoapoly-logarithmicfactor)ofthenonlinearcomponent
+of the DPLQR. We further establish root-n convergence and
+asymptotic normality of the regression coefficient estimator
+for both homoscedastic and heteroscedastic random errors.
+Thissubstantiallydistinguishesourtheoreticalcontributions
+from previous purely nonparametric approaches (Bauer and
+Kohler2019;Padilla,T ansey,andChen2020;Schmidt-Hieber
+2020;S h e ne ta l .2021). The asymptotic normality involves
+thederivationoftheinfluencefunction,whichisanontrivial
+task that includes the empirical processes of the subgradient
+of the check loss function and controlling the order of the
+remainderterm.
+3. The proposed DPLQR model is flexible and includes a large
+number of previously-studied quantile regression models.
+Specifically, DPLQR reduces to linear quantile regression
+when the nonparametric component is absent and to non-
+parametric quantile regression in the absence of linear pre-
+dictors. The DPLQR model also includes the partially linear
+additiveorsingle-indexquantileregressionmodelsasspecial
+cases.
+4. Our methodology is able to identify the underlying intrinsic
+dimensionofthedata,whichcircumventsthecurseofdimen-
+sionalitythatgreatlylimitstheapplicabilityofnonparametric
+smoothingapproach.Forexample,whenthetruemodelcor-
+respondstoapartiallylinearadditivequantileregression,the
+resultingneuralnetworkestimatorsautomaticallydetectthis
+and enjoy a one-dimensional nonparametric convergence
+rate(uptoapoly-logarithmicfactor).
+T h er e s to ft h ea r t i c l ep r o c e e d sa sf o l l o w s .I nSection 2,w e
+briefly introduce the fundamental concept of neural networks
+andquantileregression.Asymptoticpropertiesoftheestimators
+arepresentedin Section3.Theimplementationoftheproposed
+approachisdiscussedin Section4,alongwiththecalculationof
+
+PDF PAGE 4
+JOURNALOFBUSINESS&ECONOMICSTATISTICS 605
+theasymptoticcovariancematrixforthevectorparameter. Sec-
+tions 5and6 provide simulation studies and a data application
+comparing the proposed method with linear quantile regres-
+sion and partially linear additive quantile regression.Section 7
+discusses somepotentialextensions. The onlinesupplementary
+material provides mathematical proofs and additional numeri-
+calresults.
+2. Preliminaries
+2.1. Neural Networks
+We first brieflypresent therelevantbackgroundondeep neural
+networks. For some integerL ≥ 2, letq = (q0,q1,... ,qL)⊤ ∈
+NL+1.A nL-layer neural network with input dimensionq0 and
+output dimensionqL is a functionm : Rq0 → RqL that satisfies
+thefollo wingr ecursiver ela tio n:
+m(z) = ˜WLmL−1(z) + ˜bL,
+mL−1(z) = ξ(˜WL−1mL−2(z) + ˜bL−1),... ,
+m1(z) = ξ(˜W1z + ˜b1),
+(1)
+where ˜Wk and ˜bk are aqk × qk−1 matrix andqk-dimensional
+columnvector,respectively,and ξisapriordeterministicfunc-
+tionwhichoperatescomponent-wiseonvectors,thatis, ξ(v) =
+(ξ(v1),... ,ξ(vk))⊤,f o rav e c t o rv = (v1,... ,vk)⊤.W ec a l lL
+the depth of the neural network;mk,f o r1 ≤ k ≤ L − 1,
+the kth hidden layer;a n dξ : R → R the activation function.
+At w o - l a y e r(L = 2) neural network is often called ashallow
+neuralnetwork.A tthekthhiddenlayer,thereare qk neurons,or
+nodes,and qk iscalledthe widthof thekthlayer.Theactivation
+function ξlinks adjacent layers and is often set to be a simple
+nonlinearfunction.Inthisarticle,weconsiderthe rectifiedlinear
+unit (ReLU) activation functionξ(z) = max(z,0) since it is
+computationallyefficientandoftenachievesbestperformancein
+practice(Krizhevsky,Sutskever,andHinton 2012).Thematrices
+˜Wk and vectors ˜bk are often referred to as the “weight” and
+“bias”, respectively in the machine learning literature, but we
+avoid using these terms here to prevent confusion. We write
+Wk = ( ˜Wk, ˜bk) ∈ Rqk×(qk−1+1). Then the neural network in
+(1)canbesuccinctlyexpressedas
+m(z) = WL ˜ξ◦···◦ W2 ˜ξ(W1˜z),( 2 )
+where ˜ξ(v) = (ξ(v)⊤,1)⊤ and ˜z = (z⊤,1)⊤.Figure1 illustrates
+a three layers neural network withq = (4,5,5,1 )⊤.F o ra n
+overview of the structure of neural networks, see the recent
+papers by Yuan et al. (2020), Fan, Ma, and Zhong (2021)a n d
+themonographbyGoodfellow,Bengio,andCourville( 2016).
+Note that the total number of parameters in ( 2)i s∑
+L
+k=1 qk(qk−1 + 1), which can be very large and may lead to
+overfitting. Han et al. (2015), Bauer and Kohler (2019), and
+Schmidt-Hieber (2020) mitigated against this by deactivating
+someofthelinksofneuronsbetweentheadjacenthiddenlayers.
+Following this strategy, fors ∈ N, L ≥ 2, A > 0a n dq =
+(q0,q1,... ,qL)⊤ ∈ NL+1, we consider a sparsely connected
+Figure 1. Athree-layerneuralnetworkwithfourinputvariablesandoneoutput.
+neuralnetworkclass
+M(s,L, q,A)
+=
+{
+m(z) = WL ˜ξ◦···◦ W2 ˜ξ(W1˜z) |Wk ∈ Rqk×(qk−1+1),
+∥Wk∥∞ ≤ 1fo rk = 1,... ,L,
+L∑
+k=1
+∥Wk∥0 ≤ sand
+∥m∥∞ ≤ A
+}
+,
+(3)
+where ∥·∥ ∞ is the sup-norm of a matrix or function and∥·∥ 0
+isthenumberofnonzeroelementsofamatrix.
+2.2. Partially Linear Quantile Regression Model and
+Estimation
+Consider a univariate continuous random variableY and a
+multivariate random variableU = (X,Z) ∈ Rp × Rq,w h e r e
+X may include treatment (indicator) variables and continuous
+covariates of interest. LetFY|U(·|u)be the conditional distribu-
+tion function ofY given U = u.F o rs o m e0<τ< 1, theτth
+conditionalquantileof Y givenU = uisdefinedas
+¯hτ(u) = inf
+y∈R
+{y |FY|U(y|u) ≥ τ}.
+In this article, we assume¯hτ(X,Z) = X⊤θτ + mτ(Z),w h i c h
+leadstothefollowingpartiallylinearquantileregressionmodel:
+Y = X⊤θτ +mτ(Z) + ϵ,P(ϵ ≤ 0|U) = τ,( 4 )
+where θτ ∈ Rp isanunspecifiedparameterwithoutanintercept
+term, mτ : Rq → R is an unknown function and the errorϵ
+maybeheteroscedasticbyallowingittovarywith u = (x,z).
+Let {(Xi,Zi,Yi) : i = 1,... ,n} denote independent and
+identically distributed realizations of(X,Z,Y). For simplicity,
+we use the notationMA to denote the neural network class
+M(s,L, q,A)in(3)wi thq0 = q,qL = 1andsomelargeenough
+A.T oe s t i m a t et h ev e c t o rθτ and the functionmτ, we minimize
+thelossfunction:
+(ˆθτ, ˆmτ) = argmin
+(θ,m)∈Rp
+A×MA
+1
+n
+n∑
+i=1
+ρτ(Yi − X⊤
+i θ− m(Zi)),( 5 )
+where ρτ(t) = t{τ− I(t < 0)}iscalledthecheckfunctionwith
+I(·) being an indicator function andRp
+A ={ θ ∈ Rp : ∥θ∥∞ <
+
+PDF PAGE 5
+606 Q.ZHONGANDJ.-L.WANG
+A}.T h i sl o s sfu n cti o nbec o m e sth ea b so l u t ev al u eL1-loss when
+τ = 0.5 which leads to the median estimators. For brevity, we
+suppressthesubscript τandwrite
+(θ0,m0) = (θτ,mτ)and (ˆθ, ˆm) = (ˆθτ, ˆmτ).( 6 )
+3. Theory
+Inthissection,weestablishthetheoreticalpropertiesoftheesti-
+mators ˆθand ˆm. We first introduce a class of smooth functions
+inwhich m0 resides.
+Let γ and B be two positive constants and⌊γ⌋ denote the
+largest integer strictly less thanγ.W ec a l laf u n c t i o nh : T ⊂
+Rq → Ra (γ,B)-Höldersmoothfunctionifitsatisfies
+sup
+z∈T
+⏐⏐
+⏐ ∂
+|α|h
+∂α1z1 ...∂ αqzq
+(z)
+⏐⏐
+⏐ ≤ B,f o r a l lα = (α
+1,... ,αq)⊤ ∈ Nq
+and |α|=
+q∑
+i=1
+αi ≤⌊ γ⌋,
+and
+sup
+z,z∗∈T
+⏐⏐⏐ ∂|α|h
+∂α1z1 ...∂ αqzq
+(z) − ∂|α|h
+∂α1z1 ...∂ αqzq
+(z∗)
+⏐⏐⏐
+≤ B∥z − z∗∥γ−⌊γ⌋
+2 ,f o r a l l|α|=⌊ γ⌋.
+Denote the class of all such(γ,B)-Hölder smooth functions
+as Hγ
+q (T,B).L e tJ ∈ N, γ = (γ1,... ,γJ)⊤ ∈ RJ
++, d =
+(q,d1,... ,dJ)⊤ ∈ NJ+1 and ¯d = (¯d1,... , ¯dJ)⊤ ∈ NJ with
+¯d1 ≤ q and ¯dk ≤ dk−1,k = 2,... ,J. We further define a
+compositefunctionclass:
+H(J, γ, d, ¯d,B)
+=
+{
+h = hJ ◦... ◦h1 : T → R |hk = (hk1,... ,hkdk )⊤ and
+hkj ∈ Hγk
+¯dk
+([ak,bk]¯dk,B) forsome |ak|,|bk|≤ B
+}
+.
+(7)
+Thisclassoffunctions,firstproposedbySchmidt-Hieber( 2020),
+contains two kinds of dimensiond and ¯d.W ec a l l¯d the intrin-
+sic dimension of the function h in H(J, γ, d, ¯d,B).I t seffec-
+tive smoothnessis defined as ¯γ = ( ¯γ1,... , ¯γJ)⊤ with ¯γk =
+γk
+∏J
+i=k+1(γi ∧ 1),k = 1,... ,J − 1a n d¯γJ = γJ.T oe s t a b l i s h
+the convergence rate with sample sizen in Theorem 3.1below,
+wedenote
+rn = max
+k∈{1,...,J}
+n
+− ¯γk
+2 ¯γk+¯dk .( 8 )
+As an illustration,consider the function
+h(z)=h31(h21(h11(z1,z2),h12(z3,z4)),h22(h13(z5,z6),h14(z7))),
+(9)
+where allhij are (γ,1)-Hölder smooth withγ ≥ 1. It is clear
+thath ∈ H(J, γ, d, ¯d,B) with J = 3, γ = ¯γ = (γ,γ,γ)⊤, d =
+(7,4,2,1 )⊤, ¯d = (2,2,2 )⊤,B = 1and rn = n−γ/(2γ+2).
+With different choices of J, γ, d and ¯d, H(J, γ, d, ¯d,B)
+includes a large number of function classes that have been
+consideredinthestatisticalandeconomicsliterature.Belowwe
+p r o videtwoexam plestoill ustra tetheub iqui tyo fsuchfunctio n
+classes. We say a functionh is (∞ ,B)-Hölder smooth if it is
+(γ,B)-Höldersmoothforall γ> 0.
+Example 3.1(Additive functions). Af u n c t i o nh : R
+q → R is
+additiveifitcanberepresentedasumofunivariatefunctionsof
+each component(Stone1985),thatis,for z = (z1,... ,zq)⊤,
+h(z) = h1(z1) +···+ hq(zq), (10)
+where hk,k = 1,... ,q are univariate (γ,B)-Hölder smooth
+functions withγ ≥ 1. HereJ = 2, γ = ¯γ = (γ,∞ )⊤, d =
+(q,q,1)⊤, ¯d = (1,q)⊤, rn = n−1/(2γ+1), h1k(z) = hk(zk), k =
+1,... ,q,and h21(y) = y1 +···+ yq,wher ey = (y1,... ,yq)⊤.
+Example 3.2(Single/multiple index functions). A single index
+function,firstintroducedbyIchimura( 1993)andlaterextended
+tomultipleindicesbyHristacheetal.( 2001),isgivenby
+h(z) = h1(z⊤α1,... ,z⊤αK), (11)
+where αk,k = 1,... ,K are unknown parameters andz⊤αj are
+the index functions. It is easy to see thath1k(z) = z⊤αk,k =
+1,... ,Kandh21(y) = h1(y).Thus,if h1 is(γ,B)-Höldersmooth
+with γ ≥ 1, γ = ¯γ = (∞ ,γ)⊤, d = (q,K,1)⊤, ¯d = (¯d1,K)⊤
+with ¯d1 = maxk{∥αk∥0},and rn = n−1/(2γ+1).
+For the covariateX = (X1,... ,Xp)⊤,wedefine
+ϕ∗
+k = argmin
+ϕ∈L2(PZ)
+E[f(0|U){Xk − ϕ(Z)}2],k = 1,... ,p, (12)
+where L2(PZ) ={ ϕ | Eϕ2(Z)< ∞} and f(·|U) is the con-
+ditional density of errorϵ in (4). Let ϕ∗(Z) = (ϕ∗
+1 (Z),... ,
+ϕ∗
+p (Z))⊤,and
+/Sigma11 = E[τ(1 − τ){X − ϕ∗(Z)}{X − ϕ∗(Z)}⊤],
+/Sigma12 = E[f(0|U){X − ϕ∗(Z)}{X − ϕ∗(Z)}⊤]. (13)
+It is easy to show thatϕ∗ = E(X|Z) if the conditional error
+densityf(·|U)is independent ofU at zero, see also Lian (2012)
+andHoshino( 2014)forpartiallylinearadditiveregression.
+Next, we state the assumptions for the deep partially linear
+quantileregressionmodel.
+Assumption 1.The true vector parameterθ0 belongs to a com-
+pact subset /Theta1⊂ Rp bounded byB, the true nonparametric
+function m0 in (6)b e l o n g st oH = H(J, γ, d, ¯d,B),a n dA in
+(5)satisfies B < A.
+Assumption 2. The covariates(X,Z) take values in a compact
+subsetof Rp+q thatwithoutlossofgeneralitywillbeassumedto
+be [0,1]p+q.Inaddition,theprobabilitydensityfunction(PDF)
+ofZ isboundedawayfromzeroandfrominfinity.
+Assumption 3.The conditional PDFf(·|u)of the random error
+ϵ given the covariateU = u has continuous derivativef
+′
+(·|u),
+and there exist positive constantsb0 and c0 such that 1/c0 <
+f(t|u)< c0 and |f
+′
+(t|u)| < c0 forall |t|≤ b0,u ∈[0,1]p+q.
+Assumption 4.The depthL,wid thv ect o rq = (q0,q1,... ,qL)⊤
+and number of nonzero parameterss of the neural network
+class (3)s a t i s f yL = O(logn),s = O(nr2
+n logn) and nr2
+n ≲
+mink=1,...,L{qk}≤ maxk=1,...,L{qk} ≲ n,w h e r ern is defined
+in(8).
+
+PDF PAGE 6
+JOURNALOFBUSINESS&ECONOMICSTATISTICS 607
+Assumption5. Thematrices /Sigma11 and /Sigma12 in(13)arebothpositive
+definite.
+Assumption6. maxk=1,...,p(E|Xk|4)< ∞ and ¯γ¯k > ¯d¯k/2,where
+¯kistheindextoachievethemaximumvaluein( 8).
+The boundedness of both the parameters and covariate
+spaces inAssumptions 1and 2 are standard for semiparamet-
+ric/nonparametricregression.In Assumption3wepostulatethat
+thePDFoftheerroranditsderivativeareboundedtoguarantee
+thatthetrueparameter (θ
+0,m0)is a well-separated point of the
+minimumoftheexpectedchecklossfunction.In Assumption4,
+weassumethatthesizeofneuralnetworks Musedin( 5)grows
+with the sample sizen at a certain rate to balance the approxi-
+mation and estimation errors of the estimators.Assumptions 5
+and 6 are common conditions for asymptotic normality of the
+vector estimator ˆθ in semiparametric regression (He and Shi
+1996; Wang, Zhu, and Zhou2009; Sherwood and Wang2016),
+whereAssumption5 isusedtodeveloptheasymptoticvariance,
+whileAssumption6 guarantees √n-consistency.
+We are now ready to state the convergence rate of the
+estimators.
+Theorem3.1. UnderAssumptions1–5,weha ve
+lim
+C→∞
+limn→∞ sup
+m0∈H
+P(∥ ˆm − m0∥L2([0,1]q) ≥ Crn log2 n) = 0.
+From the proof ofTheorem 3.1one can see that the con-
+vergence rate is the result of a tradeoff between estimation
+error and approximation error. Here the approximation error
+is defined as the distance between the true parameterm
+0 and
+theneuralnetworkset M,tha tis,minm∈M ∥m − m0∥L2([0,1]q).
+I ti sk n o w nt h a tam o r ec o m p l e xn e u r a ln e t w o r ks t r u c t u r ei s
+more flexible and thus leads to a smaller approximation error
+(Anthony and Bartlett1999;Y a r o t s k y2017;B a u e ra n dK o h l e r
+2019;S c h m i d t - H i e b e r2020). However, too many parameters,
+f o re x a m p l et h en u m b e ro fn o n z e r ow e i g h t ss in (3), will lead
+to high variance. Hence, there is an implicit “bias-variance”
+tradeoffthatisreflectedinthegrowthofneuralnetworks.
+Note that the convergence rate of the estimatorˆm is deter-
+mined by both the intrinsic dimension¯d = (¯d
+1,... , ¯dJ)⊤ and
+theeffectivesmoothness ¯γ = ( ¯γ1,... , ¯γJ)⊤ ofthetruefunction
+m0 ∈ H(J, γ, d, ¯d,B) in (7), rather than the dimensionq of
+the covariateZ. For example, ifm0 has the composite struc-
+ture in (9), the convergence rate for the proposed method is
+n−γ/(2γ+2) log2 n. In contrast, the convergence rate for a non-
+parametricmethod,suchaskernelorsplinesmoothingisofthe
+ordern−γ/(2γ+7) (Simonoff2012).Thisshowsthatourmethod
+is able to detect the low dimensional structure of the data and
+thuscircumventsthecurseofdimensionality.
+In particular, whenm0 r e d u c e st oa na d d i t i v eo ras i n g l e
+index function, as shown inExamples 3.1and3.2,r e s p e c t i v e l y ,
+the resulting estimators have one-dimensional nonparametric
+rates of convergence (up to a poly-logarithmic factor). This
+is similar to results of Stone (1985)a n dI c h i m u r a(1993)f o r
+nonparametricregression.
+The next theorem establishes the minimax lower bound for
+estimating m
+0, which implies that the resulting estimatorˆm in
+Theorem3.1 israte-optimal.
+Theorem3.2. Let F betheclassofprobabilitydensityfunctions
+thatsatisfy Assumption3.Thenweha ve
+lim
+C→∞
+limn→∞ inf
+ˆm
+sup
+(θ0,m0,f)∈Rp×H×F
+P(θ0,m0,f)
+(
+∥ ˆm − m0∥L2([0,1]q) ≥ Crn
+)
+= 1,
+wheretheinfimumistakenoverallpossiblepredictors ˆmbased
+ontheobserveddata.
+Belo wwesho wtha ttheestima to rˆθfortheparametervector
+isasymptoticallynormalatthe √nrate.
+Theorem3.3. UnderAssumptions1–6,weha ve
+√n(ˆθ− θ0) → N(0,/Sigma1−1
+2 /Sigma11/Sigma1−1
+2 ),
+where /Sigma11 and /Sigma12 aretwo p-by-pmatricesdefinedin( 13).
+When f(0|U) is a constant function, the solution of (12)
+would be ϕ∗(Z) = E(X|Z), which leads to /Sigma11 = τ(1 −
+τ)var{X − E(X|Z)}, /Sigma12 = f(0)var{X − E(X|Z)} and more
+generally,thefollowingcorollary.
+Corollary3.1. Undertheassumptionsof Theorem3.3 andwhen
+f(0|U)isaconstantfunction,wehave
+√n(ˆθ− θ0) → N(0,/Sigma1),
+where /Sigma1= τ(1 − τ)[var{X − E(X|Z)}]−1/f2(0).
+For partially linear quantile regression with homoscedastic
+error, the random errorϵ is independent of the covariateU,
+which implies thatf(0|U = u) = f(0),f o ra l lu ∈[ 0,1]p+q,
+hence,Corollary3.1 holds.
+4. Implementation and Asymptotic Covariance
+Estimation of ˆθand ˆm: Since the check function in (5)i sn o t
+differentiableattheorigin,theNewton-Raphsonalgorithmand
+itsvariantscannotbedirectlyusedtofindthesolutionforlinear
+quantile regression. Koenker and Ng (2005)p r o p o s e ds e v e r a l
+algorithms, such as the interior point algorithm for linear pro-
+gramming, to solve this optimization problem. However, with
+the layer-by-layer structure of the neural network and the large
+number of parameters involved, this approach is infeasible for
+our purpose. We resort to theAdam algorithm (Kingma and
+Ba 2014), a variant of thestochastic gradient descent(Robbins
+and Monro1951), in the Python packagePyTorch(Paszke et al.
+2019) to solve the optimization problem (5). This algorithm
+is widely used in the deep learning field due to its computa-
+tional and memory efficiency. For our purpose, since we have
+a parametric and a nonparametric component, we wrap the
+linearpredictor θ
+⊤Xandm(Z)togetheranditerativelyestimate
+the corresponding parameters simultaneously. That is, with the
+neuralnetwork min(2),weuseAdamtoupdatetheparameters
+{θ,W
+1,... ,WL}. Here we use the default values in PyTorch for
+theinitialvalues θ(0) andW(0)
+k ,k = 1,... ,L.
+T h ea l g o r i t h ma l s or e q u i r e st h es p e c i fi c a t i o no ft u n i n g
+parameters, such as the depthL,w i d t hq, step size, minibatch
+size, the number of iterations, early stopping, the constraint
+of sparsity parameters and boundedness of weightsWk,k =
+
+PDF PAGE 7
+608 Q.ZHONGANDJ.-L.WANG
+1,... ,L of neural networkm for the classM(s,L, q,A) in (3).
+H eretheminiba tchsizeisdefinedasthesubsam plesizeusedto
+calculatethegradientoftheobjectivefunctionforeachiteration,
+andearlystoppingpreventsoverfittingbyspecifyingthenumber
+of iterations to continue when the model does not improve any
+more on a hold-out validation dataset. We enforce a certain
+proportion of elements in each row of the weight matrixW
+k to
+b ez e r oa n dk e e pt h e ma tz e r od u r i n gt h et r a i n i n g .W es e tt h e
+proportion to be 50% since a different choice leads to similar
+resultsasshowninT able12oftheSupplementarymaterial.After
+the training, we set the elements ofW
+k, whose absolute values
+are greater than 1, to equal to 1 or−1, according to the sign of
+theelements.
+In the simulation study, we randomly split the data into a
+training and validation set in a 80:20 ratio, where the tuning
+parameters were selected based on the 20% validation set. In
+the data analysis, where the ground truth is not available, we
+randomly reserved 20% of the data as testing set and then
+randomly selected 20% of the remaining data as a validation
+set to select the tuning parameter for the training set, which is
+64% of the original data. Based on minimizing the check loss
+o nt h ev a l i d a t i o ns e t ,w eu s e dg r i ds e a r c ht oc h o o s et h et u n i n g
+parameters among a set of candidates for both the simulation
+anddataapplication.Thechoiceofthegridpointsareprovided
+inTables13and14ofthesupplementarymaterial.
+AsymptoticCovarianceEstimation: Toconductinferenceforthe
+parameter θ
+0, we need to estimate the asymptotic covariance
+matrix of ˆθin Theorem 3.3or Corollary 3.1. For simplicity, we
+demonstrate how to estimate the asymptotic covariance matrix
+for the case of homoscedastic random errors. The first step is
+to obtain a density estimate forˆf(0) from the residuals{ˆϵi =
+Yi − ˆYi | ˆYi = X⊤
+i ˆθ+ ˆm(Zi),i = 1,... ,n},f o rw h i c hw eu s e
+thefunction densityintheRpackage stats.Then,weemploythe
+deepneuralnetworktoestimatetheprojections ϕ∗
+k,k = 1,... ,p
+empirically,thatis,
+ˆϕ∗
+k = argmin
+ϕ∈M1
+1
+n
+n∑
+i=1
+{Xik − ϕ(Zi)}2,
+where Xik is the kth component of covariatesXk and M1 is
+a class of neural networks. Letˆϕ∗ = ( ˆϕ∗
+1,... , ˆϕ∗
+p )⊤, Vi =
+Xi − ˆϕ∗(Zi), ¯V = (∑n
+i=1 Vi)/nand ˆ/Omega1={ ∑n
+i=1(Vi − ¯V)(Vi −
+¯V)⊤}/(n− 1).Weestimatetheasymptoticcovariancematrixby
+ˆ/Sigma1= τ(1 − τ)ˆ/Omega1−1
+ˆf2(0)
+. (14)
+For heteroscedastic random errors, we can estimate the corre-
+spondingasymptoticcovariancematrixbyabootstrapmethod,
+see Feng, He, and Hu (2011)a n dW a n g ,V a nK e i l e g o m ,a n d
+Maidman (2018)fordetails.
+5. Simulations
+In this section, we demonstrate the numerical performance of
+the proposed deep quantile regression method and compare
+it with linear quantile regression and partially linear additive
+quantile regression, abbreviated as LQR and PLAQR, respec-
+tively.Thecodeisavailableat https://github.com/qxzhong/dplqr.
+5.1. Simulation I: Homoscedastic Errors
+We first generated˜Z = (˜Z
+1,... , ˜Z10)⊤ where (˜Z1,... , ˜Z10)⊤ is
+fromaGaussiancopulaon [0,2]withcorrelationparameter0.5.
+Marginally, each coordinate of˜Z is a uniform distribution on
+[0,2].W et h e ns e tZ = (˜Z1,... , ˜Z8)⊤ andX = (X1,X2)⊤ with
+X1 = I(˜Z9 > 1) and X2 = ˜Z10 as covariates. The responseY
+wasgeneratedfrom
+Y = θ⊤X +m(Z) + ϵ, (15)
+where θ= (θ1,θ2) = (1,−1)⊤,a ndtheerr o rϵ,independentof
+(X,Z),isaStudent’s t-distributionwithzeromeanand3degrees
+offreedom.Threechoicesof mwereimplemented:
+Case1(linear) :m(z) = 0.56 × ∑8
+k=1 zk;
+Case2(additive) :m(z) = 0.82 ×{ (z1 − 1)2 − z2
+2 +3|z3 − 1|+
+0.6sin (πz4)+log(z5+0.5)+√z6 +0.5+3cos (0.1πz7)+3(z8−
+1 +|z8 − 1|)}
+Case3(deep) :m(z) = 0.61 ×[exp{z1(1 +z2 − πz3z4)/2}(z5 +
+0.2) + z5(z4 − 0.3)/(|2z4 − 1|+ 1) + 2sin (z5)|z5z6 − 0.6|+
+log(z6 +z7z8)]
+The first two cases correspond to, respectively, the LQR and
+PLAQR model, and the third case is designed for DPLQR. The
+factors 0.56,0.82, and 0.61 in each case were scaled to attain a
+signal-to-noiseratioaround5.
+For each setting, we generatedQ = 200 datasets, each with
+sample sizesn = 1000 and 2000, respectively. Throughout the
+simulation, we split the data into training data and validation
+data in a 80:20 ratio. That is, 80% of the data were used for
+estimation and the remaining 20% were used for the selection
+oftuningparametersasintroducedin Section4.T oevaluatethe
+performance of the estimation and prediction, we additionally
+generated a test data with sample sizeN = 5000 in each
+simulation.Specifically,
+The performance of ˆm
+τ was assessed by the relative mean
+squarederror(RMSE):
+RMSE( ˆmτ) =
+1
+N
+∑N
+i=1{ ˆmτ(Zi) − mτ(Zi)}2
+1
+N
+∑N
+i=1{mτ(Zi)}2 , (16)
+where ˆmτ and mτ a r ee v a l u a t e do nt h ec o v a r i a t e sZi,i =
+1,... ,N of the test data (N = 5000). Moreover, with the
+estimates ˆθτ and ˆmτ,w eu s eˆYi = X⊤
+i ˆθτ + ˆmτ(Zi) to predict
+the τthquantileof Yi andevaluateditsperformancethroughthe
+excessriskerror(VanderVaartandWellner 1996):
+ERE(ˆy) = 1
+N
+N∑
+i=1
+{ρτ( ˆYi − Yi) − ρτ(Y∗
+i − Yi)},
+where ρτ(·) is the check loss function defined in (5)a n dY∗
+i =
+X⊤
+i θτ +mτ(Zi).
+Table 1presents the biases and standard deviations of the
+estimates, ˆθ1, based on 200 simulation runs at three quantile
+levels τ = 0.25,0.50,0.75. In general, both the bias and vari-
+ance decrease steadily for all three methods as the sample size
+increases from 1000 to 2000. As expected, the mean squared
+error of the resulting estimates are the smallest at the median
+(τ = 0.5) level. Under Case 1 (linear) and Case 2 (additive),
+the proposed DPLOR method performed comparably with the
+
+PDF PAGE 8
+JOURNALOFBUSINESS&ECONOMICSTATISTICS 609
+Table 1. Biasandstandarddeviation(inparentheses)of ˆθ1 fortheLQR,PLAQR,andDPLQRmethodsunderhomoscedasticrandomerrors.
+τ= 0.25 τ= 0.50 τ= 0.75
+θ Case n LQR PLAQR DPLQR LQR PLAQR DPLQR LQR PLAQR DPLQR
+θ1
+1000 0.0896 0.0944 0.1235 0.0219 0.0413 0.0636 −0.0721 0.0836 0.1203
+Case1 (0.1402)( 0.1428)( 0.1446)( 0.1116)( 0.1199)( 0.1235)( 0.1389)( 0.1411)( 0.1439)
+(linear) 2000 0.0742 0.0821 0.1078 −0.0148 0.0304 0.0483 −0.0679 −0.0795 0.0983
+(0.0970)( 0.0998)( 0.1074)( 0.0796)( 0.0812)( 0.0925)( 0.0988)( 0.1003)( 0.1118)
+1000 0.0764 −0.0297 0.0360 −0.0611 −0.0124 0.0338 −0.0757 −0.0210 −0.0307
+Case2 (0.1384)( 0.1253)( 0.1301)( 0.1158)( 0.1008)( 0.1116)( 0.1493)( 0.1364)( 0.1417)
+(additive) 2000 0.0710 −0.0145 0.0229 0.0506 0.0099 0.0158 −0.0727 0.0112 −0.0266
+(0.1086)( 0.0970)( 0.0976)( 0.0794)( 0.0782)( 0.0785)( 0.0943)( 0.1060)( 0.0984)
+1000 0.1244 −0.1060 0.0762 0.1068 −0.0902 0.0403 −0.1322 −0.1095 0.0604
+Case3 (0.1787)( 0.1647)( 0.1394)( 0.1444)( 0.1337)( 0.0998)( 0.1718)( 0.1691)( 0.1330)
+(deep) 2000 0.1170 −0.0935 0.0556 −0.0951 −0.0630 0.0297 −0.1212 −0.0942 −0.0445
+(0.1231)( 0.1146)( 0.0951)( 0.1046)( 0.0978)( 0.0848)( 0.1165)( 0.1146)( 0.0941)
+Table 2. Empiricalcoverageprobabilityofthe95%confidenceintervalfor θ1 bytheLQR,PLAQR,andDPLQRmethodsunderhomoscedasticrandomerrors.
+τ= 0.25 τ= 0.50 τ= 0.75
+θ Case n LQR PLAQR DPLQR LQR PLAQR DPLQR LQR PLAQR DPLQR
+θ1
+Case1 1000 0.910 0.900 0.895 0.975 0.915 0.905 0.900 0.910 0.905
+(linear) 2000 0.925 0.920 0.915 0.945 0.940 0.935 0.930 0.920 0.925
+Case2 1000 0.855 0.910 0.895 0.960 0.955 0.945 0.865 0.915 0.910
+(additive) 2000 0.885 0.925 0.915 0.960 0.945 0.955 0.895 0.935 0.930
+Case3 1000. 0.865 0.885 0.910 0.885 0.875 0.930 0.870 0.895 0.925
+(deep) 2000 0.900 0.925 0.935 0.915 0.920 0.955 0.905 0.920 0.945
+Table 3. Relativemeansquarederrorof ˆmfortheLQR,PLAQR,andDPLQRmethodsunderhomoscedasticrandomerrors.
+τ= 0.25 τ= 0.50 τ= 0.75
+Case n LQR PLAQR DPLQR LQR PLAQR DPLQR LQR PLAQR DPLQR
+Case1 1000 0.0071 0.0080 0.0086 0.0064 0.0070 0.0081 0.0074 0.0083 0.0089
+(linear) 2000 0.0036 0.0043 0.0047 0.0034 0.0038 0.0040 0.0037 0.0044 0.0049
+Case2 1000 0.0097 0.0072 0.0074 0.0062 0.0053 0.0059 0.0093 0.0074 0.0080
+(additive) 2000 0.0059 0.0040 0.0044 0.0034 0.0027 0.0030 0.0051 0.0039 0.0045
+Case3 1000 0.0997 0.0872 0.0390 0.0679 0.0539 0.0209 0.0976 0.0820 0.0342
+(deep) 2000 0.0904 0.0812 0.0298 0.0633 0.0508 0.0159 0.0883 0.0774 0.0275
+optimal method (LQR and PLAQR, respectively) with slightly
+larger mean squared errors. However, under Case 3 (deep), the
+DPLQRmethodclearlyoutperformsLQRandPLAQR.Wealso
+constructthe95% confidenceintervalsfor θ1 basedontheesti-
+matesoftheasymptoticvariancein Section4.Table 2reportsthe
+empiricalcoverageprobabilitiesofthe95%confidenceintervals.
+For all three cases, the empirical coverage probabilities of the
+proposed method generally approach 95% asn increases. In
+addition, the proposed method is comparable to the other two
+methods under Case 1 (linear) and Case 2 (additive), and has
+moreaccuratecoverageratesunderCase3(deep).Wealsocom-
+pare the empirical overage probabilities of the 95% bootstrap
+confidence intervals forθand variance estimate ofˆθin Table
+7 of the supplementary material and the proposed method is
+seen to outperform the bootstrap method in terms of coverage
+probability.
+The average relative mean squared errors of the estimated
+nonparametric function ˆm over 200 repetitions are given in
+Table 3. They decline with the increasing sample sizes as
+expected. When the true model is Case 3 (deep), the proposed
+method substantially outperforms LQR and PLAQR, while it
+performs slightly worse under Case 1 (linear) and Case 2
+(additive).
+B a s e do nt h e2 0 0s i m u l a t i o nr u n s ,Table 4shows the mean
+andstandarddeviationoftheexcessriskerrorsfortheprediction
+at three quantile levelsτ = 0.25,0.50,0.75. This reveals that
+theproposedDPLQRiscompetitivewiththeoptimalprocedure
+(LQR in Case 1 (linear) and PLAQR in Case 2 (additive)) and
+superiorinCase3(deep).
+5.2. Simulation II: Heteroscedastic Errors
+We also studied the performance of the proposed method for
+heteroscedastic errors. The covariatesU = (X,Z),c oe ffi c i e n tθ
+andnonparametricfunction maresimilartothesettingsin Sec-
+tion5.1 buttheresponse Y nowcomesfromtheheteroscedastic
+regressionmodel:
+Y = X
+⊤θ+m(Z) + σ(X,Z)ϵ.
+Here ϵ followstheStudent’st-distributionwithzeromeanand3
+degreesoffreedom.Thefunction σ(X,Z)waschosenwiththree
+settings:
+Case4(linear) : σ(x,z) = (x1 +x1 + ∑8
+k=1 zk)/10;
+Case5(additive) : σ(x,z) ={ x1 +x1 + ∑8
+k=1(zk − 1)2}/10;
+Case 6 (deep): σ(x,z) = (x1 + x1)/10 + /Phi1
+(∑8
+k=1(zk − 1)/8
+)
+
+PDF PAGE 9
+610 Q.ZHONGANDJ.-L.WANG
+Table 4. Mean and standard deviation (in parentheses) of the excess risk toevaluateprediction for the LQR,PLAQR,and DPLQR methods under homoscedastic random
+errors.
+τ= 0.25 τ= 0.50 τ= 0.75
+Case n LQR PLAQR DPLQR LQR PLAQR DPLQR LQR PLAQR DPLQR
+1000 0.0053 0.0061 0.0067 0.0054 0.0065 0.0069 0.0049 0.0053 0.0056
+Case1 (0.0026)( 0.0036)( 0.0038)( 0.0029)( 0.0040)( 0.0045)( 0.0026)( 0.0033)( 0.0040)
+(linear) 2000 0.0026 0.0042 0.0045 0.0032 0.0049 0.0053 0.0026 0.0040 0.0041
+(0.0014)( 0.0019)( 0.0020)( 0.0019)( 0.0026)( 0.0031)( 0.0014)( 0.0018)( 0.0021)
+1000 0.0141 0.0111 0.0124 0.0158 0.0124 0.0143 0.0146 0.0106 0.0127
+Case2 (0.0054)( 0.0039)( 0.0050)( 0.0065)( 0.0043)( 0.0053)( 0.0056)( 0.0039)( 0.0052)
+(additive) 2000 0.0105 0.0081 0.0098 0.0129 0.0096 0.0113 0.0102 0.0076 0.0100
+(0.0041)( 0.0024)( 0.0039)( 0.0048)( 0.0032)( 0.0040)( 0.0040)( 0.0025)( 0.0037)
+1000 0.0141 0.0123 0.0116 0.0160 0.0130 0.0128 0.0140 0.0125 0.0110
+Case3 (0.0064)( 0.0050)( 0.0051)( 0.0071)( 0.0065)( 0.0058)( 0.0062)( 0.0056)( 0.0048)
+(deep) 2000 0.0108 0.0099 0.0089 0.0128 0.0103 0.0092 0.0099 0.0103 0.0088
+(0.0046)( 0.0044)( 0.0039)( 0.0054)( 0.0049)( 0.0040)( 0.0044)( 0.0041)( 0.0037)
+Figure 2. Histogram(leftpanel)andempiricalcumulativedistributionfunction(rightpanel)ofbirthweighton200thousandrandomlyselectedsubjects.
+with the cumulative distribution function/Phi1(·) of the standard
+normaldistribution.
+These lead toθτ = θ+ tτθ∗ andmτ(z) = m(z) + tτm∗(z)
+where tτ is the τ quantile of Student’s t-distribution with
+zero mean and degree of freedom 3 and (θ∗,m∗(z))
+takes (0.1, ∑10
+k=1 zk/10),(0.1, ∑8
+k=1(zk − 1)2/10) and
+(0.1,/Phi1(∑8
+k=1(zk − 1)/8)) in Case 4 (linear), Case 5 (additive)
+and Case 6 (deep), respectively.. The simulation results,
+summarized in Tables 8–11 of the supplementary material,
+ar eco m parabletothoseinSim ula tio nIinSection5.1.
+In summary, when the true model is linear or partially lin-
+ear additive quantile regression, our method is competitive for
+both the parametric coefficients and nonparametric function
+estimates, and the coverage probabilities for the parametric
+coefficients are close to the 95% nominal level as sample sizes
+increase. Furthermore, the proposed method is superior to the
+LQRandPLAQRmethodswhenthetruemodelcomesfromthe
+deeppartiallylinearquantileregression.
+6. An application to Natality Birth Data
+We apply DPLQR to analyze the relationship between mater-
+nal education and the birth weight of infants using the 2020
+Natality Birth Data published by National Center for Health
+Statistics. The data, available athttps://www.nber.org/research/
+data/vital-statistics-natality-birth-data, consists of more than
+3.6 million births with demographic and health information.
+It is well documented that low birth weight is associated with
+several short-term and long-term consequences, such as high
+risk of mortality (Badshah et al.2008) and impaired language
+development(Zerbeto,Cortelo,andCFilho 2015).Scientistsare
+interestedinwhethermaternaleducationbeyondhighschoolis
+a s s o c i a t e dw i t hb i r t hw e i g h t( S h ie ta l .2004;G a g ee ta l .2013).
+Wefocusonsingletonbirthstowhitemotherswhowereover30
+asveryfewcontinuedtogetacollegedegreeafter30.
+Along with birth weight of the baby in kilograms (Y)a n d
+indicator for education beyond high school (X), whereX is 0 if
+themother’seducationishighschoolorlessand1else,sixcon-
+tinuous variables [mother’s age (Z
+1), mother’s body mass index
+(Z2), mother’s weight gain during pregnancy (Z3), gestation
+period (Z4), number of cigarettes the mother smoked during
+pregnancy (Z5), and father’s age (Z6)] and seven categorical
+variables [gender of infant (Z7), mother’s marital status (Z8),
+pre-pregnancy diabetes indicator (Z9), usage of induction of
+labor(Z10),usageofantibiosticduringlabor( Z11),receiptofthe
+Special Supplemental Nutrition Program for Women, Infants,
+andChildren( Z12),indicatorforfather’seducationbeyondhigh
+school(Z13)]areincluded.
+After excluding subjects with missing values in any variable,
+there are about 978,000 subjects left. From these, we randomly
+select200,000subjectsinourstudytoreducethecomputational
+burden.Figure2 showsthehistogramandempiricalcumulative
+
+PDF PAGE 10
+JOURNALOFBUSINESS&ECONOMICSTATISTICS 611
+Figure 3. Estimationfor θτwith τ∈[0.02,0.98 ]and95%confidenceintervalusingDPLQR(leftpanel),LQR(middlepanel),andPLAQR(rightpanel)inNatalityBirthData.
+distribution function of birth weight for 200,000 infants, for
+whichthemean(standarddeviation)andmedian(medianabso-
+lutedeviation)are3.38(0.52)and3.40(0.46),and20.21%ofthe
+mothershavenomorethanahighschooldegree.
+With the above variables we consider the following DPLQR
+model:
+Y = θ
+τX +mτ(Z1,... ,Z13) + ϵ. (17)
+We randomly reserve 20% of the data as testing set and then
+randomly select 20% of the remaining data as a validation set
+to select the tuning parameters for the training set, which is
+64% of the data, to estimate the unknownθτ and mτ for τ =
+0.020 +0.005k,k = 0,... ,192.Theleftpanelof Figure3 shows
+the estimated coeffcientθτ, where the shaded area is the 95%
+confidenceinterval.UndertheDPLQRmodel( 17),apositive θτ
+impliesthatmotherwitheducationbeyondhighschooltendsto
+haveaheavierinfantandviceversaforanegative θτ.
+Alongthequantilelevels τ,thees tima t edθτ intheleftpanel
+of Figure 3starts with a largest positive value, but goes down
+fast beforeτ = 0.15 and declines relatively slowly to zero at
+about τ = 0.52. Then ˆθτ flattens out up toτ = 0.85, and
+finally decreases to−0.028 atτ = 0.98. The 95% confidence
+intervals (shaded regions) cover zero atτ ∈[ 0.45,0.89].T h e
+r e s u l t sa l s os h o wt h a tal o w e rl e v e lo fm a t e r n a le d u c a t i o ni s
+significantly associated with lower birth weight for newborns
+with low birth weights (belowτ = 0.45 quantiles). The effect
+decreasesmonotonicallyasthequantileincreasesfrom τ= 0to
+τ = 0.45. This is consistent with existing knowledge (Shi et al.
+2004;Gageetal. 2013)thatmotherswithlesseducationaremore
+likelytodeliverlowbirthweightinfants.
+We also model the data with the linear quantile regres-
+sion (LQR) and partially linear additive quantile regression
+(PLAQR), where the unknownm
+τ in (17) is a linear and non-
+parametricadditivefunction,respectively.Themiddleandright
+panels ofFigure 3provide the point estimates and associated
+95%confidenceintervals.Generally,bothestimates ˆθ
+τalsohave
+ad o w n w a r dt r e n da st h eq u a n t i l el e v e l sτincreases from 0.02
+to0.98.
+However,PLAQRproducesinconsistentresults,namelythat
+education is statistically significant for all birth weights before
+τ = 0.40quantilelevelsbutnotatanintervalaround τ = 0.18.
+The95%confidenceintervalsofLQRappearsignificantfor τ≤
+0.55,whichimpliesthattheeducationlevelofamotheralsohas
+an effect on normal-birth-weight (0.45≤ τ ≤ 0.55) infants.
+Thisisscientificallyquestionableandnotsupportedbytheother
+twomethods.
+Intriguingly, the proposed DPLQR method produces nar-
+rower confidence intervals than LQR and PLAQR. The areas
+covered by the 95% confidence intervals (shaded regions) are
+0.0186, 0.0184, and 0.0168 for LQR, PLAQR, and DPLQR,
+respectively. We conclude that DPLQR provides the best fit and
+interpretation of the maternal education effect for the Natality
+BirthData.
+We next compare the prediction results of DPLQR with
+LQR, PLAQR, and the deep nonparametric quantile regression
+(DNQR)approachinPadilla,Tansey,andChen( 2020)andShen
+et al. (2021), which are not amenable to checking the effect of
+maternal education on birth weight. The evaluation criterion is
+thecheckloss(CL)at τandtheaveragecheckloss(ACL),
+CL(τ)= 1
+N
+N∑
+i=1
+ρτ( ˆYi − Yi)andACL =
+∫ 1
+0
+CL(τ)dτ, (18)
+where N = 40,000 is the size of the test set,Yi is the birth
+weight of theith infant in the test set, andˆYi is the predicted
+quantilelevelofthissubject.Theresultsin Figure4 suggestthat
+the proposed DPLQR is superior to LQR and PLAQR, while it
+isasgoodasDNQR.ThismeansthatDPLQRdoesnotsacrifice
+muchpredictionaccuracycomparedtothelargerDNQRmodel,
+yet itprovidesaninterpretablemodel.
+Overall, the proposed method yields more stable, accurate
+andconvincingresults.
+7. Conclusion
+We provide an interpretable-yet-flexible deep learning model
+withpartiallylinearquantileregression,whereweleverageneu-
+ral networks to represent the nonparametric function and the
+linear predictor to obtain inference. The proposed method is
+able to detect the parsimonious structure of the data auto-
+matically, thereby producing a better convergence rate for the
+nonparametric estimator ˆm than conventional nonparametric
+
+PDF PAGE 11
+612 Q.ZHONGANDJ.-L.WANG
+Figure 4. Check loss evaluated on test set with quantile levelsτ ∈[ 0.02,0.98 ]
+underfourmodels:LQR,PLAQR,DPLQR,andDNQR.Dottedline:LQR(ACL=0.1298);
+dashedline:PLAQR(ACL=0.1265);solidredline:DPLQR(ACL=0.1245);dot-dashed
+line:DNQR(ACL=0.1244).Solidlineanddot-dashedlinealmostoverlap.
+smoothing methods. Furthermore, the estimator of the param-
+eter θ0 attains √n-consistencyandasymptoticnormality.These
+featuressubstantiallydistinguishourmethodfromthenonpara-
+metricapproachesofPadilla,Tansey,andChen( 2020),Schmidt-
+Hieber(2020),Shenetal.( 2021)andopensupamyriadoffuture
+researchopportunitiesforsemiparametricregressionmodels.
+Sofar,wehavedevelopedestimationandstatisticalinference
+forthelinearparametersoftheproposedDPLQRmodel.Model
+checking for the linearity assumption is a challenging problem
+of future interest. An ad hoc lack-of-fit test for linearity could
+be implemented by randomly spliting the data into a training
+andtestsetwith8:2ratio,wherethenonparametriccomponent
+is estimated on the training set, giving an estimateˆm
+τ(·).T h e n
+one can employ methods such as in Zheng (1998), He and Zhu
+(2003), and Escanciano and Goh (2014) to conduct a lack-of-
+fi tt e s tf o rl i n e a rq u a n t i l er e g r e s s i o nw i t ht h e“ o b s e r v a t i o n s ”
+(X
+i, ˜Yi),i = 1,... ,N on the test set, where˜Yi = Yi − ˆmτ(Zi)
+andN isthesam plesizeo fthetestset.
+A possible extension is to investigate the quantile regression
+process instead of fitting quantiles at fixed levels. Chao, Volgu-
+shev, and Cheng (2017)a n dB e l l o n ie ta l .(2019)s t u d i e dc o n -
+vergence results uniformly onτfor quantile functions approx-
+imated by linear combinations of basis functions, for example,
+polynomial, Fourier, spline and wavelet bases. However, their
+approaches cannot easily be extended to the deep learning set-
+tingbecauseofthelayerstructureinaneuralnetwork.
+In additional, one can use techniques like monotonic con-
+strained regression (Barlow et al.1972; Bondell, Reich, and
+Wang 2010) to ensure noncrossing of the estimated quantile
+functions, that is, ˆθ
+⊤
+τ1x + ˆmτ1 (z) ≤ ˆθ⊤
+τ2x + ˆmτ2 (z) whenever
+τ1 ≤ τ2.
+A swefocusinthisarticleonafixedbutmodera tesizeofthe
+linear covariatesX, future work of interest is to study DPLQR
+with high-dimensional covariates, where the number of linear
+covariatesmaygrowatacertainratewithsamplesize.Aspecial
+case for PLAQR was studied in Sherwood and Wang (2016),
+whichmayshedsomelightonextendingtheDPLQRapproach.
+Another future direction is to test whether a particular set of
+covariatescontributessignificantlytoprediction,whichincludes
+testing whether the functionm
+0 satisfies m0(z) = 0, for all
+z ∈[ 0,1]q. Reliable estimates of the unknown parameters are
+fundamental to the hypothesis test procedures. The proposed
+methods provide a stepping stone to establish the asymptotic
+normality of the neural network estimates via Donsker Theo-
+rems [see, e.g., chap. 2 in Van der Vaart and Wellner (1996)] or
+ofneuralnetworkteststatisticsviasamplesplittings(Dai,Shen,
+andPan 2021).
+Supplementary Materials
+Mathematical proofs and additional numerical results are given in the
+supplementarymaterialfile.
+Acknowledgments
+Theauthorsaregratefultotheeditor,associateeditorandrefereesfortheir
+constructive comments and suggestions that led to numerous improve-
+mentsofthearticle.
+Disclosure Statement
+Therearenocompetingintereststodeclare.
+Funding
+Zhong’s research was supported by the National Natural Science Founda-
+tion of China (12201527 and 11931001) and the Fundamental Research
+Funds for the Central Universities (20720221032). Wang’s research was
+supported by the US NationalScience Foundation(DMS19-14917and 22-
+10891).
+ORCID
+QixianZhong http://orcid.org/0000-0003-1666-2191
+References
+Anthony,M.,andBartlett,P.L.(1999), NeuralNetworkLearning:Theoretical
+Foundations,Camb ridge:Camb ridgeU niversi tyPr ess.[607]
+Badshah, S., Mason, L., McKelvie, K., Payne, R., and Lisboa, P. J. (2008),
+“Risk Factors for Low Birthweight in the Public-Hospitals at Peshawar,
+NWFP-Pakistan,”BMCPublicHealth ,8,1–10.[ 604,610]
+Barlow,R.E.,Bartholomew,D.J.,Bremner,J.M.,andBrunk,H.D.(1972),
+StatisticalInferenceunderOrderRestrictions. ,WileySeriesinProbability
+andMathematicalStatistics,London-NewYork-Sydney:Wiley. [ 612]
+Bauer, B., and Kohler, M. (2019), “On Deep Learning as a Remedy for the
+Curse of Dimensionality in Nonparametric Regression,”The Annals of
+Statistics,47,2261–2285. [ 604,605,607]
+B e l l o n i ,A . ,C h e r n o z h u k o v ,V . ,C h e t v e r i k o v ,D . ,a n dF e r n á n d e z - V a l ,I .
+(2019), “Conditional Quantile Processes based on Series or Many
+Regressors,”JournalofEconometrics ,213,4–29. [ 612]
+Bhattacharya, J., Gimenes, N., and Guerre, E. (2021), “Semiparametric
+Quantile Models for Ascending Auctions with Asymmetric Bidders,”
+Journal of Business& Economic Statistics,40,1020–1033. [ 604]
+Bondell, H. D., Reich, B. J., and Wang, H. (2010), “Noncrossing Quantile
+RegressionCurveEstimation,” Biometrika,97,825–838. [ 612]
+Cai,Z.,andXiao,Z.(2012),“SemiparametricQuantileRegressionEstima-
+tion in Dynamic Models with Partially Varying Coefficients,”Journal of
+Econometrics,167,413–425. [ 604]
+
+PDF PAGE 12
+JOURNALOFBUSINESS&ECONOMICSTATISTICS 613
+Chao, S.-K., Volgushev, S., and Cheng, G. (2017), “Quantile Processes for
+SemiandNonparametricRegression,” ElectronicJournalofStatistics ,11,
+3272–3331. [612]
+Chaudhuri, P. (1991), “Nonparametric Estimates of Regression Quantiles
+and their Local Bahadur Representation,”The Annals of Statistics, 19,
+760–777. [604]
+Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C.,
+and Newey, W. (2017), “Double/Debiased/Neyman Machine Learning
+ofTreatmentEffects,” American Economic Review,107,261–65. [ 603]
+Cybenko, G. (1989), “Approximation by Superpositions of a Sigmoidal
+Function,”MathematicsofControl,SignalsandSystems ,2,303–314.[ 603]
+Dai, B., Shen, X., and Pan, W. (2021), “Significance Tests of Feature Rele-
+vanceforaBlackboxLearner,”arXivpreprintarXiv:2103.04985. [ 612]
+Escanciano, J. C., and Goh, S.-C. (2014), “Specification Analysis of Linear
+QuantileModels,”JournalofEconometrics ,178,495–507. [ 612]
+Fan, J., Ma, C., and Zhong, Y. (2021), “A Selective Overview of Deep
+Learning,”StatisticalScience,36,264–290. [ 605]
+Fan, Y., and Liu, R. (2016), “A Direct Approach to Inference in Nonpara-
+metric and Semiparametric Quantile Models,”Journal of Econometrics,
+191,196–216. [604]
+Fang,Z.,Li,Q.,andYan,K.(2021),“ASimpleNonparametricApproachfor
+EstimationandInferenceofConditionalQuantileFunctions,” Economet-
+ricTheory,39,290–320. [ 604]
+Feng, X., He, X., and Hu, J. (2011), “Wild Bootstrap for Quantile Regres-
+sion,”Biometrika,98,995–999. [ 608]
+Gage,T.B.,Fang,F.,O’Neill,E.,andDiRienzo,G.(2013),enquoteMaternal
+Education, Birth Weight, and Infant Mortality in the United States,
+Demography,50,615–635. [ 610,611]
+Gan, D., Wang, Y., Yang, S., and Kang, C. (2018), “Embedding based
+QuantileRegressionNeuralNetworkforProbabilisticLoadForecasting,”
+JournalofModernPowerSystemsandCleanEnergy ,6,244–254. [ 604]
+Goodfellow, I., Bengio, Y., and Courville, A. (2016),Deep Learning,C a m -
+bridge,MA:MITPress. [ 605]
+Guerre, E., and Sabbah, C. (2012),“UniformBias Study and Bahadur Rep-
+resentationforLocalPolynomialEstimatorsoftheConditionalQuantile
+Function,”Econometric Theory,28,87–129. [ 604]
+Han, S., Pool, J., Tran, J., and Dally, W. (2015), “Learning both Weights
+andConnectionsforEfficientNeuralNetwork,”in ProceedingsofNeural
+Information Processing Systems,pp.1135–1143. [ 605]
+Hatalis,K.,Lamadrid,A.J.,Scheinberg,K.,andKishore,S.(2017),“Smooth
+Pinball Neural Network for Probabilistic Forecasting of Wind Power,”
+arXivpreprintarXiv:1710.01720. [ 604]
+He, X., and Shi, P. (1996), “Bivariate Tensor-Product B-splines in a Partly
+LinearModel,”JournalofMultivariateAnalysis ,58,162–181. [
+604,607]
+He,X.,andZhu,L.-X.(2003),“ALack-of-FitTestforQuantileRegression,”
+JournaloftheAmericanStatisticalAssociation ,98,1013–1022. [ 612]
+Heaton, J. B., Polson, N. G., and Witte, J. H. (2017), “Deep Learning for
+Finance: Deep Portfolios,”Applied Stochastic Models in Business and
+Industry,33,3–12. [ 603]
+Hornik, K., Stinchcombe, M., and White, H. (1989), “Multilayer Feedfor-
+wardNetworksareUniversalApproximators.” Neural Networks,2,359–
+366. [603]
+Hoshino, T. (2014), “Quantile Regression Estimation of Partially Lin-
+ear Additive Models,”Journal of Nonparametric Statistics, 26, 509–536.
+[604,606]
+Hristache, M., Juditsky, A., Polzehl, J., and Spokoiny, V. (2001), “Structure
+Adaptive Approach for Dimension Reduction,”The Annals of Statistics,
+29,1537–1566. [606]
+Ichimura, H. (1993), “Semiparametric Least Squares (SLS) and Weighted
+SLSEstimationofSingle-IndexModels,” JournalofEconometrics,58,71–
+120. [606,607]
+Jantre, S. R., Bhattacharya, S., and Maiti, T. (2020), “Quantile
+Regression Neural Networks: A Bayesian Approach,” arXiv preprint
+arXiv:2009.13591. [604]
+Jones, M., and Hall, P. (1990), “Mean Squared Error Properties of Kernel
+Estimates or Regression Quantiles,”Statistics & Probability Letters, 10,
+283–289. [604]
+Kingma,D.P.,andBa,J.(2014),“Adam:AMethodforStochasticOptimiza-
+tion,”arXivpreprintarXiv:1412.6980. [607]
+Koenker,R.(2005), QuantileRegression,Cambridge:CambridgeU niversity
+Press. [604]
+Koenker, R., and Bassett, G. (1978), “Regression Quantiles,”Econometrica,
+46,33–50. [603,604]
+Koenker, R., Chernozhukov, V., He, X., and Peng, L. (2017),Handbook of
+Quantile Regression,BocaRa to n,FL:CRCPr ess.[604]
+Koenker, R., and Ng, P. (2005), “Inequality Constrained Quantile Regres-
+sion,”Sankhy¯a:TheIndianJournalofStatistics ,67,418–440. [ 607]
+Kong, E., Linton, O., and Xia, Y. (2013), “Global Bahadur Representation
+forNonparametricCensoredRegressionQuantilesanditsApplications,”
+Econometric Theory,29,941–968. [ 604]
+Kong, E., and Xia, Y. (2012), “A Single-Index Quantile Regression Model
+anditsEstimation,” Econometric Theory,730–768. [604
+]
+Krizhevsky,A.,Sutskever,I.,andHinton,G.E.(2012),“ImagenetClassifica-
+tionwithDeepConvolutionalNeuralNetworks,”in ProceedingsofNeural
+Information Processing Systems,pp.1097–1105. [ 603,605]
+Lee, S. (2003), “Efficient Semiparametric Estimation of a Partially Linear
+QuantileRegressionModel,” Econometric Theory,19,1–31. [ 604]
+Li, Q., and Racine, J. S. (2008), “Nonparametric Estimation of Conditional
+CDF and Quantile Functions with Mixed Categorical and Continuous
+Data,”Journal of Business & Economic Statistics,26,423–434. [ 604]
+Lian, H. (2012), “Semiparametric Estimation of Additive Quantile Regres-
+sion Models by Two-Fold Penalty,”Journal of Business & Economic
+Statistics,30,337–350. [ 604,606]
+Ma, S., and He, X. (2016),“Inference forSingle-Index QuantileRegression
+Models with Profile Optimization,”The Annals of Statistics, 44, 1234–
+1268. [604]
+Mi, X., Tighe, P., Zou, F., and Zou, B. (2021), “A Deep Learning Semipara-
+metricRegressionforAdjustingComplexConfoundingStructures,” The
+Annals of Applied Statistics,15,1086–1100. [ 603]
+Noh, H., Ghouch, A. E., and Van Keilegom, I. (2015), “Semiparametric
+Conditional Quantile Estimation through Copula-based Multivariate
+Models,”Journal of Business& Economic Statistics,33,167–178. [ 604]
+Nolle, T., Seeliger, A., and Mühlhäuser, M. (2018), “BINet: Multivari-
+ate Business Process Anomaly Detection Using Deep Learning,” in
+International Conference on Business Process Management, pp. 271–287,
+Springer. [603]
+Padilla, O. H. M., Tansey, W., and Chen, Y. (2020), “Quantile
+Regression with ReLU Networks: Estimators and Minimax Rates,”
+arXivpreprintarXiv:2010.08236. [ 604,611,612]
+P a szk e ,A.,G r os s,S.,M a s sa,F .,Ler er ,A.,B rad b ury ,J .,Ch a n a n,G.,K illeen,
+T.,Lin,Z.,Gimelshein,N.,Antiga,L.,etal.(2019),“Pytorch:AnImper-
+ative Style, High-Performance Deep Learning Library,” inAdvances in
+Neural Information Processing Systems(Vol.32). [607]
+Portnoy, S. (1991), “Asymptotic Behavior of Regression Quantiles in Non-
+stationary, Dependent Cases,”Journal of Multivariate Analysis, 38, 100–
+113. [604]
+Robbins, H., and Monro, S. (1951), “A Stochastic Approximation Method,”
+Annals of Mathematical Statistics,22,400–407. [ 607]
+Rolnick, D., and Tegmark, M. (2017), “The Power of Deeper Networks for
+ExpressingNaturalFunctions,”arXivpreprintarXiv:1705.05502. [ 604]
+Romano,Y.,Patterson,E.,andCandes,E.(2019),“ConformalizedQuantile
+Regression,”inProceedingsofNeuralInformationProcessingSystems ,pp .
+3543–3553. [604]
+Rudin, C. (2019), “Stop Explaining Black Box Machine Learning Models
+forHighStakesDecisionsandUseInterpretableModelsInstead,” Nature
+Machine Intelligence,1,206–215. [ 603
+]
+Samanta, M. (1989), “Non-parametric Estimation of Conditional Quan-
+tiles,”Statistics&ProbabilityLetters ,7,407–412. [ 604]
+Schmidt-Hieber, J. (2020), “Nonparametric Regression Using Deep Neural
+Networks with ReLU Activation Function,”The Annals of Statistics, 48,
+1875–1897. [604,605,606,607,612]
+Shen, G., Jiao, Y., Lin, Y., Horowitz, J. L., and Huang, J. (2021), “Deep
+Quantile Regression: Mitigating the Curse of Dimensionality Through
+Composition,”arXivpreprintarXiv:2107.04907. [604,611,612]
+Sherwood, B., and Wang, L. (2016), “Partially Linear Additive Quantile
+Regression in Ultra-High Dimension,”The Annals of Statistics, 44, 288–
+317. [604,607,612]
+S h i ,L . ,M a c i n k o ,J . ,S t a r fi e l d ,B . ,X u ,J . ,R e g a n ,J . ,P o l i t z e r ,R . ,a n dW u l u ,J .
+(2004), “Primary Care, Infant Mortality, and Low Birth Weight in the
+States of the USA,”Journal of Epidemiology & Community Health, 58,
+374–380. [610,611]
+
+PDF PAGE 13
+614 Q.ZHONGANDJ.-L.WANG
+Simonoff,J.S.(2012), Smoothing Methods in Statistics,N ewY o rk:S p rin g er .
+[607]
+Stone,C.J.(1985),“AdditiveRegressionandotherNonparametricModels,”
+TheAnnalsofStatistics ,13,689–705. [ 606,607]
+Telgarsky,M.(2016),“BenefitsofDepthinNeuralNetworks,”arXivpreprint
+arXiv:1602.04485. [603]
+Van der Vaart, A. W., and Wellner, J. A. (1996),Weak Convergence and
+Empirical Processes,N ewY o rk:S p ring er .[608,612]
+Wang, H. J., Zhu, Z., and Zhou, J. (2009),“Quantile Regression in Partially
+Linear Varying Coefficient Models,”The Annals of Statistics, 37, 3841–
+3866. [607]
+Wang,L.,VanKeilegom,I.,andMaidman,A.(2018),“WildResidualBoot-
+strap Inference for Penalized Quantile Regression with Heteroscedastic
+Errors,”Biometrika,105,859–872. [ 608]
+Wu,C.,andYu,Y.(2014),“PartiallyLinearModelingofConditionalQuan-
+tilesUsingPenalizedSplines,” Computational Statistics & Data Analysis,
+77,170–187. [604]
+Wu, T. Z., Yu, K., and Yu, Y. (2010), “Single-Index Quantile Regression,”
+JournalofMultivariateAnalysis ,101,1607–1621. [ 604]
+Yarotsky, D. (2017), “Error Bounds for Approximations with Deep ReLU
+Networks,”Neural Networks,94,103–114. [ 603,607]
+Yuan, Y., Deng, Y., Zhang, Y., and Qu, A. (2020), “Deep Learning from a
+StatisticalPerspective,”Stat,9,e294. [ 605]
+Zeiler,M.D.,andFergus,R. (2014),“Visualizing andUnderstandingCon-
+volutional Networks,” inProceedings of European Conference on Com-
+puter Vision,pp.818–833. [ 603]
+Zerbeto,A.B.,Cortelo,F.M.,andCFilho,É.B.(2015),“Associationbetween
+Gestational Age and Birth Weight on the Language Development of
+Brazilian Children: A Systematic Review,”Jornal de Pediatria, 91, 326–
+332. [610]
+Zhang,Y.,Lian,H.,andYu,Y.(2017),“EstimationandVariableSelectionfor
+Quantile Partially Linear Single-Index Models,”Journal of Multivariate
+Analysis,162,215–234. [ 604]
+(2020), “Ultra-High Dimensional Single-Index Quantile Regres-
+sion,”JournalofMachineLearningResearch ,21,1–25. [ 604]
+Zheng,J.X.(1998),“AConsistentNonparametricTestofParametricRegres-
+sionModelsunderConditionalQuantileRestrictions,” EconometricThe-
+ory,14,123–138. [ 612]
