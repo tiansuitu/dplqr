@@ -1,0 +1,88 @@
+{
+  "1": {
+    "N": 1000000,
+    "f0": 0.36755259694786135,
+    "Sigma2": [
+      [
+        0.06506,
+        0.00484
+      ],
+      [
+        0.00484,
+        0.06996
+      ]
+    ],
+    "eig_Sigma2": [
+      0.06209,
+      0.07293
+    ],
+    "eig_EXX": [
+      0.17394,
+      1.65828
+    ],
+    "ratio_min_Sigma2_over_min_EXX": 0.3569444830051121,
+    "ratio_min_Sigma2_over_f0_min_EXX": 0.9711385145123759,
+    "ratio_min_CovXtilde_over_min_CovX": 0.9966319311627599,
+    "mean_Xtilde": [
+      0.00034,
+      -0.0003
+    ],
+    "var_share_Xtilde_over_X": [
+      0.708,
+      0.5717
+    ],
+    "eig_corr_Xtilde": [
+      0.9283,
+      1.0717
+    ],
+    "corr_Xtilde12": 0.07168784443046204,
+    "R2_Xtilde_on_Z_phi": [
+      1e-05,
+      1e-05
+    ],
+    "cond_Sigma2": 1.174610353496616
+  },
+  "2": {
+    "N": 1000000,
+    "f0": 0.36755259694786135,
+    "Sigma2": [
+      [
+        0.06498,
+        0.00491
+      ],
+      [
+        0.00491,
+        0.07019
+      ]
+    ],
+    "eig_Sigma2": [
+      0.06203,
+      0.07315
+    ],
+    "eig_EXX": [
+      0.1739,
+      1.65807
+    ],
+    "ratio_min_Sigma2_over_min_EXX": 0.3567150376632735,
+    "ratio_min_Sigma2_over_f0_min_EXX": 0.9705142627896459,
+    "ratio_min_CovXtilde_over_min_CovX": 0.9961636605943872,
+    "mean_Xtilde": [
+      0.00026,
+      4e-05
+    ],
+    "var_share_Xtilde_over_X": [
+      0.7072,
+      0.5738
+    ],
+    "eig_corr_Xtilde": [
+      0.9273,
+      1.0727
+    ],
+    "corr_Xtilde12": 0.07267822410896578,
+    "R2_Xtilde_on_Z_phi": [
+      1e-05,
+      2e-05
+    ],
+    "cond_Sigma2": 1.1791651825800036
+  }
+}
