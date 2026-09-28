@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "claim_id": "case3-saved-adam-full-remainder-decomposition",
+  "repository": {
+    "commit": "33c86c6774af19933179188bdd4c3d832467bc4d",
+    "dirty": true,
+    "status_before_execution": "?? results/2026-09-11_asymptotic_normality_case3/full_remainder_decomposition_post_analysis/\n?? results/2026-09-28_followups/_scratch/peek_toy_phihat.py\n?? results/2026-09-28_followups/case3_xfit_m_200ep/\n?? results/2026-09-28_followups/toy_xfit_phihat/README.md\n?? results/2026-09-28_followups/toy_xfit_phihat/aggregate_log.txt\n?? results/2026-09-28_followups/toy_xfit_phihat/paired.csv\n?? results/2026-09-28_followups/toy_xfit_phihat/replication_results.csv\n?? results/2026-09-28_followups/toy_xfit_phihat/summary.csv"
+  },
+  "command": "C:\\Users\\Tiansui Tu\\Documents\\GitHub\\dplqr\\.venv\\Scripts\\python.exe -B C:\\Users\\Tiansui Tu\\.codex\\visualizations\\2026\\09\\28\\01a0e6a7-9337-7640-b043-5ced52c808c5\\full_remainder_work_ys3mbozr\\run_post_analysis.py",
+  "reproduction": "Run the new notebook's code cells in order with the repository .venv; every numerical input is an existing CSV.",
+  "environment": {
+    "software": [
+      "Python 3.11.9",
+      "numpy 2.4.6",
+      "pandas 3.0.5",
+      "scipy 1.17.1",
+      "matplotlib 3.11.1",
+      "nbformat 5.11.0",
+      "nbclient 0.11.0"
+    ],
+    "hardware": "Windows-10-10.0.26200-SP0; CPU; no GPU or network training"
+  },
+  "mathematics": {
+    "assertion_tested": "For every stored Adam fit, C = IF + EP + Taylor and fully_remainder_removed = IF; exact sample-variance decomposition; descriptive finite-sample bias and covariance analysis.",
+    "coefficient_domain": "float64",
+    "conventions": "N=n_train=0.8*n_full; epochs=1000; strict residual<0 score; full symmetric stored Sigma2; linear solves; sample SD ddof=1; user-specified Taylor normalization.",
+    "inputs": [
+      {
+        "path": "results/2026-09-11_asymptotic_normality_case3/run_psi_n_if/replication_terms.csv",
+        "sha256": "d940ef1e2cf5777723f935a81a446c8aab5fb83a5c8893861fd398a42388c762"
+      },
+      {
+        "path": "results/2026-09-11_asymptotic_normality_case3/run/raw_replications.csv",
+        "sha256": "d1b7ea3a47e90b8f28dce6a1675fd9435b76dd807a541a51d6f7351bd9a08f8b"
+      },
+      {
+        "path": "results/2026-09-11_asymptotic_normality_case3/run/run_config.json",
+        "sha256": "8ccf4da0c59f18a0772577bc83db0e08b03f49451a10e46ab44acfd7d26081c1"
+      },
+      {
+        "path": "results/2026-09-11_asymptotic_normality_case3/psi_n_if_helpers.py",
+        "sha256": "fecef13843de32f124e6c69a31acb3dd534cb307627f551368d996dbfce385b8"
+      },
+      {
+        "path": "results/2026-09-11_asymptotic_normality_case3/corrected_asymptotic_normality_post_analysis/corrected_asymptotic_normality_post_analysis.ipynb",
+        "sha256": "829414ea12ed80b640ceda7b11bb72e2b0916c8053a424c70063f5658278da1d"
+      },
+      {
+        "path": "Zhong and Wang 2024 JBES.pdf",
+        "sha256": "f4bd1b18022f70193f5a503d01c880c94c9b964fd6308ceecb58a9bb64003011"
+      },
+      {
+        "path": "Zhong and Wang 2024 JBES supplement.pdf",
+        "sha256": "8a9e40855801264db0b7faa764a40145d5e7a5ba68ee5111bd61e3c419ad2be3"
+      }
+    ],
+    "bounds": {
+      "full_sample_sizes": [
+        500,
+        1000,
+        2000,
+        4000
+      ],
+      "epochs": [
+        1000
+      ],
+      "stored_replications": 800,
+      "replications_per_size": 200,
+      "stored_n_eval": 50000,
+      "new_evaluation_samples": 0,
+      "rtol": 1e-10,
+      "atol": 1e-10
+    },
+    "non_claims": [
+      "No asymptotic convergence rate or theorem proof.",
+      "No refits or new Monte Carlo replications.",
+      "No intrinsic EP/Taylor noise separation from aggregated population-score estimates.",
+      "No resolution of the supplement's printed Taylor normalization/sign discrepancy."
+    ]
+  },
+  "randomness": {
+    "used": false,
+    "generator": "none; existing CSV only",
+    "seed": null
+  },
+  "run": {
+    "started_at": "2026-09-28T07:03:54.139652+00:00",
+    "runtime_seconds": 14.008497600007104,
+    "exit_status": 0
+  },
+  "outputs": [
+    {
+      "path": "results/2026-09-11_asymptotic_normality_case3/full_remainder_decomposition_post_analysis/full_remainder_decomposition_post_analysis.ipynb",
+      "sha256": "b9fe8b627c4e494f06a677e10d03358d42d3a752f16265f64fd927df5a3fc7d9"
+    }
+  ],
+  "checks": [
+    "nbformat schema validation; static no-training/no-simulation/no-explicit-inverse audit",
+    "800 stored rows matched to raw replication keys, n_train, data hashes, and A",
+    "All per-replication identities verified with rtol=atol=1e-10",
+    "Positive-definite stored Sigma2 and reused oracle covariance verified",
+    "Exact sample-variance identity checked for all eight n/coefficient groups",
+    "All eight code cells executed without errors; three embedded PNG figures",
+    "4885 pre-existing Case 3 files preserved byte-for-byte"
+  ],
+  "result": "Finite CSV calculation completed and identities verified at the stated floating tolerances. Bias reduction is partial; both remainders and their cross-covariances matter. This is not theorem verification.",
+  "residual_risks": [
+    "Separate EP/Taylor components contain noise from the stored n_eval=50000 evaluation.",
+    "200 replications per setting give finite Monte Carlo uncertainty.",
+    "Only four full sample sizes and one epoch setting are examined.",
+    "The local supplement has a printed normalization/sign discrepancy; user conventions are retained."
+  ]
+}
