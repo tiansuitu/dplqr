@@ -1,0 +1,4 @@
+n=4000 rep=30 elapsed=10s
+n=4000 rep=40 elapsed=58s
+n=4000 rep=50 elapsed=97s
+cache filled for n=[4000] 97s

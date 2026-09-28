@@ -1,0 +1,4 @@
+n=2000 rep=10 elapsed=32s
+n=2000 rep=20 elapsed=97s
+n=2000 rep=30 elapsed=134s
+n=2000 rep=40 elapsed=169s

@@ -1,0 +1,16 @@
+=== start 2026-09-28 14:24:10 keep_awake=True: 72 done, 728 to run, workers=10, plan=['500:200', '1000:200', '2000:200', '4000:200'], minutes=100.0
+[     65s] n=500 rep=20 done=1 rep_s=46 fits=34/9 sn_xi1(phi_lp)=4.67
+[     65s] n=500 rep=19 done=2 rep_s=46 fits=35/9 sn_xi1(phi_lp)=6.13
+[     66s] n=500 rep=21 done=3 rep_s=46 fits=34/9 sn_xi1(phi_lp)=-6.82
+[     82s] n=1000 rep=21 done=4 rep_s=62 fits=42/17 sn_xi1(phi_lp)=-2.09
+[     82s] n=1000 rep=20 done=5 rep_s=63 fits=42/17 sn_xi1(phi_lp)=4.09
+[     82s] n=1000 rep=19 done=6 rep_s=63 fits=42/17 sn_xi1(phi_lp)=-5.18
+[     86s] n=500 rep=22 done=7 rep_s=21 fits=9/9 sn_xi1(phi_lp)=-1.32
+[    105s] n=500 rep=23 done=8 rep_s=19 fits=8/8 sn_xi1(phi_lp)=-5.57
+[    112s] n=2000 rep=20 done=9 rep_s=92 fits=58/31 sn_xi1(phi_lp)=4.27
+[    112s] n=2000 rep=19 done=10 rep_s=92 fits=59/31 sn_xi1(phi_lp)=-2.24
+[    115s] n=1000 rep=22 done=11 rep_s=33 fits=16/15 sn_xi1(phi_lp)=3.98
+[    131s] n=2000 rep=21 done=12 rep_s=65 fits=32/30 sn_xi1(phi_lp)=-1.13
+[    135s] n=500 rep=24 done=13 rep_s=20 fits=8/9 sn_xi1(phi_lp)=0.94
+[    139s] n=1000 rep=23 done=14 rep_s=34 fits=15/16 sn_xi1(phi_lp)=2.41
+[    146s] n=2000 rep=22 done=15 rep_s=63 fits=30/31 sn_xi1(phi_lp)=6.72

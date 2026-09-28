@@ -1,0 +1,6 @@
+n=500 rep=10 elapsed=16s
+n=500 rep=20 elapsed=29s
+n=500 rep=30 elapsed=55s
+n=500 rep=40 elapsed=95s
+n=500 rep=50 elapsed=117s
+cache filled for n=[500] 117s
